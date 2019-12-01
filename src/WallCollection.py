@@ -5,6 +5,7 @@ import shelve         # for storing state
 import pathlib
 import os.path
 
+
 class WallCollection:
 	def __init__(self):
 		self.collection = []
@@ -18,6 +19,6 @@ class WallCollection:
 		return self.collection[self.lastWall]
 
 	def update(self, files=[]):
-		newFiles = [ f for f in files if f not in self.collection ]
+		newFiles = [f for f in files if f not in self.collection]
 		for i, f in enumerate(newFiles):
 			self.collection.insert(self.lastWall + i + 1, f)
