@@ -1,25 +1,26 @@
 #!/usr/bin/python
 
-import configparser   # for loading config file
-import shelve         # for storing state
+import configparser  # for loading config file
+import shelve  # for storing state
 import pathlib
 import os.path
 
 
 class WallCollection:
-	def __init__(self):
-		self.collection = []
-		self.lastWall = 0
+    def __init__(self):
+        self.collection = []
+        self.nextWall = 0
 
-	def next(self):
-		if len(self.collection) == 0:
-		   raise Exception('Cannot get next wallpaper! The collection is empty')
+    def next(self):
+        if len(self.collection) == 0:
+            raise Exception(
+                'Cannot get next wallpaper! The collection is empty')
 
-		index = self.lastWall
-		self.lastWall = (self.lastWall + 1) % len(self.collection)
-		return self.collection[index]
+        index = self.nextWall
+        self.nextWall = (self.nextWall + 1) % len(self.collection)
+        return self.collection[index]
 
-	def update(self, files=[]):
-		newFiles = [f for f in files if f not in self.collection]
-		for i, f in enumerate(newFiles):
-			self.collection.insert(self.lastWall + i, f)
+    def update(self, files=[]):
+        tmpCollection = set(self.collection)
+        newFiles = [f for f in files if f not in tmpCollection]
+        self.collection[self.nextWall:self.nextWall] = newFiles
