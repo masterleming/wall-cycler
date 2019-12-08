@@ -1,10 +1,4 @@
-#!/usr/bin/python
-
-import configparser  # for loading config file
-import shelve  # for storing state
-import pathlib
-import os.path
-
+# WallCollection
 
 class WallCollection:
     def __init__(self):
