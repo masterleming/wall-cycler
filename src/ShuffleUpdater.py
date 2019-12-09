@@ -12,6 +12,8 @@ class ShuffleUpdater(BaseUpdater):
     def update(self, walls, images):
         tmpCollection = set(walls.collection)
         images = [i for i in images if i not in tmpCollection]
+        if len(images) == 0:
+            return
 
         random.shuffle(images)
         if len(walls.collection) == 0:
