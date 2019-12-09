@@ -83,6 +83,26 @@ class Test_TestSortedUpdater(unittest.TestCase):
         self.assertEqual(self.walls.collection, sorted(images))
         self.assertEqual(self.walls.nextWall, 0)
 
+    def test_addOnlyUniqueEntries(self):
+        images = self._getRandomFiles()
+        tmpImages = images[:]
+        count = len(tmpImages)
+        selectionCnt = count // 5
+        self.assertGreater(selectionCnt, 0)
+        selection = tmpImages[:selectionCnt]
+        tmpImages[:selectionCnt] = []
+        selection += tmpImages[:selectionCnt]
+        random.shuffle(selection)
+
+        self.walls.nextWall = 0
+        self.walls.collection = sorted(tmpImages)
+
+        uut = SortedUpdater()
+        uut.update(self.walls, selection)
+
+        self.assertEqual(self.walls.collection, sorted(images))
+
+
     @staticmethod
     def _getRandomFiles():
         f = FILE_LIST[:]

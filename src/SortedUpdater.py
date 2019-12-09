@@ -2,7 +2,6 @@
 
 from src.detail.BaseUpdater import BaseUpdater
 from WallCollection import WallCollection
-import enum
 import bisect
 
 
@@ -19,7 +18,9 @@ class SortedUpdater(BaseUpdater):
 
         where = 0
         for i in sImages:
-            where = bisect.bisect(walls.collection, i, lo=where)
+            where = bisect.bisect_left(walls.collection, i, lo=where)
+            if where < len(walls.collection) and walls.collection[where] == i:
+                continue
             if (where <= walls.nextWall):
                 walls.nextWall += 1
             walls.collection.insert(where, i)
