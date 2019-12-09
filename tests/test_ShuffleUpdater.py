@@ -140,6 +140,8 @@ class Test_TestShuffleUpdater(unittest.TestCase):
             uut.update(self.walls, images)
 
             self.assertEqual(self.walls.collection, [])
+            self.assertEqual(self.walls.nextWall, 0)
+
 
     def test_insertEmptyListToExistingCollection(self):
         images = self._getSortedFiles()

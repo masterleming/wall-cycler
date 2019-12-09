@@ -102,6 +102,29 @@ class Test_TestSortedUpdater(unittest.TestCase):
 
         self.assertEqual(self.walls.collection, sorted(images))
 
+    def test_insertEmptyListToEmptyCollection(self):
+        images = []
+
+        uut = SortedUpdater()
+        uut.update(self.walls, images)
+
+        self.assertEqual(self.walls.collection, [])
+        self.assertEqual(self.walls.nextWall, 0)
+
+    def test_insertEmptyListToExistingCollection(self):
+        images = self._getSortedFiles()
+        empty = []
+        self.walls.collection = images[:]
+
+        for _ in range(1000):
+            self.walls.nextWall = random.randrange(len(self.walls.collection))
+            nextWall = self.walls.nextWall
+
+            uut = SortedUpdater()
+            uut.update(self.walls, empty)
+
+            self.assertEqual(self.walls.collection, images)
+            self.assertEqual(self.walls.nextWall, nextWall)
 
     @staticmethod
     def _getRandomFiles():
