@@ -1,3 +1,5 @@
+# test_WallCollection
+
 from WallCollection import WallCollection
 
 import unittest

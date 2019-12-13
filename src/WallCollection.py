@@ -1,5 +1,6 @@
 # WallCollection
 
+
 class WallCollection:
     def __init__(self):
         self.collection = []

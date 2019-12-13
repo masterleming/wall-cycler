@@ -1,3 +1,5 @@
+# test_FileScanner
+
 from FileScanner import FileScanner
 
 import unittest
