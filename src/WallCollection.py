@@ -2,20 +2,17 @@
 
 
 class WallCollection:
-    def __init__(self):
-        self.collection = []
+    def __init__(self, collection=[]):
+        self.collection = collection
         self.nextWall = 0
 
-    def next(self):
+    def __iter__(self):
+        return self
+
+    def __next__(self):
         if len(self.collection) == 0:
-            raise Exception(
-                'Cannot get next wallpaper! The collection is empty')
+            raise StopIteration
 
         index = self.nextWall
         self.nextWall = (self.nextWall + 1) % len(self.collection)
         return self.collection[index]
-
-    def update(self, files=[]):
-        tmpCollection = set(self.collection)
-        newFiles = [f for f in files if f not in tmpCollection]
-        self.collection[self.nextWall:self.nextWall] = newFiles

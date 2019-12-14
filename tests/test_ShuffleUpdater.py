@@ -95,8 +95,8 @@ class Test_TestShuffleUpdater(unittest.TestCase):
             uut.update(self.walls, part2)
 
             self.assertEqual(sorted(self.walls.collection), images)
-            self.assertTrue(self.walls.next() in part2)
-            self.assertEqual(self.walls.next(), nextWallVal)
+            self.assertTrue(next(self.walls) in part2)
+            self.assertEqual(next(self.walls), nextWallVal)
 
     def test_updatingEmptyDoesNotAffectNextWall(self):
         images = self._getSortedFiles()
