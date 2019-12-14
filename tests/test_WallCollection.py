@@ -6,41 +6,44 @@ import unittest
 
 
 class Test_TestWallCollection(unittest.TestCase):
-    def test_updateEmptyCollection(self):
-        filesCnt = 50
-        files = self._prepareSomeFileNames(filesCnt)
-
-        wc = WallCollection()
-        wc.update(files)
-
-        self.assertEqual(wc.collection, files)
-
     def test_getNext(self):
         filesCnt = 50
         files = self._prepareSomeFileNames(filesCnt)
 
-        wc = WallCollection()
-        wc.update(files)
+        wc = WallCollection(files[:])
+
         for f in files:
-            wall = wc.next()
-            self.assertEqual(wall, f)
+            self.assertEqual(wc.__next__(), f)
 
-    def test_getUpdateNotEmpty(self):
-        filesCnt = 100
+    def test_iterator(self):
+        filesCnt = 50
         files = self._prepareSomeFileNames(filesCnt)
-        filesA = files[:filesCnt // 2]
-        filesB = files[filesCnt // 2:]
-        filesAlen = len(filesA)
 
+        wc = WallCollection(files[:])
+        i = iter(wc)
+
+        for f in files:
+            self.assertEqual(next(i), f)
+
+    def test_emptyIteration(self):
         wc = WallCollection()
-        wc.update(filesA)
-        for _ in range(len(filesA) // 2):
-            wc.next()
 
-        wc.update(filesB)
+        l = [w for w in wc]
+        self.assertEqual(l, [])
 
-        expected = filesA[:filesAlen // 2] + filesB + filesA[filesAlen // 2:]
-        self.assertEqual(wc.collection, expected)
+    def test_infiniteIteration(self):
+        filesCnt = 50
+        files = self._prepareSomeFileNames(filesCnt)
+
+        wc = WallCollection(files[:])
+
+        i = 0
+        for w in wc:
+            f = files[i % filesCnt]
+            self.assertEqual(w, f)
+            i += 1
+            if i == 2 * filesCnt:
+                break
 
     @staticmethod
     def _prepareSomeFileNames(count):
