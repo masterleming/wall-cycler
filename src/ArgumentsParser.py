@@ -1,7 +1,9 @@
 # ArgumentsParser
 
 import argparse
-import re
+
+from RuntimeConfig import RuntimeConfig
+from Interval import Interval
 
 """
 [xyz]
@@ -13,6 +15,7 @@ wallpaper backend = sway | $(expression)
 
 config = path to the (additional) config file
 """
+
 
 class ArgumentsParser:
     def __init__(self):
@@ -27,12 +30,8 @@ class ArgumentsParser:
         self.parser = parser
 
     def parse(self):
-        return self.parser.parse_args()
+        return RuntimeConfig.fromProgramArgs(self.parser.parse_args())
 
     @staticmethod
     def __interval_choices(arg):
-        pattern = re.compile(r"(?:\d+[dhm]\s*)+|boot|daily")
-        if not pattern.match(arg):
-            raise argparse.ArgumentTypeError
-        # TODO: interval
-        return arg
+        return Interval(arg)

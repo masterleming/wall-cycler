@@ -8,3 +8,6 @@ class MissingDirectoryException(Exception):
 
 class InvalidSortOrderException(Exception):
     pass
+
+class InvalidTimeIntervalSpecification(Exception):
+    pass
