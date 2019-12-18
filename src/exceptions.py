@@ -9,5 +9,8 @@ class MissingDirectoryException(Exception):
 class InvalidSortOrderException(Exception):
     pass
 
-class InvalidTimeIntervalSpecification(Exception):
+class InvalidTimeIntervalSpecificationException(Exception):
+    pass
+
+class TransactionCollisionException(Exception):
     pass

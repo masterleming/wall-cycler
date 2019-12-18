@@ -26,6 +26,18 @@ wallpaper backend = sway
 __userConfigPath = "$HOME/.config/wloop/wloop.conf"
 
 
+class GlobalConfig:
+
+    __instance = None
+
+    @classmethod
+    def get(cls):
+        return cls.__instance
+
+    def __init__(self, config):
+        self.__instance = config
+
+
 class ConfigLoader:
     def __init__(self, configPath=None, runtimeConf=None):
         self.configPaths = [__userConfigPath]
@@ -55,7 +67,8 @@ class ConfigLoader:
         self.config = RuntimeConfig.fromCfgFile(self.configParser)
         self._combineWithRuntimeArgs()
 
-        return self.config
+        completeConfig = GlobalConfig(self.config)
+        return completeConfig.get()
 
     def createDefaultConfig(self, path=None):
         if path is None:
