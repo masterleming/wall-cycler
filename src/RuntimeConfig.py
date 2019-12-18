@@ -32,27 +32,27 @@ class RuntimeConfig:
     @staticmethod
     def fromCfgFile(parsed):
         ret = RuntimeConfig()
-        xyzConf = parsed['xyz']
+        wloopConf = parsed['wloop']
 
-        val = xyzConf.get('order')
+        val = wloopConf.get('order')
         if val is not None:
             ret.order = val
 
-        val = xyzConf.get('wallpaper paths')
+        val = wloopConf.get('wallpaper paths')
         if val is not None:
             ret.wallpaperPaths = [
                 p.strip() for path in val.split('\n') for p in path.split(':')
             ]
 
-        val = xyzConf.get('change time')
+        val = wloopConf.get('change time')
         if val is not None:
             ret.interval = Interval(val)
 
-        val = xyzConf.get('cache dir')
+        val = wloopConf.get('cache dir')
         if val is not None:
             ret.cacheDir = val
 
-        val = xyzConf.get('wallpaper backend')
+        val = wloopConf.get('wallpaper backend')
         if val is not None:
             ret.backend = val
 

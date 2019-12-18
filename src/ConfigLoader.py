@@ -5,9 +5,8 @@ import os.path
 from exceptions import MissingConfigFileException
 from RuntimeConfig import RuntimeConfig
 
-# TODO: replace 'xyz' with the name selected for the project
 """
-[xyz]
+[wloop]
 order = shuffle | sorted
 wallpaper paths = multiple paths allowed in either unix format (path1:path2) or multiline in separate lines
 change time = 1d 4h 30m | boot | daily
@@ -16,15 +15,15 @@ wallpaper backend = sway | $(expression)
 """
 
 __defaultConfig = """
-[xyz]
+[wloop]
 order = shuffle
 wallpaper paths = $HOME/Pictures
 change time = daily
-cache dir = $HOME/.cache/xyz
+cache dir = $HOME/.cache/wloop
 wallpaper backend = sway
 """
 
-__userConfigPath = "$HOME/.config/xyz/xyz.conf"
+__userConfigPath = "$HOME/.config/wloop/wloop.conf"
 
 
 class ConfigLoader:
