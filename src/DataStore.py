@@ -1,4 +1,4 @@
-# IntermediateDb
+# DataStore
 
 import shelve
 import os.path
@@ -6,19 +6,19 @@ import os.path
 from ConfigLoader import GlobalConfig
 from exceptions import TransactionCollisionException
 
-class IntermediateDb:
+class DataStore:
 
     __instance = None
 
     @classmethod
     def get(cls):
         if cls.__instance is None:
-            cls.__instance = _IntermediateDb(GlobalConfig.get())
+            cls.__instance = _DataStore(GlobalConfig.get())
 
         return cls.__instance
 
 
-class _IntermediateDb:
+class _DataStore:
     def __init__(self, config):
         self.config = config
         self.db = None

@@ -4,7 +4,7 @@ import datetime as dt
 import uptime
 import re
 
-from IntermediateDb import IntermediateDb
+from DataStore import DataStore
 from exceptions import InvalidTimeIntervalSpecificationException
 
 __intervalPattern = re.compile(r"(?:\d+[dhm]\s*)+|boot|daily")
@@ -28,14 +28,14 @@ class TimeStampCache:
         pass
 
     def readTimestamp(self):
-        with IntermediateDb.get() as db:
+        with DataStore.get() as db:
             timestamp = db['last timestamp']
             msg = db['timestamp msg']
 
         return timestamp, msg
 
     def writeTimestamp(self, msg):
-        with IntermediateDb.get() as db:
+        with DataStore.get() as db:
             db['last timestamp'] = dt.datetime.now()
             db['timestamp msg'] = msg
 
