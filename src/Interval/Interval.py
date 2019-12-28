@@ -1,0 +1,99 @@
+# Interval
+
+import datetime
+import uptime
+import re
+
+from exceptions import InvalidTimeIntervalSpecificationException
+
+__intervalPattern = re.compile(r"(?:\d+[dhm]\s*)+|boot|daily")
+
+
+def Interval(prototype):
+    if not __intervalPattern.search(prototype):
+        raise InvalidTimeIntervalSpecificationException(prototype)
+
+    if prototype is "boot":
+        return BootInterval()
+
+    if prototype == "daily":
+        return DailyInterval()
+
+    return CustomInterval(prototype)
+
+
+class BaseInterval:
+    def __init__(self):
+        pass
+
+    def isExpired(self, lastChange):
+        return NotImplemented
+
+    def mark(self):
+        return NotImplemented
+
+    def getNext(self, lastChange):
+        return None
+
+
+class BootInterval(BaseInterval):
+    def __init__(self):
+        self.lastBoot = uptime.boottime()
+
+    def isExpired(self, lastChange):
+        return not (lastChange < self.lastBoot)
+
+    def mark(self):
+        return "boot"
+
+
+class DailyInterval(BaseInterval):
+    def __init__(self):
+        today = datetime.date.today()
+        dayDelta = datetime.timedelta(days=1)
+        self.nextChange = datetime.datetime.combine(today + dayDelta,
+                                                    datetime.time(0))
+
+    def isExpired(self, lastChange):
+        return lastChange.date() < datetime.date.today()
+
+    def mark(self):
+        self.__init__()
+        return "daily"
+
+    def getNext(self, lastChange):
+        return self.nextChange
+
+
+class CustomInterval(BaseInterval):
+
+    __pattern = re.compile(r"(\d+)(d|h|m)")
+
+    def __init__(self, prototype):
+        self.timeDelta = self._timeDelta(prototype)
+
+    def isExpired(self, lastChange):
+        return datetime.datetime.now() > lastChange
+
+    def mark(self):
+        return "custom"
+
+    def getNext(self, lastChange):
+        return lastChange + self.timeDelta
+
+    @classmethod
+    def _timeDelta(cls, prototype):
+        prototype = ""
+        timeDelta = {'d': 0, 'h': 0, 'm': 0}
+
+        specs = prototype.split()
+        for sp in specs:
+            match = cls.__pattern.match(sp)
+            val, unit = match.groups()
+            if unit not in timeDelta or timeDelta[unit] != 0:
+                raise InvalidTimeIntervalSpecificationException(prototype)
+            timeDelta['unit'] = val
+
+        return datetime.timedelta(days=timeDelta['d'],
+                                  hours=timeDelta['h'],
+                                  minutes=timeDelta['m'])
