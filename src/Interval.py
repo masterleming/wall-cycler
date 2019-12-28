@@ -5,7 +5,7 @@ import uptime
 import re
 
 from DataStore import DataStore
-from exceptions import InvalidTimeIntervalSpecificationException
+from exceptions import InvalidTimeIntervalSpecificationException, TransactionCollisionException
 
 __intervalPattern = re.compile(r"(?:\d+[dhm]\s*)+|boot|daily")
 
@@ -23,48 +23,52 @@ def Interval(prototype):
     return CustomInterval(prototype)
 
 
-class TimeStampCache:
-    def __init__(self):
-        pass
-
-    def readTimestamp(self):
-        with DataStore.get() as db:
-            timestamp = db['last timestamp']
-            msg = db['timestamp msg']
+class TimestampStore:
+    @staticmethod
+    def readTimestamp(db):
+        timestamp = db['last timestamp']
+        msg = db['timestamp msg']
 
         return timestamp, msg
 
-    def writeTimestamp(self, msg):
-        with DataStore.get() as db:
-            db['last timestamp'] = dt.datetime.now()
-            db['timestamp msg'] = msg
+    @staticmethod
+    def writeTimestamp(db, msg):
+        db['last timestamp'] = dt.datetime.now()
+        db['timestamp msg'] = msg
 
 
 class ExpirationCheck:
     def __init__(self, interval):
         self.interval = interval
-        self.timestampCache = TimeStampCache()
+        self.transaction = None
 
     def isExpired(self):
-        timestamp, msg = self.timestampCache.readTimestamp()
+        timestamp, msg = TimestampStore.readTimestamp(self.transaction)
         # TODO: log msg
         return self.interval.isExpired(timestamp)
 
     def mark(self):
         msg = self.interval.mark()
-        self.timestampCache.writeTimestamp(msg)
+        TimestampStore.writeTimestamp(self.transaction, msg)
 
     def getNext(self):
-        timestamp, _ = self.timestampCache.readTimestamp()
+        timestamp, _ = TimestampStore.readTimestamp(self.transaction)
         return self.interval.getNext(timestamp)
 
     def __enter__(self):
-        pass
-        # TODO: make the DB context guard
+        if self.transaction is not None:
+            raise TransactionCollisionException("ExpirationCheck is already in opened transaction!")
+
+        self.transaction = DataStore.get()
+        self.transaction.open()
+        return self
 
     def __exit__(self, type, value, tb):
-        pass
-        # TODO: make the DB context guard
+        if self.transaction is None:
+            raise TransactionCollisionException("ExpirationCheck is not opened!")
+
+        self.transaction.close()
+        self.transaction = None
 
 
 class BaseInterval:

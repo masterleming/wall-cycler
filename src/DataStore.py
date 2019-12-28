@@ -24,14 +24,20 @@ class _DataStore:
         self.db = None
 
     def __enter__(self):
+        self.open()
+        return self.db
+
+    def __exit__(self, type, value, tb):
+        self.close()
+
+    def open(self):
         if self.db is not None:
             raise TransactionCollisionException("DB is already opened!")
 
         cachePath = os.path.join(self.config.cacheDir, 'wloop')
         self.db = shelve.open(cachePath)
-        return self.db
 
-    def __exit__(self, type, value, tb):
+    def close(self):
         if self.db is None:
             raise TransactionCollisionException("DB is closed!")
 
