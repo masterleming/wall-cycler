@@ -95,8 +95,14 @@ class Test_TestDailyInterval(unittest.TestCase):
         self.assertFalse(uut.isExpired(datetime.now()))
 
     def test_mark(self):
-        uut = DailyInterval()
-        self.assertEqual(uut.mark(), "daily")
+        with mock.patch("datetime.date", mock.Mock()) as fakeDate:
+            fakeDate.today.return_value = self.today.date()
+            uut = DailyInterval()
+            self.assertEqual(uut.nextChange, self.today + timedelta(days=1))
+
+            fakeDate.today.return_value = (self.today + timedelta(days=1)).date()
+            self.assertEqual(uut.mark(), "daily")
+            self.assertEqual(uut.nextChange, self.today + timedelta(days=2))
 
     def test_getNext(self):
         with mock.patch("datetime.date", mock.Mock()) as fakeDate:
