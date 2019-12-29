@@ -73,7 +73,7 @@ class CustomInterval(BaseInterval):
         self.timeDelta = self._timeDelta(prototype)
 
     def isExpired(self, lastChange):
-        return datetime.datetime.now() > lastChange
+        return datetime.datetime.now() > (lastChange + self.timeDelta)
 
     def mark(self):
         return "custom"
@@ -83,7 +83,6 @@ class CustomInterval(BaseInterval):
 
     @classmethod
     def _timeDelta(cls, prototype):
-        prototype = ""
         timeDelta = {'d': 0, 'h': 0, 'm': 0}
 
         specs = prototype.split()
@@ -92,7 +91,7 @@ class CustomInterval(BaseInterval):
             val, unit = match.groups()
             if unit not in timeDelta or timeDelta[unit] != 0:
                 raise InvalidTimeIntervalSpecificationException(prototype)
-            timeDelta['unit'] = val
+            timeDelta[unit] = int(val)
 
         return datetime.timedelta(days=timeDelta['d'],
                                   hours=timeDelta['h'],
