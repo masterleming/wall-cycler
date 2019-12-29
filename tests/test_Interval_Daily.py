@@ -6,8 +6,8 @@ from datetime import datetime, timedelta, date, time
 
 from Interval.Intervals import DailyInterval
 
-class Test_TestDailyInterval(unittest.TestCase):
 
+class Test_TestDailyInterval(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.today = datetime(year=2019, month=12, day=29)
@@ -32,18 +32,24 @@ class Test_TestDailyInterval(unittest.TestCase):
             for microseconds in range(
                     0, self.microsecondsInADay,
                     self.microsecondsInADay // self.iterations):
-                lastChange = self._timeAfterToday(timedelta(microseconds=microseconds))
+                lastChange = self._timeAfterToday(
+                    timedelta(microseconds=microseconds))
                 self.assertFalse(uut.isExpired(lastChange))
 
-            for milliseconds in range(0, self.millisecondsInADay, self.millisecondsInADay // self.iterations):
-                lastChange = self._timeAfterToday(timedelta(milliseconds=milliseconds))
+            for milliseconds in range(
+                    0, self.millisecondsInADay,
+                    self.millisecondsInADay // self.iterations):
+                lastChange = self._timeAfterToday(
+                    timedelta(milliseconds=milliseconds))
                 self.assertFalse(uut.isExpired(lastChange))
 
-            for seconds in range(0, self.secondsInADay, self.secondsInADay // self.iterations):
+            for seconds in range(0, self.secondsInADay,
+                                 self.secondsInADay // self.iterations):
                 lastChange = self._timeAfterToday(timedelta(seconds=seconds))
                 self.assertFalse(uut.isExpired(lastChange))
 
-            for minutes in range(0, self.minutesInADay, self.minutesInADay // self.iterations):
+            for minutes in range(0, self.minutesInADay,
+                                 self.minutesInADay // self.iterations):
                 lastChange = self._timeAfterToday(timedelta(minutes=minutes))
                 self.assertFalse(uut.isExpired(lastChange))
 
@@ -59,18 +65,24 @@ class Test_TestDailyInterval(unittest.TestCase):
             for microseconds in range(
                     1, self.microsecondsInADay,
                     self.microsecondsInADay // self.iterations):
-                lastChange = self._timeBeforeToday(timedelta(microseconds=microseconds))
+                lastChange = self._timeBeforeToday(
+                    timedelta(microseconds=microseconds))
                 self.assertTrue(uut.isExpired(lastChange))
 
-            for milliseconds in range(1, self.millisecondsInADay, self.millisecondsInADay // self.iterations):
-                lastChange = self._timeBeforeToday(timedelta(milliseconds=milliseconds))
+            for milliseconds in range(
+                    1, self.millisecondsInADay,
+                    self.millisecondsInADay // self.iterations):
+                lastChange = self._timeBeforeToday(
+                    timedelta(milliseconds=milliseconds))
                 self.assertTrue(uut.isExpired(lastChange))
 
-            for seconds in range(1, self.secondsInADay, self.secondsInADay // self.iterations):
+            for seconds in range(1, self.secondsInADay,
+                                 self.secondsInADay // self.iterations):
                 lastChange = self._timeBeforeToday(timedelta(seconds=seconds))
                 self.assertTrue(uut.isExpired(lastChange))
 
-            for minutes in range(1, self.minutesInADay, self.minutesInADay // self.iterations):
+            for minutes in range(1, self.minutesInADay,
+                                 self.minutesInADay // self.iterations):
                 lastChange = self._timeBeforeToday(timedelta(minutes=minutes))
                 self.assertTrue(uut.isExpired(lastChange))
 
@@ -88,7 +100,8 @@ class Test_TestDailyInterval(unittest.TestCase):
 
     def test_getNext(self):
         with mock.patch("datetime.date", mock.Mock()) as fakeDate:
-            tomorrow = datetime.combine(date.today() + timedelta(days=1), time(0))
+            tomorrow = datetime.combine(date.today() + timedelta(days=1),
+                                        time(0))
             fakeDate.today.return_value = self.today.date()
             uut = DailyInterval()
             self.assertEqual(uut.getNext(datetime.now()), tomorrow)
