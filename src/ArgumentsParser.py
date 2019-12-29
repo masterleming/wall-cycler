@@ -3,7 +3,7 @@
 import argparse
 
 from RuntimeConfig import RuntimeConfig
-from Interval import Interval
+from Interval import Intervals
 
 """
 [wloop]
@@ -34,4 +34,4 @@ class ArgumentsParser:
 
     @staticmethod
     def __interval_choices(arg):
-        return Interval(arg)
+        return Intervals.Interval(arg)

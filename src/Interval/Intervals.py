@@ -1,4 +1,4 @@
-# Interval
+# Intervals
 
 import datetime
 import uptime
@@ -41,7 +41,7 @@ class BootInterval(BaseInterval):
         self.lastBoot = uptime.boottime()
 
     def isExpired(self, lastChange):
-        return not (lastChange < self.lastBoot)
+        return lastChange < self.lastBoot
 
     def mark(self):
         return "boot"

@@ -1,6 +1,6 @@
 # RuntimeConfig
 
-from Interval import Interval
+from Interval import Intervals
 
 class RuntimeConfig:
     def __init__(self):
@@ -46,7 +46,7 @@ class RuntimeConfig:
 
         val = wloopConf.get('change time')
         if val is not None:
-            ret.interval = Interval(val)
+            ret.interval = Intervals.Interval(val)
 
         val = wloopConf.get('cache dir')
         if val is not None:
