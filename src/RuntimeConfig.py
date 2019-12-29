@@ -64,7 +64,7 @@ class RuntimeConfig:
             ret.order = argsConf.order
 
         if argsConf.img_path is not None and argsConf.img_path is not []:
-            ret.wallpaperPaths = argsConf.wallpaperPaths
+            ret.wallpaperPaths = argsConf.img_path
 
         if argsConf.interval is not None:
             ret.interval = argsConf.interval

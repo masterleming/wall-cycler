@@ -39,7 +39,7 @@ class Test_TestArgumentsParser(unittest.TestCase):
             self.assertEqual(config.order, order)
 
         if imgDirs is not None:
-            self.assertEqual(config.img_path, imgDirs)
+            self.assertEqual(config.wallpaperPaths, imgDirs)
 
         if interval is not None:
             self.assertEqual(config.interval, interval)
