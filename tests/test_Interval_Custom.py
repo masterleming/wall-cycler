@@ -69,7 +69,7 @@ class Test_TestCustomInterval(unittest.TestCase):
                                           minutes=minutes)
             uut = CustomInterval(proto)
 
-            self.assertFalse(uut.isExpired(datetime.now))
+            self.assertFalse(uut.isExpired(datetime.now()))
 
     def test_mark(self):
         for days, hours, minutes in self._getTimeSpecs(self.minutes,

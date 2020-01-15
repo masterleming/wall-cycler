@@ -106,7 +106,7 @@ class Test_TestDailyInterval(unittest.TestCase):
 
     def test_getNext(self):
         with mock.patch("datetime.date", mock.Mock()) as fakeDate:
-            tomorrow = datetime.combine(date.today() + timedelta(days=1),
+            tomorrow = datetime.combine(self.today.date() + timedelta(days=1),
                                         time(0))
             fakeDate.today.return_value = self.today.date()
             uut = DailyInterval()
