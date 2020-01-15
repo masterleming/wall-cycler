@@ -35,7 +35,7 @@ class GlobalConfig:
         return cls.__instance
 
     def __init__(self, config):
-        self.__instance = config
+        GlobalConfig.__instance = config
 
 
 class ConfigLoader:
