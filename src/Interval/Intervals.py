@@ -35,6 +35,9 @@ class BaseInterval:
     def getNext(self, lastChange):
         return None
 
+    def __eq__(self, other):
+        return str(self) == str(other)
+
 
 class BootInterval(BaseInterval):
     def __init__(self):

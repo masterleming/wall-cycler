@@ -94,6 +94,13 @@ class RuntimeConfig:
 
         return ret
 
+    def __eq__(self, other):
+        return (self.order == other.order
+                and self.wallpaperPaths == other.wallpaperPaths
+                and self.interval == other.interval
+                and self.cacheDir == other.cacheDir
+                and self.backend == other.backend)
+
     def __str__(self):
         ret = "[{root}]\n".format(root=self._ConfigFileKeys.rootSection.value)
         if self.order != "":
