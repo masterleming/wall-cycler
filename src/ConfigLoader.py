@@ -2,6 +2,8 @@
 
 import configparser
 import os.path
+import enum
+
 from exceptions import MissingConfigFileException
 from RuntimeConfig import RuntimeConfig
 
@@ -14,7 +16,8 @@ cache dir = path to the cache folder
 wallpaper backend = sway | $(expression)
 """
 
-__defaultConfig = """
+class DefaultConfig(enum.Enum):
+    defaultConfig = """
 [wloop]
 order = shuffle
 wallpaper paths = $HOME/Pictures
@@ -22,8 +25,7 @@ change time = daily
 cache dir = $HOME/.cache/wloop
 wallpaper backend = sway
 """
-
-__userConfigPath = "$HOME/.config/wloop/wloop.conf"
+    userConfigPath = "$HOME/.config/wloop/wloop.conf"
 
 
 class GlobalConfig:
@@ -40,7 +42,7 @@ class GlobalConfig:
 
 class ConfigLoader:
     def __init__(self, configPath=None, runtimeConf=None):
-        self.configPaths = [__userConfigPath]
+        self.configPaths = [DefaultConfig.userConfigPath.value]
         if configPath is not None:
             self.configPaths.append(configPath)
         self.runtimeConf = runtimeConf
@@ -49,13 +51,13 @@ class ConfigLoader:
 
     def loadConfig(self):
         self.configParser = configparser.ConfigParser()
-        self.configParser.read_string(__defaultConfig)
+        self.configParser.read_string(DefaultConfig.defaultConfig.value)
 
         success = self.configParser.read(self.configPaths)
 
         if len(success) != len(self.configPaths):
-            failed = self.configPaths - success
-            if len(failed) == 1 and failed[0] == __userConfigPath:
+            failed = [confPath for confPath in self.configPaths if confPath not in success]
+            if len(failed) == 1 and failed[0] == DefaultConfig.userConfigPath.value:
                 #TODO: log
                 pass
             else:
@@ -72,7 +74,7 @@ class ConfigLoader:
 
     def createDefaultConfig(self, path=None):
         if path is None:
-            path = __userConfigPath
+            path = DefaultConfig.userConfigPath.value
 
         path = self.__expandPath(path)
         confDir = os.path.dirname(path)
@@ -85,7 +87,7 @@ class ConfigLoader:
             os.rename(path, backup)
 
         defaultConf = configparser.ConfigParser()
-        defaultConf.read_string(__defaultConfig)
+        defaultConf.read_string(DefaultConfig.defaultConfig.value)
         with open(path, 'w') as confFile:
             defaultConf.write(confFile)
 
