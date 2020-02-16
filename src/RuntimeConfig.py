@@ -1,14 +1,29 @@
 # RuntimeConfig
 
 from Interval import Intervals
+import enum
 
 class RuntimeConfig:
-    def __init__(self):
-        self.order = ""
-        self.wallpaperPaths = []
-        self.interval = None
-        self.cacheDir = ""
-        self.backend = ""
+
+    class _ConfigFileKeys(enum.Enum):
+        rootSection = 'wloop'
+        order = 'order'
+        wallpaperPaths = 'wallpaper paths'
+        interval = 'change time'
+        cacheDir = 'cache dir'
+        backend = 'wallpaper backend'
+
+    def __init__(self,
+                 order="",
+                 wallpaperPaths=[],
+                 interval=None,
+                 cacheDir="",
+                 backend=""):
+        self.order = order
+        self.wallpaperPaths = wallpaperPaths
+        self.interval = interval
+        self.cacheDir = cacheDir
+        self.backend = backend
 
     def __iadd__(self, other):
         default = RuntimeConfig()
@@ -29,30 +44,30 @@ class RuntimeConfig:
 
         return self
 
-    @staticmethod
-    def fromCfgFile(parsed):
+    @classmethod
+    def fromCfgFile(cls, parsed):
         ret = RuntimeConfig()
-        wloopConf = parsed['wloop']
+        wloopConf = parsed[cls._ConfigFileKeys.rootSection.value]
 
-        val = wloopConf.get('order')
+        val = wloopConf.get(cls._ConfigFileKeys.order.value)
         if val is not None:
             ret.order = val
 
-        val = wloopConf.get('wallpaper paths')
+        val = wloopConf.get(cls._ConfigFileKeys.wallpaperPaths.value)
         if val is not None:
             ret.wallpaperPaths = [
                 p.strip() for path in val.split('\n') for p in path.split(':')
             ]
 
-        val = wloopConf.get('change time')
+        val = wloopConf.get(cls._ConfigFileKeys.interval.value)
         if val is not None:
             ret.interval = Intervals.Interval(val)
 
-        val = wloopConf.get('cache dir')
+        val = wloopConf.get(cls._ConfigFileKeys.cacheDir.value)
         if val is not None:
             ret.cacheDir = val
 
-        val = wloopConf.get('wallpaper backend')
+        val = wloopConf.get(cls._ConfigFileKeys.backend.value)
         if val is not None:
             ret.backend = val
 
@@ -76,3 +91,25 @@ class RuntimeConfig:
             ret.backend = argsConf.backend
 
         return ret
+
+    def __str__(self):
+        ret = "[{root}]\n".format(root=self._ConfigFileKeys.rootSection.value)
+        if self.order != "":
+            ret += self.__strPrep(self._ConfigFileKeys.order.value, self.order)
+        if self.wallpaperPaths != []:
+            ret += self.__strPrep(self._ConfigFileKeys.wallpaperPaths.value,
+                                  ":".join(self.wallpaperPaths))
+        if self.interval is not None:
+            ret += self.__strPrep(self._ConfigFileKeys.interval.value,
+                                  str(self.interval))
+        if self.cacheDir != "":
+            ret += self.__strPrep(self._ConfigFileKeys.cacheDir.value,
+                                  self.cacheDir)
+        if self.backend != "":
+            ret += self.__strPrep(self._ConfigFileKeys.backend.value,
+                                  self.backend)
+        return ret
+
+    @staticmethod
+    def __strPrep(key, value):
+        return "{key} = {value}\n".format(key=key, value=value)
