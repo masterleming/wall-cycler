@@ -71,6 +71,8 @@ class RuntimeConfig:
         if val is not None:
             ret.backend = val
 
+        return ret
+
     @staticmethod
     def fromProgramArgs(argsConf):
         ret = RuntimeConfig()
