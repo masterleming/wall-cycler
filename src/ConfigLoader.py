@@ -92,8 +92,9 @@ class ConfigLoader:
             defaultConf.write(confFile)
 
     def _combineWithRuntimeArgs(self):
-        runtime = RuntimeConfig.fromProgramArgs(self.runtimeConf)
-        self.config += runtime
+        if self.runtimeConf is not None:
+            runtime = RuntimeConfig.fromProgramArgs(self.runtimeConf)
+            self.config += runtime
 
     @staticmethod
     def __expandPath(path):
