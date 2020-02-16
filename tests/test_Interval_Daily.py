@@ -100,7 +100,8 @@ class Test_TestDailyInterval(unittest.TestCase):
             uut = DailyInterval()
             self.assertEqual(uut.nextChange, self.today + timedelta(days=1))
 
-            fakeDate.today.return_value = (self.today + timedelta(days=1)).date()
+            fakeDate.today.return_value = (self.today +
+                                           timedelta(days=1)).date()
             self.assertEqual(uut.mark(), "daily")
             self.assertEqual(uut.nextChange, self.today + timedelta(days=2))
 
@@ -111,6 +112,10 @@ class Test_TestDailyInterval(unittest.TestCase):
             fakeDate.today.return_value = self.today.date()
             uut = DailyInterval()
             self.assertEqual(uut.getNext(datetime.now()), tomorrow)
+
+    def test_string(self):
+        uut = DailyInterval()
+        self.assertEqual(str(uut), "daily")
 
     @classmethod
     def _timeAfterToday(cls, diff):

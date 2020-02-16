@@ -13,7 +13,7 @@ def Interval(prototype):
     if not __intervalPattern.search(prototype):
         raise InvalidTimeIntervalSpecificationException(prototype)
 
-    if prototype is "boot":
+    if prototype == "boot":
         return BootInterval()
 
     if prototype == "daily":
@@ -46,6 +46,9 @@ class BootInterval(BaseInterval):
     def mark(self):
         return "boot"
 
+    def __str__(self):
+        return "boot"
+
 
 class DailyInterval(BaseInterval):
     def __init__(self):
@@ -63,6 +66,9 @@ class DailyInterval(BaseInterval):
 
     def getNext(self, lastChange):
         return self.nextChange
+
+    def __str__(self):
+        return "daily"
 
 
 class CustomInterval(BaseInterval):
@@ -96,3 +102,16 @@ class CustomInterval(BaseInterval):
         return datetime.timedelta(days=timeDelta['d'],
                                   hours=timeDelta['h'],
                                   minutes=timeDelta['m'])
+
+    def __str__(self):
+        tmp = []
+        if self.timeDelta.days > 0:
+            tmp.append("{}d".format(self.timeDelta.days))
+        minutes = int(self.timeDelta.seconds // 60)
+        hours = minutes // 60
+        minutes = minutes - hours * 60
+        if hours > 0:
+            tmp.append("{}h".format(hours))
+        if minutes > 0:
+            tmp.append("{}m".format(minutes))
+        return " ".join(tmp)

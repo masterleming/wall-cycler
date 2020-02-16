@@ -94,6 +94,16 @@ class Test_TestCustomInterval(unittest.TestCase):
 
             self.assertEqual(uut.getNext(self.now), expectedNext)
 
+    def test_string(self):
+        for days, hours, minutes in self._getTimeSpecs(self.minutes,
+                                                       self.minutes // 177):
+            proto = self._createPrototype(days=days,
+                                          hours=hours,
+                                          minutes=minutes)
+            uut = CustomInterval(proto)
+
+            self.assertEqual(str(uut), proto)
+
     @staticmethod
     def _createPrototype(days=0, hours=0, minutes=0):
         parts = []

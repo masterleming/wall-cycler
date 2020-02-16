@@ -102,6 +102,10 @@ class Test_TestBootInterval(unittest.TestCase):
         uut = BootInterval()
         self.assertEqual(uut.getNext(datetime.now()), None)
 
+    def test_string(self):
+        uut = BootInterval()
+        self.assertEqual(str(uut), "boot")
+
     @classmethod
     def _timeAfterBoot(cls, diff=timedelta(days=0, hours=2, minutes=30)):
         return cls.boottime + diff
