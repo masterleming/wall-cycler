@@ -6,10 +6,12 @@ from ConfigLoader import GlobalConfig
 
 
 class Test_TestGlobalConfig(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.testInstance = "Test config instance!"
+
+    def setUp(self):
+        GlobalConfig._GlobalConfig__instance = None
 
     def test_000_gettingWithoutSetting(self):
         uut = GlobalConfig.get()
@@ -40,7 +42,6 @@ class Test_TestGlobalConfig(unittest.TestCase):
         self._assertConfig(GlobalConfig.get(), newConfig)
 
         self.assertIs(uut1.get(), uut2.get())
-
 
     def _assertConfig(self, otherInstance, correct=None):
         if correct is None:
