@@ -6,6 +6,7 @@ import enum
 
 from exceptions import MissingConfigFileException
 from RuntimeConfig import RuntimeConfig
+from Interval.Intervals import Interval
 
 """
 [wloop]
@@ -17,15 +18,31 @@ wallpaper backend = sway | $(expression)
 """
 
 class DefaultConfig(enum.Enum):
-    defaultConfig = """
-[wloop]
+    defaultConfig = """[wloop]
 order = shuffle
 wallpaper paths = $HOME/Pictures
 change time = daily
 cache dir = $HOME/.cache/wloop
 wallpaper backend = sway
 """
+    defaultOrder = "shuffle"
+    defaultWallpaperPaths = "$HOME/Pictures"
+    defaultInterval = "daily"
+    defaultCacheDir = "$HOME/.cache/wloop"
+    defaultBackend = "sway"
     userConfigPath = "$HOME/.config/wloop/wloop.conf"
+
+    @classmethod
+    def getRuntime(cls):
+        return RuntimeConfig(order=cls.defaultOrder.value,
+                             wallpaperPaths=[cls.defaultWallpaperPaths.value],
+                             interval=Interval(cls.defaultInterval.value),
+                             cacheDir=cls.defaultCacheDir.value,
+                             backend=cls.defaultBackend.value)
+
+    @classmethod
+    def getIni(cls):
+        return str(cls.getRuntime())
 
 
 class GlobalConfig:
@@ -51,7 +68,7 @@ class ConfigLoader:
 
     def loadConfig(self):
         self.configParser = configparser.ConfigParser()
-        self.configParser.read_string(DefaultConfig.defaultConfig.value)
+        self.configParser.read_string(DefaultConfig.getIni())
 
         success = self.configParser.read(self.configPaths)
 
@@ -93,7 +110,7 @@ class ConfigLoader:
 
     def _combineWithRuntimeArgs(self):
         if self.runtimeConf is not None:
-            runtime = RuntimeConfig.fromProgramArgs(self.runtimeConf)
+            runtime = RuntimeConfig.fromProgramArgs(self.runtimeConf) # XXX is this needed? the Argument Parser returns RuntimeConfig already!
             self.config += runtime
 
     @staticmethod
