@@ -72,8 +72,12 @@ class ConfigLoader:
         success = self.configParser.read(self.configPaths)
 
         if len(success) != len(self.configPaths):
-            failed = [confPath for confPath in self.configPaths if confPath not in success]
-            if len(failed) == 1 and failed[0] == DefaultConfig.userConfigPath.value:
+            failed = [
+                confPath for confPath in self.configPaths
+                if confPath not in success
+            ]
+            if (len(failed) == 1
+                    and failed[0] == DefaultConfig.userConfigPath.value):
                 #TODO: log
                 pass
             else:
