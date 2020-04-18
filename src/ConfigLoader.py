@@ -7,7 +7,6 @@ import enum
 from exceptions import MissingConfigFileException
 from RuntimeConfig import RuntimeConfig
 from Interval.Intervals import Interval
-
 """
 [wloop]
 order = shuffle | sorted
@@ -16,6 +15,7 @@ change time = 1d 4h 30m | boot | daily
 cache dir = path to the cache folder
 wallpaper backend = sway | $(expression)
 """
+
 
 class DefaultConfig(enum.Enum):
     defaultConfig = """[wloop]
@@ -58,11 +58,10 @@ class GlobalConfig:
 
 
 class ConfigLoader:
-    def __init__(self, configPath=None, runtimeConf=None):
+    def __init__(self, configPath=None):
         self.configPaths = [DefaultConfig.userConfigPath.value]
         if configPath is not None:
             self.configPaths.append(configPath)
-        self.runtimeConf = runtimeConf
         self.configParser = None
         self.config = RuntimeConfig()
 
@@ -84,10 +83,7 @@ class ConfigLoader:
                         strList.strip))
 
         self.config = RuntimeConfig.fromCfgFile(self.configParser)
-        self._combineWithRuntimeArgs()
-
-        completeConfig = GlobalConfig(self.config)
-        return completeConfig.get()
+        return self.config
 
     def createDefaultConfig(self, path=None):
         if path is None:
@@ -107,11 +103,6 @@ class ConfigLoader:
         defaultConf.read_string(DefaultConfig.defaultConfig.value)
         with open(path, 'w') as confFile:
             defaultConf.write(confFile)
-
-    def _combineWithRuntimeArgs(self):
-        if self.runtimeConf is not None:
-            runtime = RuntimeConfig.fromProgramArgs(self.runtimeConf) # XXX is this needed? the Argument Parser returns RuntimeConfig already!
-            self.config += runtime
 
     @staticmethod
     def __expandPath(path):
