@@ -1,4 +1,4 @@
-# ConfigLoader
+# FileLoader
 
 import configparser
 import os.path
@@ -45,7 +45,7 @@ wallpaper backend = sway
         return str(cls.getRuntime())
 
 
-class ConfigLoader:
+class FileLoader:
     def __init__(self, configPath=None):
         self.configPaths = [DefaultConfig.userConfigPath.value]
         if configPath is not None:
