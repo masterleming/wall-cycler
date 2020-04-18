@@ -6,7 +6,7 @@ from .RuntimeConfig import RuntimeConfig
 from wall_cycler.Interval import Intervals
 
 """
-[wloop]
+[wall_cycler]
 order = shuffle | sorted
 wallpaper paths = multiple paths allowed in either unix format (path1:path2) or multiline in separate lines
 change time = 1d 4h 30m | boot | once a day

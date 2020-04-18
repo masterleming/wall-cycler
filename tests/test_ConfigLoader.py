@@ -13,7 +13,7 @@ TEST_CONFIG_TEMP_PREFIX = 'test-'
 TEST_CONFIG_DEFAULT_NAME = 'default.cfg'
 TEST_CONFIG_FILE = 'test.cfg'
 TEST_CONFIG = """
-[wloop]
+[wall_cycler]
 order = sorted
 wallpaper paths = testPath1:testPath2
 change time = boot

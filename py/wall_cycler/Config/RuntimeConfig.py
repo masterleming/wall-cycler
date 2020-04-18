@@ -7,7 +7,7 @@ import enum
 class RuntimeConfig:
 
     class _ConfigFileKeys(enum.Enum):
-        rootSection = 'wloop'
+        rootSection = 'wall_cycler'
         order = 'order'
         wallpaperPaths = 'wallpaper paths'
         interval = 'change time'

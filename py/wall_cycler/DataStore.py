@@ -34,7 +34,7 @@ class _DataStore:
         if self.db is not None:
             raise TransactionCollisionException("DB is already opened!")
 
-        cachePath = os.path.join(self.config.cacheDir, 'wloop')
+        cachePath = os.path.join(self.config.cacheDir, 'wall_cycler')
         self.db = shelve.open(cachePath)
 
     def close(self):
