@@ -53,8 +53,12 @@ class GlobalConfig:
     def get(cls):
         return cls.__instance
 
-    def __init__(self, config):
-        GlobalConfig.__instance = config
+    @classmethod
+    def set(cls, config):
+        cls.__instance = config
+
+    def __init__(self):
+        pass
 
 
 class ConfigLoader:

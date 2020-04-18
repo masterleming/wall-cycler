@@ -18,7 +18,7 @@ class Test_TestGlobalConfig(unittest.TestCase):
         self.assertIsNone(uut)
 
     def test_setConfig(self):
-        uut = GlobalConfig(self.testInstance)
+        GlobalConfig.set(self.testInstance)
         self._assertConfig(GlobalConfig._GlobalConfig__instance)
 
     def test_gettingConfig(self):
@@ -29,16 +29,19 @@ class Test_TestGlobalConfig(unittest.TestCase):
         self._assertConfig(uut)
 
     def test_setGetConfig(self):
-        conf = GlobalConfig(self.testInstance)
+        conf = GlobalConfig()
+        conf.set(self.testInstance)
         self._assertConfig(conf.get())
         self._assertConfig(GlobalConfig.get())
 
     def test_overwriteConfig(self):
-        uut1 = GlobalConfig(self.testInstance)
+        uut1 = GlobalConfig()
+        uut1.set(self.testInstance)
         self._assertConfig(GlobalConfig.get())
 
         newConfig = "something new!"
-        uut2 = GlobalConfig(newConfig)
+        uut2 = GlobalConfig()
+        uut2.set(newConfig)
         self._assertConfig(GlobalConfig.get(), newConfig)
 
         self.assertIs(uut1.get(), uut2.get())
