@@ -1,7 +1,7 @@
 # test_SortedUpdater
 
-from SortedUpdater import SortedUpdater
-from WallCollection import WallCollection
+from wall_cycler.Wallpapers.SortedUpdater import SortedUpdater
+from wall_cycler.Wallpapers.WallCollection import WallCollection
 
 import unittest
 import random

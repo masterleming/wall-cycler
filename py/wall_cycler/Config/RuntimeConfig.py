@@ -1,6 +1,7 @@
 # RuntimeConfig
 
-from Interval import Intervals
+# TODO: substitute dotted submodule access with proper paths (top module name)
+from wall_cycler.Interval import Intervals
 import enum
 
 class RuntimeConfig:

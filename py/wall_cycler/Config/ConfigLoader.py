@@ -4,9 +4,9 @@ import configparser
 import os.path
 import enum
 
-from exceptions import MissingConfigFileException
-from RuntimeConfig import RuntimeConfig
-from Interval.Intervals import Interval
+from .RuntimeConfig import RuntimeConfig
+from wall_cycler.Interval.Intervals import Interval
+from wall_cycler.exceptions import MissingConfigFileException
 """
 [wloop]
 order = shuffle | sorted

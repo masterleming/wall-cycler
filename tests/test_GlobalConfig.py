@@ -2,7 +2,7 @@
 
 import unittest
 
-from GlobalConfig import GlobalConfig
+from wall_cycler.Config.GlobalConfig import GlobalConfig
 
 
 class Test_TestGlobalConfig(unittest.TestCase):

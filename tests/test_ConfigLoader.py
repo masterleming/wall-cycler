@@ -5,8 +5,8 @@ import unittest
 import os.path
 from tempfile import TemporaryDirectory
 
-from ConfigLoader import ConfigLoader, DefaultConfig
-from RuntimeConfig import RuntimeConfig
+from wall_cycler.Config.ConfigLoader import ConfigLoader, DefaultConfig
+from wall_cycler.Config.RuntimeConfig import RuntimeConfig
 
 TEST_CONFIG_ROOT = '/tmp'
 TEST_CONFIG_TEMP_PREFIX = 'test-'

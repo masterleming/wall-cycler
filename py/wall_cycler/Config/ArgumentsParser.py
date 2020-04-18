@@ -2,8 +2,8 @@
 
 import argparse
 
-from RuntimeConfig import RuntimeConfig
-from Interval import Intervals
+from .RuntimeConfig import RuntimeConfig
+from wall_cycler.Interval import Intervals
 
 """
 [wloop]

@@ -3,8 +3,8 @@
 import shelve
 import os.path
 
-from GlobalConfig import GlobalConfig
-from exceptions import TransactionCollisionException
+from .Config.GlobalConfig import GlobalConfig
+from .exceptions import TransactionCollisionException
 
 class DataStore:
 

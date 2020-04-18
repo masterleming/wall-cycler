@@ -4,7 +4,7 @@ import unittest
 import unittest.mock as mock
 from datetime import datetime, timedelta
 
-from Interval.Intervals import BootInterval
+from wall_cycler.Interval.Intervals import BootInterval
 
 
 class Test_TestBootInterval(unittest.TestCase):
