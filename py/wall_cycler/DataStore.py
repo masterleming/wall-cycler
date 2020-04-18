@@ -6,7 +6,7 @@ import os.path
 from .Config.GlobalConfig import GlobalConfig
 from .exceptions import TransactionCollisionException
 
-class DataStore:
+class DataStore: # TODO: add unit tests
 
     __instance = None
 
