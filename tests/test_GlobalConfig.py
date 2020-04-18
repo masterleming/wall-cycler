@@ -2,7 +2,7 @@
 
 import unittest
 
-from ConfigLoader import GlobalConfig
+from GlobalConfig import GlobalConfig
 
 
 class Test_TestGlobalConfig(unittest.TestCase):

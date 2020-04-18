@@ -3,7 +3,7 @@
 import shelve
 import os.path
 
-from ConfigLoader import GlobalConfig
+from GlobalConfig import GlobalConfig
 from exceptions import TransactionCollisionException
 
 class DataStore:

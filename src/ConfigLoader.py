@@ -45,22 +45,6 @@ wallpaper backend = sway
         return str(cls.getRuntime())
 
 
-class GlobalConfig:
-
-    __instance = None
-
-    @classmethod
-    def get(cls):
-        return cls.__instance
-
-    @classmethod
-    def set(cls, config):
-        cls.__instance = config
-
-    def __init__(self):
-        pass
-
-
 class ConfigLoader:
     def __init__(self, configPath=None):
         self.configPaths = [DefaultConfig.userConfigPath.value]
