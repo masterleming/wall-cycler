@@ -1,6 +1,7 @@
 # test_ConfigLoader
 
 import unittest
+
 import os.path
 from tempfile import TemporaryDirectory
 
@@ -20,11 +21,20 @@ cache dir = .test/cache
 wallpaper backend = 'bash -c test'
 """
 
-_TestConfig = RuntimeConfig(order="sorted",
-                            wallpaperPaths=["testPath1", "testPath2"],
-                            interval="boot",
-                            cacheDir=".cache/test",
-                            backend='test backend')
+_TestConfig1 = RuntimeConfig(order="sorted",
+                             wallpaperPaths=["testPath1", "testPath2"],
+                             interval="boot",
+                             cacheDir=".cache/test",
+                             backend="test backend")
+
+_TestConfig2 = RuntimeConfig(wallpaperPaths=["otherPath1", "otherPath2"],
+                             interval="2h")
+
+_CombinedConfig = RuntimeConfig(order="sorted",
+                                wallpaperPaths=["otherPath1", "otherPath2"],
+                                interval="2h",
+                                cacheDir=".cache/test",
+                                backend="test backend")
 
 
 class Test_TestConfigLoader(unittest.TestCase):
@@ -44,20 +54,50 @@ class Test_TestConfigLoader(unittest.TestCase):
             defC = self._getDefaultConfig()
             self.assertEqual(writtenConf, defC)
 
+    def test_defaultFromRuntimeIsTheSameAsFromString(self):
+        fromIni = DefaultConfig.getIni()
+        fromStr = DefaultConfig.defaultConfig.value
+        self.assertEqual(fromIni, fromStr)
+
+    def test_loadFromDefaultConfigFile(self):
+        with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX,
+                                dir=TEST_CONFIG_ROOT) as testDir:
+            testConfigFile = self._prepareConfig(testDir)
+
+            uut = ConfigLoader()
+            self._overrideDefaultConfigPath(uut, testConfigFile)
+
+            conf = uut.loadConfig()
+
+            self.assertEqual(conf, _TestConfig1)
+
     def test_loadSingleFile(self):
         with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX,
                                 dir=TEST_CONFIG_ROOT) as testDir:
             testConfigFile = self._prepareConfig(testDir)
 
             uut = ConfigLoader(configPath=testConfigFile)
+            self._removeDefaultConfig(uut)
+
             conf = uut.loadConfig()
 
-            self.assertEqual(conf, _TestConfig)
+            self.assertEqual(conf, _TestConfig1)
 
-    def test_defaultFromRuntimeIsTheSameAsFromString(self):
-        fromIni = DefaultConfig.getIni()
-        fromStr = DefaultConfig.defaultConfig.value
-        self.assertEqual(fromIni, fromStr)
+    def test_loadMultipleFiles(self):
+        with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX,
+                                dir=TEST_CONFIG_ROOT) as testDir:
+            defaultConfig = self._prepareConfig(testDir,
+                                                TEST_CONFIG_DEFAULT_NAME,
+                                                str(_TestConfig1))
+            testConfigFile = self._prepareConfig(testDir, TEST_CONFIG_FILE,
+                                                 str(_TestConfig2))
+
+            uut = ConfigLoader(configPath=testConfigFile)
+            self._overrideDefaultConfigPath(uut, defaultConfig)
+
+            conf = uut.loadConfig()
+
+            self.assertEqual(conf, _CombinedConfig)
 
     def _ensureConfigDoesNotExist(self, path):
         try:
@@ -70,8 +110,18 @@ class Test_TestConfigLoader(unittest.TestCase):
         return DefaultConfig.getRuntime()
 
     @staticmethod
-    def _prepareConfig(testDir):
-        testConfName = os.path.join(testDir, TEST_CONFIG_FILE)
+    def _prepareConfig(testDir,
+                       configName=TEST_CONFIG_FILE,
+                       configString=str(_TestConfig1)):
+        testConfName = os.path.join(testDir, configName)
         with open(testConfName, 'w') as testFile:
-            testFile.write(str(_TestConfig))
+            testFile.write(configString)
         return testConfName
+
+    @staticmethod
+    def _overrideDefaultConfigPath(uut, path):
+        uut.configPaths[0] = path
+
+    @staticmethod
+    def _removeDefaultConfig(uut):
+        uut.configPaths.remove(DefaultConfig.userConfigPath.value)
