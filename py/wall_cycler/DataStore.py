@@ -35,7 +35,13 @@ class DataStore:
         self.db = None
 
     def __getitem__(self, key):
+        if self.db is None:
+            with self:
+                return self.__getitem__(key)
         return self.db[key]
 
     def __setitem__(self, key, value):
+        if self.db is None:
+            with self:
+                return self.__setitem__(key, value)
         self.db[key] = value

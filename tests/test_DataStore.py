@@ -86,6 +86,43 @@ class Test_TestDataStore(unittest.TestCase):
 
             self._assertDbExists(testDir)
 
+    def test_storeAndRetrieve_withoutExpliciteOpeningOrContextManager(self):
+        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
+                                dir=TEST_CACHE_ROOT) as testDir:
+            config = RuntimeConfig(cacheDir=testDir)
+
+            uut = DataStore(config)
+            self.assertEqual(uut.db, None)
+            for key, value in TEST_DATA_PAIRS:
+                uut[key] = value
+            self.assertEqual(uut.db, None)
+
+            self.assertEqual(uut.db, None)
+            for key, value in TEST_DATA_PAIRS:
+                self.assertEqual(uut[key], value)
+            self.assertEqual(uut.db, None)
+
+            self._assertDbExists(testDir)
+
+    def test_storeAndRetrieve_withoutExpliciteOpeningOrContextManager_withDifferentInstances(self):
+        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
+                                dir=TEST_CACHE_ROOT) as testDir:
+            config = RuntimeConfig(cacheDir=testDir)
+
+            uut1 = DataStore(config)
+            self.assertEqual(uut1.db, None)
+            for key, value in TEST_DATA_PAIRS:
+                uut1[key] = value
+            self.assertEqual(uut1.db, None)
+
+            uut2 = DataStore(config)
+            self.assertEqual(uut2.db, None)
+            for key, value in TEST_DATA_PAIRS:
+                self.assertEqual(uut2[key], value)
+            self.assertEqual(uut2.db, None)
+
+            self._assertDbExists(testDir)
+
     def _assertDbExists(self, cacheDir):
         cacheFile = os.path.join(cacheDir, DATASTORE_DB)
         self.assertTrue(os.path.exists(cacheFile))
