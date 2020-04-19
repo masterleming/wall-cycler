@@ -125,3 +125,7 @@ class Test_TestFileLoader(unittest.TestCase):
     @staticmethod
     def _removeDefaultConfig(uut):
         uut.configPaths.remove(DefaultConfig.userConfigPath.value)
+
+
+if __name__ == '__main__':
+    unittest.main()

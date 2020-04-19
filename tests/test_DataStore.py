@@ -34,7 +34,6 @@ class Test_TestDataStore(unittest.TestCase):
 
             self._assertDbExists(testDir)
 
-
     def test_storeAndRetrieve_inDifferentExplicitOpens(self):
         with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
                                 dir=TEST_CACHE_ROOT) as testDir:
@@ -90,3 +89,7 @@ class Test_TestDataStore(unittest.TestCase):
     def _assertDbExists(self, cacheDir):
         cacheFile = os.path.join(cacheDir, DATASTORE_DB)
         self.assertTrue(os.path.exists(cacheFile))
+
+
+if __name__ == '__main__':
+    unittest.main()

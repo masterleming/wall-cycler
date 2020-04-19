@@ -142,7 +142,6 @@ class Test_TestShuffleUpdater(unittest.TestCase):
             self.assertEqual(self.walls.collection, [])
             self.assertEqual(self.walls.nextWall, 0)
 
-
     def test_insertEmptyListToExistingCollection(self):
         images = self._getSortedFiles()
         empty = []
@@ -179,3 +178,7 @@ class Test_TestShuffleUpdater(unittest.TestCase):
     @staticmethod
     def _getSortedFiles():
         return sorted(FILE_LIST[:])
+
+
+if __name__ == '__main__':
+    unittest.main()
