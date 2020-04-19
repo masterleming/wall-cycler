@@ -5,7 +5,7 @@ from wall_cycler.exceptions import TransactionCollisionException
 from wall_cycler.DataStore import DataStore
 
 
-class ExpirationCheck:  #TODO add unit tests!
+class ExpirationCheck:
     def __init__(self, interval, timestampStore):
         self.interval = interval
         self.timestampStore = timestampStore
