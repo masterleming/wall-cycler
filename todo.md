@@ -2,7 +2,8 @@
 ========================================
 
 - [ ] add missing unit tests
-    - [ ] DataStore
+    - [x] DataStore
+    - [ ] TimestampStore
 - [ ] prepare 'main' function
 - [ ] add program logger
     - [ ] start logging stuff
