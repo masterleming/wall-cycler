@@ -1,4 +1,4 @@
-# test_ConfigLoader
+# test_FileLoader
 
 import unittest
 
@@ -37,7 +37,7 @@ _CombinedConfig = RuntimeConfig(order="sorted",
                                 backend="test backend")
 
 
-class Test_TestConfigLoader(unittest.TestCase):
+class Test_TestFileLoader(unittest.TestCase):
     def test_createDefaultConfig(self):
         with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX,
                                 dir=TEST_CONFIG_ROOT) as testDir:
@@ -125,3 +125,7 @@ class Test_TestConfigLoader(unittest.TestCase):
     @staticmethod
     def _removeDefaultConfig(uut):
         uut.configPaths.remove(DefaultConfig.userConfigPath.value)
+
+
+if __name__ == '__main__':
+    unittest.main()

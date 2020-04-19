@@ -135,3 +135,7 @@ class Test_TestSortedUpdater(unittest.TestCase):
     @staticmethod
     def _getSortedFiles():
         return sorted(FILE_LIST[:])
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -4,35 +4,21 @@ from .TimestampStore import TimestampStore
 from wall_cycler.exceptions import TransactionCollisionException
 from wall_cycler.DataStore import DataStore
 
-class ExpirationCheck: #TODO add unit tests!
-    def __init__(self, interval):
+
+class ExpirationCheck:
+    def __init__(self, interval, timestampStore):
         self.interval = interval
-        self.transaction = None
+        self.timestampStore = timestampStore
 
     def isExpired(self):
-        timestamp, msg = TimestampStore.readTimestamp(self.transaction)
+        timestamp, msg = self.timestampStore.readTimestamp()
         # TODO: log msg
         return self.interval.isExpired(timestamp)
 
     def mark(self):
         msg = self.interval.mark()
-        TimestampStore.writeTimestamp(self.transaction, msg)
+        self.timestampStore.writeTimestamp(msg)
 
     def getNext(self):
-        timestamp, _ = TimestampStore.readTimestamp(self.transaction)
+        timestamp, _ = self.timestampStore.readTimestamp()
         return self.interval.getNext(timestamp)
-
-    def __enter__(self):
-        if self.transaction is not None:
-            raise TransactionCollisionException("ExpirationCheck is already in opened transaction!")
-
-        self.transaction = DataStore.get()
-        self.transaction.open()
-        return self
-
-    def __exit__(self, type, value, tb):
-        if self.transaction is None:
-            raise TransactionCollisionException("ExpirationCheck is not opened!")
-
-        self.transaction.close()
-        self.transaction = None

@@ -6,11 +6,8 @@ import unittest.mock as mock
 
 from wall_cycler.Config.ArgumentsParser import ArgumentsParser
 
+
 class Test_TestArgumentsParser(unittest.TestCase):
-
-    def setUp(self):
-        pass
-
     def test_parsingOrder(self):
         basicArgv = ["test_parsingOrder", "--order"]
         validOrders = ["shuffle", "sorted"]
@@ -25,9 +22,11 @@ class Test_TestArgumentsParser(unittest.TestCase):
         for order in invalidOrders:
             sys.argv = basicArgv + [order]
 
-            with mock.patch('argparse.ArgumentParser.exit', Test_TestArgumentsParser._MockExit.exit):
+            with mock.patch('argparse.ArgumentParser.exit',
+                            Test_TestArgumentsParser._MockExit.exit):
                 uut = ArgumentsParser()
-                with self.assertRaises(Test_TestArgumentsParser._MockExit) as raised:
+                with self.assertRaises(
+                        Test_TestArgumentsParser._MockExit) as raised:
                     uut.parse()
                 self.assertNotEqual(raised.exception.status, 0)
                 self.assertIn(order, raised.exception.message)
@@ -55,7 +54,6 @@ class Test_TestArgumentsParser(unittest.TestCase):
         uut = ArgumentsParser()
         conf = uut.parse()
         self._checkConfig(conf, imgDirs=paths)
-
 
     def _checkConfig(self,
                      config,
@@ -89,12 +87,13 @@ class Test_TestArgumentsParser(unittest.TestCase):
 
     class _MockExit(Exception):
         def __init__(self, status, message):
-            self. status = status
+            self.status = status
             self.message = message
 
         @classmethod
         def exit(cls, status=0, message=None):
             raise cls(status, message)
+
 
 if __name__ == '__main__':
     unittest.main()

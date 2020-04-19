@@ -3,29 +3,19 @@
 import shelve
 import os.path
 
-from .Config.GlobalConfig import GlobalConfig
 from .exceptions import TransactionCollisionException
 
-class DataStore: # TODO: add unit tests
-
-    __instance = None
-
-    @classmethod
-    def get(cls):
-        if cls.__instance is None:
-            cls.__instance = _DataStore(GlobalConfig.get())
-
-        return cls.__instance
+DATASTORE_DB = 'cache.db'
 
 
-class _DataStore:
-    def __init__(self, config):
-        self.config = config
+class DataStore:
+    def __init__(self, cacheDir):
+        self.cacheDir = cacheDir
         self.db = None
 
     def __enter__(self):
         self.open()
-        return self.db
+        return self
 
     def __exit__(self, type, value, tb):
         self.close()
@@ -34,7 +24,7 @@ class _DataStore:
         if self.db is not None:
             raise TransactionCollisionException("DB is already opened!")
 
-        cachePath = os.path.join(self.config.cacheDir, 'wall_cycler')
+        cachePath = os.path.join(self.cacheDir, DATASTORE_DB)
         self.db = shelve.open(cachePath)
 
     def close(self):
@@ -43,3 +33,15 @@ class _DataStore:
 
         self.db.close()
         self.db = None
+
+    def __getitem__(self, key):
+        if self.db is None:
+            with self:
+                return self.__getitem__(key)
+        return self.db[key]
+
+    def __setitem__(self, key, value):
+        if self.db is None:
+            with self:
+                return self.__setitem__(key, value)
+        self.db[key] = value
