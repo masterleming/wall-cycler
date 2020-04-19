@@ -14,7 +14,7 @@ class DataStore:
 
     def __enter__(self):
         self.open()
-        return self.db
+        return self
 
     def __exit__(self, type, value, tb):
         self.close()
@@ -32,3 +32,9 @@ class DataStore:
 
         self.db.close()
         self.db = None
+
+    def __getitem__(self, key):
+        return self.db[key]
+
+    def __setitem__(self, key, value):
+        self.db[key] = value
