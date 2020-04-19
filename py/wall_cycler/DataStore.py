@@ -9,8 +9,8 @@ DATASTORE_DB = 'cache.db'
 
 
 class DataStore:
-    def __init__(self, config):
-        self.config = config
+    def __init__(self, cacheDir):
+        self.cacheDir = cacheDir
         self.db = None
 
     def __enter__(self):
@@ -24,7 +24,7 @@ class DataStore:
         if self.db is not None:
             raise TransactionCollisionException("DB is already opened!")
 
-        cachePath = os.path.join(self.config.cacheDir, DATASTORE_DB)
+        cachePath = os.path.join(self.cacheDir, DATASTORE_DB)
         self.db = shelve.open(cachePath)
 
     def close(self):

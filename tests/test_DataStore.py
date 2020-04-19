@@ -21,7 +21,7 @@ class Test_TestDataStore(unittest.TestCase):
     def test_storeAndRetrieve_explicitOpen(self):
         with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
                                 dir=TEST_CACHE_ROOT) as testDir:
-            uut = DataStore(RuntimeConfig(cacheDir=testDir))
+            uut = DataStore(testDir)
             uut.open()
             for key, value in TEST_DATA_PAIRS:
                 self.assertNotIn(key, uut.db)
@@ -37,7 +37,7 @@ class Test_TestDataStore(unittest.TestCase):
     def test_storeAndRetrieve_inDifferentExplicitOpens(self):
         with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
                                 dir=TEST_CACHE_ROOT) as testDir:
-            uut1 = DataStore(RuntimeConfig(cacheDir=testDir))
+            uut1 = DataStore(testDir)
             uut1.open()
             for key, value in TEST_DATA_PAIRS:
                 self.assertNotIn(key, uut1.db)
@@ -46,7 +46,7 @@ class Test_TestDataStore(unittest.TestCase):
 
             self._assertDbExists(testDir)
 
-            uut2 = DataStore(RuntimeConfig(cacheDir=testDir))
+            uut2 = DataStore(testDir)
             uut2.open()
             for key, value in TEST_DATA_PAIRS:
                 self.assertIn(key, uut2.db)
@@ -58,7 +58,7 @@ class Test_TestDataStore(unittest.TestCase):
     def test_storeAndRetrieve_inContext(self):
         with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
                                 dir=TEST_CACHE_ROOT) as testDir:
-            with DataStore(RuntimeConfig(cacheDir=testDir)) as uut:
+            with DataStore(testDir) as uut:
                 for key, value in TEST_DATA_PAIRS:
                     self.assertNotIn(key, uut.db)
                     uut[key] = value
@@ -72,14 +72,14 @@ class Test_TestDataStore(unittest.TestCase):
     def test_storeAndRetrieve_inDifferentContexts(self):
         with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
                                 dir=TEST_CACHE_ROOT) as testDir:
-            with DataStore(RuntimeConfig(cacheDir=testDir)) as uut1:
+            with DataStore(testDir) as uut1:
                 for key, value in TEST_DATA_PAIRS:
                     self.assertNotIn(key, uut1.db)
                     uut1[key] = value
 
             self._assertDbExists(testDir)
 
-            with DataStore(RuntimeConfig(cacheDir=testDir)) as uut2:
+            with DataStore(testDir) as uut2:
                 for key, value in TEST_DATA_PAIRS:
                     self.assertIn(key, uut2.db)
                     self.assertEqual(uut2[key], value)
@@ -89,9 +89,7 @@ class Test_TestDataStore(unittest.TestCase):
     def test_storeAndRetrieve_withoutExpliciteOpeningOrContextManager(self):
         with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
                                 dir=TEST_CACHE_ROOT) as testDir:
-            config = RuntimeConfig(cacheDir=testDir)
-
-            uut = DataStore(config)
+            uut = DataStore(testDir)
             self.assertEqual(uut.db, None)
             for key, value in TEST_DATA_PAIRS:
                 uut[key] = value
@@ -107,15 +105,13 @@ class Test_TestDataStore(unittest.TestCase):
     def test_storeAndRetrieve_withoutExpliciteOpeningOrContextManager_withDifferentInstances(self):
         with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
                                 dir=TEST_CACHE_ROOT) as testDir:
-            config = RuntimeConfig(cacheDir=testDir)
-
-            uut1 = DataStore(config)
+            uut1 = DataStore(testDir)
             self.assertEqual(uut1.db, None)
             for key, value in TEST_DATA_PAIRS:
                 uut1[key] = value
             self.assertEqual(uut1.db, None)
 
-            uut2 = DataStore(config)
+            uut2 = DataStore(testDir)
             self.assertEqual(uut2.db, None)
             for key, value in TEST_DATA_PAIRS:
                 self.assertEqual(uut2[key], value)

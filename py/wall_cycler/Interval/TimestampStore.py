@@ -5,8 +5,8 @@ from wall_cycler.DataStore import DataStore
 
 
 class TimestampStore:
-    def __init__(self, config):
-        self.dataStore = DataStore(config)
+    def __init__(self, cacheDir):
+        self.dataStore = DataStore(cacheDir)
 
     def readTimestamp(self):
         with self.dataStore:

@@ -32,7 +32,7 @@ class Test_TestTimestampStore(unittest.TestCase):
 
             fakeDateTime.now = lambda: self.now
 
-            uut = TimestampStore(RuntimeConfig(cacheDir=testDir))
+            uut = TimestampStore(testDir)
 
             uut.writeTimestamp(TEST_MESSAGE)
             timestamp, msg = uut.readTimestamp()
@@ -45,12 +45,11 @@ class Test_TestTimestampStore(unittest.TestCase):
             TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,dir=TEST_CACHE_ROOT) as testDir:
 
             fakeDateTime.now = lambda: self.now
-            conf = RuntimeConfig(cacheDir=testDir)
 
-            uut1 = TimestampStore(conf)
+            uut1 = TimestampStore(testDir)
             uut1.writeTimestamp(TEST_MESSAGE)
 
-            uut2 = TimestampStore(conf)
+            uut2 = TimestampStore(testDir)
             timestamp, msg = uut2.readTimestamp()
 
             self.assertEqual(timestamp, self.now)
