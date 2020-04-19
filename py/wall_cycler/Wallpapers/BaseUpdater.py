@@ -1,5 +1,6 @@
 # BaseUpdater
 
+
 class BaseUpdater:
     def __init__(self):
         pass

@@ -4,7 +4,6 @@ import argparse
 
 from .RuntimeConfig import RuntimeConfig
 from wall_cycler.Interval import Intervals
-
 """
 [wall_cycler]
 order = shuffle | sorted

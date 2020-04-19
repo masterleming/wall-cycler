@@ -3,8 +3,8 @@
 from wall_cycler.Interval import Intervals
 import enum
 
-class RuntimeConfig:
 
+class RuntimeConfig:
     class _ConfigFileKeys(enum.Enum):
         rootSection = 'wall_cycler'
         order = 'order'

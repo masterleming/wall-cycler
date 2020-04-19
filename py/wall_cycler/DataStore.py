@@ -7,6 +7,7 @@ from .exceptions import TransactionCollisionException
 
 DATASTORE_DB = 'cache.db'
 
+
 class DataStore:
     def __init__(self, config):
         self.config = config

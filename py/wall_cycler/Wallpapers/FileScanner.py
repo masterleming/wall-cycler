@@ -4,9 +4,11 @@ import os
 import os.path
 import magic
 
+
 class FileScanner:
     def __init__(self, path, subdirs=True):
-        self.path = os.path.abspath(os.path.expandvars(os.path.expanduser(path)))
+        self.path = os.path.abspath(
+            os.path.expandvars(os.path.expanduser(path)))
         self._origPath = path
         self.subdirs = subdirs
         self.mime = magic.Magic(mime=True)

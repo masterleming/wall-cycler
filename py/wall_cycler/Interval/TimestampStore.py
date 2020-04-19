@@ -2,7 +2,8 @@
 
 from datetime import datetime
 
-class TimestampStore: # TODO: add unit tests
+
+class TimestampStore:  # TODO: add unit tests
     @staticmethod
     def readTimestamp(db):
         timestamp = db['last timestamp']
