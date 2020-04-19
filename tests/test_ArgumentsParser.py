@@ -4,8 +4,7 @@ import unittest
 import sys
 import unittest.mock as mock
 
-from ArgumentsParser import ArgumentsParser
-import exceptions
+from wall_cycler.Config.ArgumentsParser import ArgumentsParser
 
 class Test_TestArgumentsParser(unittest.TestCase):
 

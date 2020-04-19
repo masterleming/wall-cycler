@@ -1,6 +1,7 @@
 # main
 
-from ArgumentsParser import ArgumentsParser
+from .Config.ArgumentsParser import ArgumentsParser
+
 import sys
 
 def main(argv):

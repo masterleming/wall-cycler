@@ -1,6 +1,6 @@
 # test_FileScanner
 
-from FileScanner import FileScanner
+from wall_cycler.Wallpapers.FileScanner import FileScanner
 
 import unittest
 import os.path

@@ -1,14 +1,14 @@
-# ConfigLoader
+# FileLoader
 
 import configparser
 import os.path
 import enum
 
-from exceptions import MissingConfigFileException
-from RuntimeConfig import RuntimeConfig
-from Interval.Intervals import Interval
+from .RuntimeConfig import RuntimeConfig
+from wall_cycler.Interval.Intervals import Interval
+from wall_cycler.exceptions import MissingConfigFileException
 """
-[wloop]
+[wall_cycler]
 order = shuffle | sorted
 wallpaper paths = multiple paths allowed in either unix format (path1:path2) or multiline in separate lines
 change time = 1d 4h 30m | boot | daily
@@ -18,19 +18,19 @@ wallpaper backend = sway | $(expression)
 
 
 class DefaultConfig(enum.Enum):
-    defaultConfig = """[wloop]
+    defaultConfig = """[wall_cycler]
 order = shuffle
 wallpaper paths = $HOME/Pictures
 change time = daily
-cache dir = $HOME/.cache/wloop
+cache dir = $HOME/.cache/wall_cycler
 wallpaper backend = sway
 """
     defaultOrder = "shuffle"
     defaultWallpaperPaths = "$HOME/Pictures"
     defaultInterval = "daily"
-    defaultCacheDir = "$HOME/.cache/wloop"
+    defaultCacheDir = "$HOME/.cache/wall_cycler"
     defaultBackend = "sway"
-    userConfigPath = "$HOME/.config/wloop/wloop.conf"
+    userConfigPath = "$HOME/.config/wall_cycler/wall_cycler.conf"
 
     @classmethod
     def getRuntime(cls):
@@ -45,7 +45,7 @@ wallpaper backend = sway
         return str(cls.getRuntime())
 
 
-class ConfigLoader:
+class FileLoader:
     def __init__(self, configPath=None):
         self.configPaths = [DefaultConfig.userConfigPath.value]
         if configPath is not None:

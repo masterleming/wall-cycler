@@ -1,6 +1,6 @@
 # test_WallCollection
 
-from WallCollection import WallCollection
+from wall_cycler.Wallpapers.WallCollection import WallCollection
 
 import unittest
 

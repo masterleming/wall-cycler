@@ -1,7 +1,8 @@
 # ShuffleUpdater
 
-from src.detail.BaseUpdater import BaseUpdater
-from WallCollection import WallCollection
+from .BaseUpdater import BaseUpdater
+from .WallCollection import WallCollection
+
 import random
 
 

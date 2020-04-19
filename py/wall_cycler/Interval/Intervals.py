@@ -4,7 +4,7 @@ import datetime
 import uptime
 import re
 
-from exceptions import InvalidTimeIntervalSpecificationException
+from wall_cycler.exceptions import InvalidTimeIntervalSpecificationException
 
 __intervalPattern = re.compile(r"(?:\d+[dhm]\s*)+|boot|daily")
 

@@ -4,7 +4,7 @@ import unittest
 import unittest.mock as mock
 from datetime import timedelta, datetime
 
-from Interval.Intervals import CustomInterval
+from wall_cycler.Interval.Intervals import CustomInterval
 
 
 class Test_TestCustomInterval(unittest.TestCase):

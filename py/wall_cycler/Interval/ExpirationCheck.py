@@ -1,10 +1,10 @@
 # ExpirationCheck
 
-from TimestampStore import TimestampStore
-from exceptions import TransactionCollisionException
-from DataStore import DataStore
+from .TimestampStore import TimestampStore
+from wall_cycler.exceptions import TransactionCollisionException
+from wall_cycler.DataStore import DataStore
 
-class ExpirationCheck:
+class ExpirationCheck: #TODO add unit tests!
     def __init__(self, interval):
         self.interval = interval
         self.transaction = None

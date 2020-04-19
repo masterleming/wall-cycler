@@ -5,15 +5,15 @@ import unittest
 import os.path
 from tempfile import TemporaryDirectory
 
-from ConfigLoader import ConfigLoader, DefaultConfig
-from RuntimeConfig import RuntimeConfig
+from wall_cycler.Config.FileLoader import FileLoader, DefaultConfig
+from wall_cycler.Config.RuntimeConfig import RuntimeConfig
 
 TEST_CONFIG_ROOT = '/tmp'
 TEST_CONFIG_TEMP_PREFIX = 'test-'
 TEST_CONFIG_DEFAULT_NAME = 'default.cfg'
 TEST_CONFIG_FILE = 'test.cfg'
 TEST_CONFIG = """
-[wloop]
+[wall_cycler]
 order = sorted
 wallpaper paths = testPath1:testPath2
 change time = boot
@@ -44,12 +44,12 @@ class Test_TestConfigLoader(unittest.TestCase):
             defaultConfPath = os.path.join(testDir, TEST_CONFIG_DEFAULT_NAME)
             self._ensureConfigDoesNotExist(defaultConfPath)
 
-            uut = ConfigLoader()
+            uut = FileLoader()
             uut.createDefaultConfig(defaultConfPath)
 
             self.assertTrue(os.path.exists(defaultConfPath))
 
-            writtenConf = ConfigLoader(defaultConfPath).loadConfig()
+            writtenConf = FileLoader(defaultConfPath).loadConfig()
 
             defC = self._getDefaultConfig()
             self.assertEqual(writtenConf, defC)
@@ -64,7 +64,7 @@ class Test_TestConfigLoader(unittest.TestCase):
                                 dir=TEST_CONFIG_ROOT) as testDir:
             testConfigFile = self._prepareConfig(testDir)
 
-            uut = ConfigLoader()
+            uut = FileLoader()
             self._overrideDefaultConfigPath(uut, testConfigFile)
 
             conf = uut.loadConfig()
@@ -76,7 +76,7 @@ class Test_TestConfigLoader(unittest.TestCase):
                                 dir=TEST_CONFIG_ROOT) as testDir:
             testConfigFile = self._prepareConfig(testDir)
 
-            uut = ConfigLoader(configPath=testConfigFile)
+            uut = FileLoader(configPath=testConfigFile)
             self._removeDefaultConfig(uut)
 
             conf = uut.loadConfig()
@@ -92,7 +92,7 @@ class Test_TestConfigLoader(unittest.TestCase):
             testConfigFile = self._prepareConfig(testDir, TEST_CONFIG_FILE,
                                                  str(_TestConfig2))
 
-            uut = ConfigLoader(configPath=testConfigFile)
+            uut = FileLoader(configPath=testConfigFile)
             self._overrideDefaultConfigPath(uut, defaultConfig)
 
             conf = uut.loadConfig()
