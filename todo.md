@@ -3,7 +3,8 @@
 
 - [ ] add missing unit tests
     - [x] DataStore
-    - [ ] TimestampStore
+    - [x] TimestampStore
+    - [ ] ExpirationCheck
 - [ ] prepare 'main' function
 - [ ] add program logger
     - [ ] start logging stuff
