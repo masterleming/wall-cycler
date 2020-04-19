@@ -28,13 +28,14 @@ class Test_TestTimestampStore(unittest.TestCase):
 
     def test_timestampStore(self):
         with mock.patch("wall_cycler.Interval.TimestampStore.datetime", mock.Mock()) as fakeDateTime, \
-            TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,dir=TEST_CACHE_ROOT) as testDir, \
-            DataStore(RuntimeConfig(cacheDir=testDir)) as db:
+            TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,dir=TEST_CACHE_ROOT) as testDir:
 
             fakeDateTime.now = lambda: self.now
 
-            TimestampStore.writeTimestamp(db, TEST_MESSAGE)
-            timestamp, msg = TimestampStore.readTimestamp(db)
+            uut = TimestampStore(RuntimeConfig(cacheDir=testDir))
+
+            uut.writeTimestamp(TEST_MESSAGE)
+            timestamp, msg = uut.readTimestamp()
 
             self.assertEqual(timestamp, self.now)
             self.assertEqual(msg, TEST_MESSAGE)
@@ -44,12 +45,13 @@ class Test_TestTimestampStore(unittest.TestCase):
             TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,dir=TEST_CACHE_ROOT) as testDir:
 
             fakeDateTime.now = lambda: self.now
+            conf = RuntimeConfig(cacheDir=testDir)
 
-            with DataStore(RuntimeConfig(cacheDir=testDir)) as db1:
-                TimestampStore.writeTimestamp(db1, TEST_MESSAGE)
+            uut1 = TimestampStore(conf)
+            uut1.writeTimestamp(TEST_MESSAGE)
 
-            with DataStore(RuntimeConfig(cacheDir=testDir)) as db2:
-                timestamp, msg = TimestampStore.readTimestamp(db2)
+            uut2 = TimestampStore(conf)
+            timestamp, msg = uut2.readTimestamp()
 
             self.assertEqual(timestamp, self.now)
             self.assertEqual(msg, TEST_MESSAGE)
