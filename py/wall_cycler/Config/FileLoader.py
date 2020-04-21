@@ -80,7 +80,7 @@ class FileLoader:
 
         path = self.__expandPath(path)
         confDir = os.path.dirname(path)
-        if not os.path.exists(confDir):
+        if confDir != "" and not os.path.exists(confDir):
             os.makedirs(confDir, exist_ok=True)
         elif os.path.exists(path):
             backup = path + ".bak"
