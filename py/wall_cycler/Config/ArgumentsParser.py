@@ -26,7 +26,7 @@ class ArgumentsParser:
         parser.add_argument("--interval", type=self.__interval_choices, help="specifies the time at which the wallpaper is changed. See TIME for details.")
         parser.add_argument("--cache-dir", type=str, help="path used for storing cached data; note that clearing the cache _will reset the wallpaper cycle_.")
         parser.add_argument("--backend", type=str, choices=['sway', 'custom'], help="defines what backend shall be used for changing the wallpaper.")
-        parser.add_argument("--config", type=str, help="points to the configuration file to be used; note however that whatever options are set in this file will override options from a default file; to surpress all default options the default file needs to be removed or all options overriden.")
+        parser.add_argument("--config", type=str, help="points to the configuration file to be used; note however that whatever options are set in this file will override options from a default file; to suppress all default options the default file needs to be removed or all options overridden.")
         parser.add_argument("--generate-config", type=str, nargs='?', help="causes generation of default configuration file; if no argument is given, the file is created in default location.")
         self.parser = parser
 
