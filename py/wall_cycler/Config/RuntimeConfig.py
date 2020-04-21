@@ -102,22 +102,22 @@ class RuntimeConfig:
     def fromProgramArgs(argsConf):
         ret = RuntimeConfig()
 
-        if argsConf.order is not None and argsConf.order is not "":
+        if argsConf.order is not None and argsConf.order != "":
             ret.order = argsConf.order
 
-        if argsConf.img_path is not None and argsConf.img_path is not []:
+        if argsConf.img_path is not None and argsConf.img_path != []:
             ret.wallpaperPaths = argsConf.img_path
 
         if argsConf.interval is not None:
             ret.interval = argsConf.interval
 
-        if argsConf.cache_dir is not None and argsConf.cache_dir is not "":
+        if argsConf.cache_dir is not None and argsConf.cache_dir != "":
             ret.cacheDir = argsConf.cache_dir
 
-        if argsConf.backend is not None and argsConf.backend is not "":
+        if argsConf.backend is not None and argsConf.backend != "":
             ret.backend = argsConf.backend
 
-        if argsConf.config is not None and argsConf.config is not []:
+        if argsConf.config is not None and argsConf.config != []:
             ret.configFiles = [argsConf.config]
 
         if argsConf.generate_config is not None:
