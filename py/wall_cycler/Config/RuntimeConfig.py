@@ -1,6 +1,9 @@
 # RuntimeConfig
 
 from wall_cycler.Interval import Intervals
+from wall_cycler.Wallpapers.Updaters import UpdaterTypes
+from wall_cycler.exceptions import InvalidSortOrderException
+
 import enum
 
 
@@ -51,6 +54,8 @@ class RuntimeConfig:
 
         val = wloopConf.get(cls._ConfigFileKeys.order.value)
         if val is not None:
+            if val not in UpdaterTypes.choices():
+                raise InvalidSortOrderException(val, UpdaterTypes.choices())
             ret.order = val
 
         val = wloopConf.get(cls._ConfigFileKeys.wallpaperPaths.value)

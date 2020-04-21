@@ -1,6 +1,6 @@
 # test_ShuffleUpdater
 
-from wall_cycler.Wallpapers.ShuffleUpdater import ShuffleUpdater
+from wall_cycler.Wallpapers.Updaters import ShuffleUpdater
 from wall_cycler.Wallpapers.WallCollection import WallCollection
 
 import unittest

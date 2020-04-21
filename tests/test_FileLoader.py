@@ -54,11 +54,6 @@ class Test_TestFileLoader(unittest.TestCase):
             defC = self._getDefaultConfig()
             self.assertEqual(writtenConf, defC)
 
-    def test_defaultFromRuntimeIsTheSameAsFromString(self):
-        fromIni = DefaultConfig.getIni()
-        fromStr = DefaultConfig.defaultConfig.value
-        self.assertEqual(fromIni, fromStr)
-
     def test_loadFromDefaultConfigFile(self):
         with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX,
                                 dir=TEST_CONFIG_ROOT) as testDir:

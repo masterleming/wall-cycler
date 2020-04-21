@@ -6,7 +6,9 @@ import enum
 
 from .RuntimeConfig import RuntimeConfig
 from wall_cycler.Interval.Intervals import Interval
+from wall_cycler.Wallpapers.Updaters import UpdaterTypes
 from wall_cycler.exceptions import MissingConfigFileException
+
 """
 [wall_cycler]
 order = shuffle | sorted
@@ -18,14 +20,7 @@ wallpaper backend = sway | $(expression)
 
 
 class DefaultConfig(enum.Enum):
-    defaultConfig = """[wall_cycler]
-order = shuffle
-wallpaper paths = $HOME/Pictures
-change time = daily
-cache dir = $HOME/.cache/wall_cycler
-wallpaper backend = sway
-"""
-    defaultOrder = "shuffle"
+    defaultOrder = UpdaterTypes.shuffle.name
     defaultWallpaperPaths = "$HOME/Pictures"
     defaultInterval = "daily"
     defaultCacheDir = "$HOME/.cache/wall_cycler"
@@ -38,7 +33,9 @@ wallpaper backend = sway
                              wallpaperPaths=[cls.defaultWallpaperPaths.value],
                              interval=Interval(cls.defaultInterval.value),
                              cacheDir=cls.defaultCacheDir.value,
-                             backend=cls.defaultBackend.value)
+                             backend=cls.defaultBackend.value
+                             #TODO: add missing default values!
+                             )
 
     @classmethod
     def getIni(cls):
@@ -92,7 +89,7 @@ class FileLoader:
             os.rename(path, backup)
 
         defaultConf = configparser.ConfigParser()
-        defaultConf.read_string(DefaultConfig.defaultConfig.value)
+        defaultConf.read_string(DefaultConfig.getIni())
         with open(path, 'w') as confFile:
             defaultConf.write(confFile)
 
