@@ -132,6 +132,25 @@ class Test_TestDataStore(unittest.TestCase):
             self.assertTrue(os.path.exists(testDir))
             self._assertDbExists(testDir)
 
+    def test_retrieveNonExistentEntry(self):
+        testDefault = "I Solemnly Swear I Aim To Misbehave!"
+        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
+                                dir=TEST_CACHE_ROOT) as testDir:
+            with DataStore(testDir) as uut:
+                for key, _ in TEST_DATA_PAIRS:
+                    self.assertNotIn(key, uut.db)
+                    try:
+                        tmp = uut[key]
+                    except KeyError as err:
+                        self.assertIn(bytes(key, "ASCII"), err.args)
+
+                for key, _ in TEST_DATA_PAIRS:
+                    self.assertNotIn(key, uut.db)
+                    tmp = uut.db.get(key, default=testDefault)
+                    self.assertEqual(tmp, testDefault)
+
+            self._assertDbExists(testDir)
+
     def _assertDbExists(self, cacheDir):
         cacheFile = os.path.join(cacheDir, DATASTORE_DB)
         self.assertTrue(os.path.exists(cacheFile))
