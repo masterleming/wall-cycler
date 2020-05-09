@@ -3,6 +3,7 @@
 import configparser
 import os.path
 import enum
+from collections.abc import Sequence
 
 from .RuntimeConfig import RuntimeConfig
 from wall_cycler.Interval.Intervals import Interval
@@ -46,7 +47,13 @@ class FileLoader:
     def __init__(self, configPath=None):
         self.configPaths = [DefaultConfig.userConfigPath.value]
         if configPath is not None:
-            self.configPaths.append(configPath)
+            if isinstance(configPath, str):
+                self.configPaths.append(configPath)
+            elif isinstance(configPath, Sequence):
+                self.configPaths += configPath
+            else:
+                self.configPaths.append(configPath)
+
         self.configParser = None
         self.config = RuntimeConfig()
 
