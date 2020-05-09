@@ -119,6 +119,19 @@ class Test_TestDataStore(unittest.TestCase):
 
             self._assertDbExists(testDir)
 
+    def test_creatingDirectoryIfDoesNotExistsBeforeOpeningCache(self):
+        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
+                                dir=TEST_CACHE_ROOT) as testBaseDir:
+
+            testDir = os.path.join(testBaseDir, "very/long/extra/path/")
+            self.assertFalse(os.path.exists(testDir))
+
+            uut = DataStore(testDir)
+            uut.open()
+
+            self.assertTrue(os.path.exists(testDir))
+            self._assertDbExists(testDir)
+
     def _assertDbExists(self, cacheDir):
         cacheFile = os.path.join(cacheDir, DATASTORE_DB)
         self.assertTrue(os.path.exists(cacheFile))

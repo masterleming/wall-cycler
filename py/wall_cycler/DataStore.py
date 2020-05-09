@@ -24,6 +24,8 @@ class DataStore:
         if self.db is not None:
             raise TransactionCollisionException("DB is already opened!")
 
+        self.__ensurePathExists()
+
         cachePath = os.path.join(self.cacheDir, DATASTORE_DB)
         self.db = shelve.open(cachePath)
 
@@ -45,3 +47,6 @@ class DataStore:
             with self:
                 return self.__setitem__(key, value)
         self.db[key] = value
+
+    def __ensurePathExists(self):
+        os.makedirs(self.cacheDir, exist_ok=True)
