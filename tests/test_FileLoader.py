@@ -12,6 +12,7 @@ TEST_CONFIG_ROOT = '/tmp'
 TEST_CONFIG_TEMP_PREFIX = 'test-'
 TEST_CONFIG_DEFAULT_NAME = 'default.cfg'
 TEST_CONFIG_FILE = 'test.cfg'
+TEST_BACKEDUP_CONFIG_FILE = TEST_CONFIG_FILE + ".bak"
 TEST_CONFIG = """
 [wall_cycler]
 order = sorted
@@ -20,6 +21,8 @@ change time = boot
 cache dir = .test/cache
 wallpaper backend = 'bash -c test'
 """
+
+import os
 
 _TestConfig1 = RuntimeConfig(order="sorted",
                              wallpaperPaths=["testPath1", "testPath2"],
@@ -53,6 +56,25 @@ class Test_TestFileLoader(unittest.TestCase):
 
             defC = self._getDefaultConfig()
             self.assertEqual(writtenConf, defC)
+
+    def test_backingUpConfigBeforeGeneratingNewOne(self):
+        with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX, dir=TEST_CONFIG_ROOT) as testDir:
+            confFile = os.path.join(testDir, TEST_CONFIG_FILE)
+            backedConfFile = os.path.join(testDir, TEST_BACKEDUP_CONFIG_FILE)
+
+            self._ensureConfigDoesNotExist(confFile)
+            self._ensureConfigDoesNotExist(backedConfFile)
+
+            uut = FileLoader()
+            uut.createDefaultConfig(confFile)
+
+            self.assertTrue(os.path.exists(confFile))
+            self.assertFalse(os.path.exists(backedConfFile))
+
+            uut.createDefaultConfig(confFile)
+
+            self.assertTrue(os.path.exists(confFile))
+            self.assertTrue(os.path.exists(backedConfFile))
 
     def test_loadFromDefaultConfigFile(self):
         with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX,
