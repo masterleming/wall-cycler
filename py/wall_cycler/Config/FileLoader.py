@@ -76,7 +76,7 @@ class FileLoader:
                 strList = ', '.join(["'{}'".format(f) for f in failed])
                 raise MissingConfigFileException(
                     "These configuration file paths are invalid: {}!".format(
-                        strList.strip))
+                        strList.strip()))
 
         self.config = RuntimeConfig.fromCfgFile(self.configParser)
         return self.config
