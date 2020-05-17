@@ -10,8 +10,8 @@ from wall_cycler.Schedulers.InternalScheduler import InternalScheduler
 TEST_START = 30
 TEST_THRESHOLD = 31
 
-class Test_TestInternalScheduler(unittest.TestCase):
 
+class Test_TestInternalScheduler(unittest.TestCase):
     def test_blocksUntilScheduled(self):
 
         uut = InternalScheduler()

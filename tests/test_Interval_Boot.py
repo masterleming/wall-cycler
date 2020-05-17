@@ -32,28 +32,23 @@ class Test_TestBootInterval(unittest.TestCase):
                 self.assertFalse(uut.isExpired(lastChangeTimestamp))
 
             for hours in range(1, 1000):
-                lastChangeTimestamp = self._timeAfterBoot(
-                    timedelta(hours=hours))
+                lastChangeTimestamp = self._timeAfterBoot(timedelta(hours=hours))
                 self.assertFalse(uut.isExpired(lastChangeTimestamp))
 
             for minutes in range(1, 1000):
-                lastChangeTimestamp = self._timeAfterBoot(
-                    timedelta(minutes=minutes))
+                lastChangeTimestamp = self._timeAfterBoot(timedelta(minutes=minutes))
                 self.assertFalse(uut.isExpired(lastChangeTimestamp))
 
             for seconds in range(1, 1000):
-                lastChangeTimestamp = self._timeAfterBoot(
-                    timedelta(seconds=seconds))
+                lastChangeTimestamp = self._timeAfterBoot(timedelta(seconds=seconds))
                 self.assertFalse(uut.isExpired(lastChangeTimestamp))
 
             for milliseconds in range(1, 1000):
-                lastChangeTimestamp = self._timeAfterBoot(
-                    timedelta(milliseconds=milliseconds))
+                lastChangeTimestamp = self._timeAfterBoot(timedelta(milliseconds=milliseconds))
                 self.assertFalse(uut.isExpired(lastChangeTimestamp))
 
             for microseconds in range(1, 1000):
-                lastChangeTimestamp = self._timeAfterBoot(
-                    timedelta(microseconds=microseconds))
+                lastChangeTimestamp = self._timeAfterBoot(timedelta(microseconds=microseconds))
                 self.assertFalse(uut.isExpired(lastChangeTimestamp))
 
     def test_beforeBootExpirationCheck(self):
@@ -61,33 +56,27 @@ class Test_TestBootInterval(unittest.TestCase):
             uut = BootInterval()
 
             for days in range(1, 1000):
-                lastChangeTimestamp = self._timeBeforeBoot(
-                    timedelta(days=days))
+                lastChangeTimestamp = self._timeBeforeBoot(timedelta(days=days))
                 self.assertTrue(uut.isExpired(lastChangeTimestamp))
 
             for hours in range(1, 1000):
-                lastChangeTimestamp = self._timeBeforeBoot(
-                    timedelta(hours=hours))
+                lastChangeTimestamp = self._timeBeforeBoot(timedelta(hours=hours))
                 self.assertTrue(uut.isExpired(lastChangeTimestamp))
 
             for minutes in range(1, 1000):
-                lastChangeTimestamp = self._timeBeforeBoot(
-                    timedelta(minutes=minutes))
+                lastChangeTimestamp = self._timeBeforeBoot(timedelta(minutes=minutes))
                 self.assertTrue(uut.isExpired(lastChangeTimestamp))
 
             for seconds in range(1, 1000):
-                lastChangeTimestamp = self._timeBeforeBoot(
-                    timedelta(seconds=seconds))
+                lastChangeTimestamp = self._timeBeforeBoot(timedelta(seconds=seconds))
                 self.assertTrue(uut.isExpired(lastChangeTimestamp))
 
             for milliseconds in range(1, 1000):
-                lastChangeTimestamp = self._timeBeforeBoot(
-                    timedelta(milliseconds=milliseconds))
+                lastChangeTimestamp = self._timeBeforeBoot(timedelta(milliseconds=milliseconds))
                 self.assertTrue(uut.isExpired(lastChangeTimestamp))
 
             for microseconds in range(1, 1000):
-                lastChangeTimestamp = self._timeBeforeBoot(
-                    timedelta(microseconds=microseconds))
+                lastChangeTimestamp = self._timeBeforeBoot(timedelta(microseconds=microseconds))
                 self.assertTrue(uut.isExpired(lastChangeTimestamp))
 
     def test_expirationFromNow(self):
@@ -111,9 +100,7 @@ class Test_TestBootInterval(unittest.TestCase):
         return cls.boottime + diff
 
     @classmethod
-    def _timeBeforeBoot(cls,
-                        diff=timedelta(days=1, hours=6, minutes=15,
-                                       seconds=3)):
+    def _timeBeforeBoot(cls, diff=timedelta(days=1, hours=6, minutes=15, seconds=3)):
         return cls.boottime - diff
 
 

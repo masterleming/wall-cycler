@@ -10,6 +10,7 @@ from wall_cycler.Interval.Intervals import BaseInterval
 TEST_NOW = datetime(year=2019, month=12, day=29, hour=15, minute=40, second=20)
 TEST_MSG = "test message"
 
+
 class test_ExpirationCheck(unittest.TestCase):
     def test_expirationCheck(self):
         mockIntervals = self._prepareTestIntervals()
@@ -100,9 +101,8 @@ class _MockInterval(BaseInterval):
         return self._next
 
     def __str__(self):
-        return "testInterval({}, {}, {}, {})".format(
-            self._isExpired, self._next, self._calledMark,
-            self._testedAgainstTimestamp)
+        return "testInterval({}, {}, {}, {})".format(self._isExpired, self._next, self._calledMark,
+                                                     self._testedAgainstTimestamp)
 
 
 if __name__ == '__main__':

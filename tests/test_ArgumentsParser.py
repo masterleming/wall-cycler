@@ -26,8 +26,7 @@ class Test_TestArgumentsParser(unittest.TestCase):
             with mock.patch('argparse.ArgumentParser.exit',
                             Test_TestArgumentsParser._MockExit.exit):
                 uut = ArgumentsParser()
-                with self.assertRaises(
-                        Test_TestArgumentsParser._MockExit) as raised:
+                with self.assertRaises(Test_TestArgumentsParser._MockExit) as raised:
                     uut.parse()
                 self.assertNotEqual(raised.exception.status, 0)
                 self.assertIn(order, raised.exception.message)
