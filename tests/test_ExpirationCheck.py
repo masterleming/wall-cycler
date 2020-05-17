@@ -46,6 +46,16 @@ class test_ExpirationCheck(unittest.TestCase):
             self.assertEqual(nextChange, interval._next)
             self.assertTrue(timestampStore._calledRead)
 
+    def test_alwaysTrueWhenNoTimestampInCache(self):
+        mockIntervals = self._prepareTestIntervals()
+
+        for interval in mockIntervals:
+            timestampStore = _MockTimestampStore(None)
+            uut = ExpirationCheck(interval, timestampStore)
+
+            self.assertEqual(uut.isExpired(), True)
+            self.assertEqual(interval._testedAgainstTimestamp, None)
+
     @staticmethod
     def _prepareTestIntervals():
         return [
