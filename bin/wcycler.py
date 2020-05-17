@@ -9,6 +9,7 @@ from wall_cycler.WallCycler import WallCycler
 from wall_cycler.DataStore import DataStore
 from wall_cycler.Wallpapers.Updaters import Updater
 
+from wall_cycler.Schedulers.InternalScheduler import InternalScheduler
 
 if __name__ == '__main__':
     argConfig = ArgumentsParser().parse()
@@ -23,5 +24,6 @@ if __name__ == '__main__':
             DataStore(config.cacheDir),
             config.interval,
             Updater(config.order),
+            InternalScheduler(),
             None,  # TODO: provide implementation for different backends!
             config.wallpaperPaths).run())

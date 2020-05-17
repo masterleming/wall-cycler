@@ -15,10 +15,11 @@ class _CacheKeys(enum.Enum):
 
 
 class WallCycler:
-    def __init__(self, dataStore, interval, updater, backend, scanPaths):
+    def __init__(self, dataStore, interval, updater, scheduler, backend, scanPaths):
         self._dataStore = dataStore
         self._interval = interval
         self._updater = updater
+        self._scheduler = scheduler
         self._backend = backend
         self._scanPaths = scanPaths
         self._wallpapers = None
@@ -33,8 +34,10 @@ class WallCycler:
             if self._checkExpiration():
                 self._changeWallpaper()
 
+            if not self._sleepOrBreak():
+                break
 
-
+        self.__updateWallpaperCache()
         return 0
 
     def _loadCachedWallpapers(self):
@@ -66,7 +69,8 @@ class WallCycler:
         if nextChange is None:
             return False
 
-
+        self._scheduler.wait(nextChange)
+        return True
 
     def __createExpirationChecker(self):
         return  ExpirationCheck(self._interval, TimestampStore(self._dataStore))
