@@ -12,3 +12,4 @@
 - [ ] prepare scheduling backends
 - [ ] prepare wallpaper switching backends
 - [ ] prepare package
+- [ ] add new mode that would check if files are missing (and optionally remove them from collection)
