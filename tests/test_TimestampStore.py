@@ -55,6 +55,39 @@ class Test_TestTimestampStore(unittest.TestCase):
             self.assertEqual(timestamp, self.now)
             self.assertEqual(msg, TEST_MESSAGE)
 
+    def test_constructFromDifferentTypes(self):
+        with mock.patch("wall_cycler.Interval.TimestampStore.datetime", mock.Mock()) as fakeDateTime, \
+            TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,dir=TEST_CACHE_ROOT) as testDir:
+
+            fakeDateTime.now = lambda: self.now
+
+            uut1 = TimestampStore(testDir)
+            uut1.writeTimestamp(TEST_MESSAGE)
+
+            uut2 = TimestampStore(DataStore(testDir))
+            timestamp, msg = uut2.readTimestamp()
+
+            self.assertEqual(timestamp, self.now)
+            self.assertEqual(msg, TEST_MESSAGE)
+
+            try:
+                uut3 = TimestampStore([])
+                self.assertTrue(False)
+            except TypeError as e:
+                self.assertIn("Invalid type passed as cache!", str(e))
+
+    def test_noTimestampInCache(self):
+        with mock.patch("wall_cycler.Interval.TimestampStore.datetime", mock.Mock()) as fakeDateTime, \
+            TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,dir=TEST_CACHE_ROOT) as testDir:
+
+            fakeDateTime.now = lambda: self.now
+
+            uut = TimestampStore(testDir)
+            timestamp, msg = uut.readTimestamp()
+
+            self.assertIsNone(timestamp)
+            self.assertIsNone(msg)
+
 
 if __name__ == '__main__':
     unittest.main()
