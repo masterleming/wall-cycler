@@ -8,6 +8,12 @@ from wall_cycler.Wallpapers.WallCollection import WallCollection
 
 import wall_cycler.exceptions as exceptions
 
+import enum
+
+class _CacheKeys(enum.Enum):
+    wallpapers = "wallpapers"
+
+
 class WallCycler:
     def __init__(self, dataStore, interval, updater, backend, scanPaths):
         self._dataStore = dataStore
@@ -16,16 +22,24 @@ class WallCycler:
         self._backend = backend
         self._scanPaths = scanPaths
         self._wallpapers = None
+        self._expiryChecker = self.__createExpirationChecker()
 
     def run(self):
         self._loadCachedWallpapers()
-        self._updateWallpapers()
+
+        while True:
+            self._updateWallpapers()
+
+            if self._checkExpiration():
+                self._changeWallpaper()
+
+
 
         return 0
 
     def _loadCachedWallpapers(self):
         with self._dataStore:
-            self._wallpapers = self._dataStore.db.get("wallpapers", default=WallCollection())
+            self._wallpapers = self._dataStore.db.get(_CacheKeys.wallpapers.value, default=WallCollection())
 
     def _updateWallpapers(self):
         wallpapers = []
@@ -34,9 +48,29 @@ class WallCycler:
             wallpapers += FileScanner(path, subdirs=True).scan()
 
         self._updater.update(self._wallpapers, wallpapers)
-        with self._dataStore:
-            self._dataStore["wallpapers"] = self._wallpapers
+        self.__updateWallpaperCache()
 
-    # def _checkExpiration(self):
-    #     expiryChecker = ExpirationCheck(TimestampStore(self._config.cacheDir))  # TODO: think about using the data store rather than the path for initializing the TimestampStore
-    #     expiryChecker.isExpired()
+    def _checkExpiration(self):
+        return self._expiryChecker.isExpired()
+
+    def _changeWallpaper(self):
+        wallpaper = next(self._wallpapers)
+        # TODO: change the wallpaper
+        print("XXX changing wallpaper placeholder! New wallpaper is: '{}'".format(wallpaper), flush=True)
+
+        self.__updateWallpaperCache()
+        self._expiryChecker.mark()
+
+    def _sleepOrBreak(self):
+        nextChange = self._expiryChecker.getNext()
+        if nextChange is None:
+            return False
+
+
+
+    def __createExpirationChecker(self):
+        return  ExpirationCheck(self._interval, TimestampStore(self._dataStore))
+
+    def __updateWallpaperCache(self):
+        with self._dataStore:
+            self._dataStore[_CacheKeys.wallpapers.value] = self._wallpapers
