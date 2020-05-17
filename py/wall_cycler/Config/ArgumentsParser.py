@@ -5,7 +5,6 @@ import argparse
 from .RuntimeConfig import RuntimeConfig
 from wall_cycler.Interval import Intervals
 from wall_cycler.Wallpapers.Updaters import UpdaterTypes
-
 """
 [wall_cycler]
 order = shuffle | sorted
@@ -20,6 +19,7 @@ config = path to the (additional) config file
 
 class ArgumentsParser:
     def __init__(self):
+        # yapf: disable
         parser = argparse.ArgumentParser(description="Simple utility for changing the screen wallpaper.")
         parser.add_argument("--order", choices=UpdaterTypes.choices(), type=str, help="select the order of the wallpapers.")
         parser.add_argument("--img-path", type=str, action="extend", nargs='+', help="path(s) to look for the wallpaper images.")
@@ -28,6 +28,7 @@ class ArgumentsParser:
         parser.add_argument("--backend", type=str, choices=['sway', 'custom'], help="defines what backend shall be used for changing the wallpaper.")
         parser.add_argument("--config", type=str, help="points to the configuration file to be used; note however that whatever options are set in this file will override options from a default file; to suppress all default options the default file needs to be removed or all options overridden.")
         parser.add_argument("--generate-config", type=str, nargs='?', help="causes generation of default configuration file; if no argument is given, the file is created in default location.", const=True)
+        # yapf: enable
         self.parser = parser
 
     def parse(self):

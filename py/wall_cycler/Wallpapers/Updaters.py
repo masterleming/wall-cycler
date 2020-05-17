@@ -74,8 +74,7 @@ class SortedUpdater(BaseUpdater):
         where = 0
         for img in sImages:
             where = bisect.bisect_left(walls.collection, img, lo=where)
-            if where < len(
-                    walls.collection) and walls.collection[where] == img:
+            if where < len(walls.collection) and walls.collection[where] == img:
                 continue
             if (where <= walls.nextWall):
                 walls.nextWall += 1

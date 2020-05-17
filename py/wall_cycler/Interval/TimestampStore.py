@@ -11,7 +11,9 @@ class TimestampStore:
         elif isinstance(cache, str):
             self.dataStore = DataStore(cache)
         else:
-            raise TypeError("Invalid type passed as cache! Expected 'DataStore' or path (str), got {}.". format(type(cache)), cache)
+            raise TypeError(
+                "Invalid type passed as cache! Expected 'DataStore' or path (str), got {}.".format(
+                    type(cache)), cache)
 
     def readTimestamp(self):
         timestamp = None

@@ -8,8 +8,7 @@ import magic
 class FileScanner:
     # TODO: handle subdirectories config!
     def __init__(self, path, subdirs=True):
-        self.path = os.path.abspath(
-            os.path.expandvars(os.path.expanduser(path)))
+        self.path = os.path.abspath(os.path.expandvars(os.path.expanduser(path)))
         self._origPath = path
         self.subdirs = subdirs
         self.mime = magic.Magic(mime=True)
@@ -17,8 +16,8 @@ class FileScanner:
     def scan(self):
         if not os.path.exists(self.path):
             raise Exception(
-                "Given path does not exist! Original path: '{}'; expanded path: '{}'."
-                .format(self._origPath, self.path))
+                "Given path does not exist! Original path: '{}'; expanded path: '{}'.".format(
+                    self._origPath, self.path))
 
         images = []
         if self.subdirs:
