@@ -11,19 +11,12 @@ class Test_TestCustomInterval(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.minutes = 10 * 24 * 60
-        cls.now = datetime(year=2019,
-                           month=12,
-                           day=29,
-                           hour=15,
-                           minute=40,
-                           second=20)
+        cls.now = datetime(year=2019, month=12, day=29, hour=15, minute=40, second=20)
 
     def test_create(self):
         for days, hours, minutes in self._getTimeSpecs(self.minutes):
             diff = timedelta(days=days, hours=hours, minutes=minutes)
-            proto = self._createPrototype(days=days,
-                                          hours=hours,
-                                          minutes=minutes)
+            proto = self._createPrototype(days=days, hours=hours, minutes=minutes)
 
             uut = CustomInterval(proto)
             self.assertEqual(uut.timeDelta, diff)
@@ -31,11 +24,8 @@ class Test_TestCustomInterval(unittest.TestCase):
     def test_expirationCheckLastChangeInTheFuture(self):
         with mock.patch("datetime.datetime", mock.Mock()) as fakeDateTime:
             fakeDateTime.now = lambda: self.now
-            for days, hours, minutes in self._getTimeSpecs(
-                    self.minutes, self.minutes // 177):
-                proto = self._createPrototype(days=days,
-                                              hours=hours,
-                                              minutes=minutes)
+            for days, hours, minutes in self._getTimeSpecs(self.minutes, self.minutes // 177):
+                proto = self._createPrototype(days=days, hours=hours, minutes=minutes)
                 uut = CustomInterval(proto)
 
                 seconds = self.minutes * 60
@@ -46,12 +36,8 @@ class Test_TestCustomInterval(unittest.TestCase):
         with mock.patch("datetime.datetime", mock.Mock()) as fakeDateTime:
             fakeDateTime.now = lambda: self.now
             for days, hours, minutes in self._getTimeSpecs(48 * 60, 11):
-                proto = self._createPrototype(days=days,
-                                              hours=hours,
-                                              minutes=minutes)
-                intervalInTimeDelta = timedelta(days=days,
-                                                hours=hours,
-                                                minutes=minutes)
+                proto = self._createPrototype(days=days, hours=hours, minutes=minutes)
+                intervalInTimeDelta = timedelta(days=days, hours=hours, minutes=minutes)
 
                 uut = CustomInterval(proto)
 
@@ -62,44 +48,31 @@ class Test_TestCustomInterval(unittest.TestCase):
                     self.assertEqual(expired, timeDiff > intervalInTimeDelta)
 
     def test_expirationFromNow(self):
-        for days, hours, minutes in self._getTimeSpecs(self.minutes,
-                                                       self.minutes // 177):
-            proto = self._createPrototype(days=days,
-                                          hours=hours,
-                                          minutes=minutes)
+        for days, hours, minutes in self._getTimeSpecs(self.minutes, self.minutes // 177):
+            proto = self._createPrototype(days=days, hours=hours, minutes=minutes)
             uut = CustomInterval(proto)
 
             self.assertFalse(uut.isExpired(datetime.now()))
 
     def test_mark(self):
-        for days, hours, minutes in self._getTimeSpecs(self.minutes,
-                                                       self.minutes // 177):
-            proto = self._createPrototype(days=days,
-                                          hours=hours,
-                                          minutes=minutes)
+        for days, hours, minutes in self._getTimeSpecs(self.minutes, self.minutes // 177):
+            proto = self._createPrototype(days=days, hours=hours, minutes=minutes)
             uut = CustomInterval(proto)
 
             self.assertEqual(uut.mark(), "custom")
 
     def test_getNext(self):
-        for days, hours, minutes in self._getTimeSpecs(self.minutes,
-                                                       self.minutes // 177):
-            proto = self._createPrototype(days=days,
-                                          hours=hours,
-                                          minutes=minutes)
-            expectedNext = self.now + timedelta(
-                days=days, hours=hours, minutes=minutes)
+        for days, hours, minutes in self._getTimeSpecs(self.minutes, self.minutes // 177):
+            proto = self._createPrototype(days=days, hours=hours, minutes=minutes)
+            expectedNext = self.now + timedelta(days=days, hours=hours, minutes=minutes)
 
             uut = CustomInterval(proto)
 
             self.assertEqual(uut.getNext(self.now), expectedNext)
 
     def test_string(self):
-        for days, hours, minutes in self._getTimeSpecs(self.minutes,
-                                                       self.minutes // 177):
-            proto = self._createPrototype(days=days,
-                                          hours=hours,
-                                          minutes=minutes)
+        for days, hours, minutes in self._getTimeSpecs(self.minutes, self.minutes // 177):
+            proto = self._createPrototype(days=days, hours=hours, minutes=minutes)
             uut = CustomInterval(proto)
 
             self.assertEqual(str(uut), proto)

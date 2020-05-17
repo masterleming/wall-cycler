@@ -10,6 +10,7 @@ import wall_cycler.exceptions as exceptions
 
 import enum
 
+
 class _CacheKeys(enum.Enum):
     wallpapers = "wallpapers"
 
@@ -42,7 +43,8 @@ class WallCycler:
 
     def _loadCachedWallpapers(self):
         with self._dataStore:
-            self._wallpapers = self._dataStore.db.get(_CacheKeys.wallpapers.value, default=WallCollection())
+            self._wallpapers = self._dataStore.db.get(_CacheKeys.wallpapers.value,
+                                                      default=WallCollection())
 
     def _updateWallpapers(self):
         wallpapers = []
@@ -60,7 +62,8 @@ class WallCycler:
         wallpaper = next(self._wallpapers)
         # TODO: change the wallpaper
         # TODO: implement changing wallpaper backends!
-        print("XXX changing wallpaper placeholder! New wallpaper is: '{}'".format(wallpaper), flush=True)
+        print("XXX changing wallpaper placeholder! New wallpaper is: '{}'".format(wallpaper),
+              flush=True)
 
         self.__updateWallpaperCache()
         self._expiryChecker.mark()
@@ -74,7 +77,7 @@ class WallCycler:
         return True
 
     def __createExpirationChecker(self):
-        return  ExpirationCheck(self._interval, TimestampStore(self._dataStore))
+        return ExpirationCheck(self._interval, TimestampStore(self._dataStore))
 
     def __updateWallpaperCache(self):
         with self._dataStore:

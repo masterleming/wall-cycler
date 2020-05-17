@@ -10,17 +10,12 @@ from wall_cycler.DataStore import DataStore, DATASTORE_DB
 TEST_CACHE_ROOT = '/tmp'
 TEST_CACHE_TEMP_PREFIX = 'test-cache-'
 
-TEST_DATA_PAIRS = [("number", 1234), ("text", "lorem ipsum"),
-                   ("object", {
-                       "A": 1,
-                       "B": 2
-                   })]
+TEST_DATA_PAIRS = [("number", 1234), ("text", "lorem ipsum"), ("object", {"A": 1, "B": 2})]
 
 
 class Test_TestDataStore(unittest.TestCase):
     def test_storeAndRetrieve_explicitOpen(self):
-        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
-                                dir=TEST_CACHE_ROOT) as testDir:
+        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX, dir=TEST_CACHE_ROOT) as testDir:
             uut = DataStore(testDir)
             uut.open()
             for key, value in TEST_DATA_PAIRS:
@@ -35,8 +30,7 @@ class Test_TestDataStore(unittest.TestCase):
             self._assertDbExists(testDir)
 
     def test_storeAndRetrieve_inDifferentExplicitOpens(self):
-        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
-                                dir=TEST_CACHE_ROOT) as testDir:
+        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX, dir=TEST_CACHE_ROOT) as testDir:
             uut1 = DataStore(testDir)
             uut1.open()
             for key, value in TEST_DATA_PAIRS:
@@ -56,8 +50,7 @@ class Test_TestDataStore(unittest.TestCase):
             self._assertDbExists(testDir)
 
     def test_storeAndRetrieve_inContext(self):
-        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
-                                dir=TEST_CACHE_ROOT) as testDir:
+        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX, dir=TEST_CACHE_ROOT) as testDir:
             with DataStore(testDir) as uut:
                 for key, value in TEST_DATA_PAIRS:
                     self.assertNotIn(key, uut.db)
@@ -70,8 +63,7 @@ class Test_TestDataStore(unittest.TestCase):
             self._assertDbExists(testDir)
 
     def test_storeAndRetrieve_inDifferentContexts(self):
-        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
-                                dir=TEST_CACHE_ROOT) as testDir:
+        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX, dir=TEST_CACHE_ROOT) as testDir:
             with DataStore(testDir) as uut1:
                 for key, value in TEST_DATA_PAIRS:
                     self.assertNotIn(key, uut1.db)
@@ -87,8 +79,7 @@ class Test_TestDataStore(unittest.TestCase):
             self._assertDbExists(testDir)
 
     def test_storeAndRetrieve_withoutExpliciteOpeningOrContextManager(self):
-        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
-                                dir=TEST_CACHE_ROOT) as testDir:
+        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX, dir=TEST_CACHE_ROOT) as testDir:
             uut = DataStore(testDir)
             self.assertEqual(uut.db, None)
             for key, value in TEST_DATA_PAIRS:
@@ -103,8 +94,7 @@ class Test_TestDataStore(unittest.TestCase):
             self._assertDbExists(testDir)
 
     def test_storeAndRetrieve_withoutExpliciteOpeningOrContextManager_withDifferentInstances(self):
-        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
-                                dir=TEST_CACHE_ROOT) as testDir:
+        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX, dir=TEST_CACHE_ROOT) as testDir:
             uut1 = DataStore(testDir)
             self.assertEqual(uut1.db, None)
             for key, value in TEST_DATA_PAIRS:
@@ -120,8 +110,7 @@ class Test_TestDataStore(unittest.TestCase):
             self._assertDbExists(testDir)
 
     def test_creatingDirectoryIfDoesNotExistsBeforeOpeningCache(self):
-        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
-                                dir=TEST_CACHE_ROOT) as testBaseDir:
+        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX, dir=TEST_CACHE_ROOT) as testBaseDir:
 
             testDir = os.path.join(testBaseDir, "very/long/extra/path/")
             self.assertFalse(os.path.exists(testDir))
@@ -134,8 +123,7 @@ class Test_TestDataStore(unittest.TestCase):
 
     def test_retrieveNonExistentEntry(self):
         testDefault = "I Solemnly Swear I Aim To Misbehave!"
-        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX,
-                                dir=TEST_CACHE_ROOT) as testDir:
+        with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX, dir=TEST_CACHE_ROOT) as testDir:
             with DataStore(testDir) as uut:
                 for key, _ in TEST_DATA_PAIRS:
                     self.assertNotIn(key, uut.db)

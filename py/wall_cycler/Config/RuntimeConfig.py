@@ -80,9 +80,7 @@ class RuntimeConfig:
 
         val = appConf.get(cls._ConfigFileKeys.wallpaperPaths.value)
         if val is not None:
-            ret.wallpaperPaths = [
-                p.strip() for path in val.split('\n') for p in path.split(':')
-            ]
+            ret.wallpaperPaths = [p.strip() for path in val.split('\n') for p in path.split(':')]
 
         val = appConf.get(cls._ConfigFileKeys.interval.value)
         if val is not None:
@@ -126,12 +124,9 @@ class RuntimeConfig:
         return ret
 
     def __eq__(self, other):
-        return (self.order == other.order
-                and self.wallpaperPaths == other.wallpaperPaths
-                and self.interval == other.interval
-                and self.cacheDir == other.cacheDir
-                and self.backend == other.backend
-                and self.configFiles == other.configFiles
+        return (self.order == other.order and self.wallpaperPaths == other.wallpaperPaths
+                and self.interval == other.interval and self.cacheDir == other.cacheDir
+                and self.backend == other.backend and self.configFiles == other.configFiles
                 and self.mode == other.mode)
 
     def __str__(self):
@@ -142,14 +137,11 @@ class RuntimeConfig:
             ret += self.__strPrep(self._ConfigFileKeys.wallpaperPaths.value,
                                   ":".join(self.wallpaperPaths))
         if self.interval is not None:
-            ret += self.__strPrep(self._ConfigFileKeys.interval.value,
-                                  str(self.interval))
+            ret += self.__strPrep(self._ConfigFileKeys.interval.value, str(self.interval))
         if self.cacheDir != "":
-            ret += self.__strPrep(self._ConfigFileKeys.cacheDir.value,
-                                  self.cacheDir)
+            ret += self.__strPrep(self._ConfigFileKeys.cacheDir.value, self.cacheDir)
         if self.backend != "":
-            ret += self.__strPrep(self._ConfigFileKeys.backend.value,
-                                  self.backend)
+            ret += self.__strPrep(self._ConfigFileKeys.backend.value, self.backend)
         return ret
 
     def _toDebugStr(self):

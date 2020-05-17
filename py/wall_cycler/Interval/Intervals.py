@@ -57,8 +57,7 @@ class DailyInterval(BaseInterval):
     def __init__(self):
         today = datetime.date.today()
         dayDelta = datetime.timedelta(days=1)
-        self.nextChange = datetime.datetime.combine(today + dayDelta,
-                                                    datetime.time(0))
+        self.nextChange = datetime.datetime.combine(today + dayDelta, datetime.time(0))
 
     def isExpired(self, lastChange):
         return lastChange.date() < datetime.date.today()
@@ -102,9 +101,7 @@ class CustomInterval(BaseInterval):
                 raise InvalidTimeIntervalSpecificationException(prototype)
             timeDelta[unit] = int(val)
 
-        return datetime.timedelta(days=timeDelta['d'],
-                                  hours=timeDelta['h'],
-                                  minutes=timeDelta['m'])
+        return datetime.timedelta(days=timeDelta['d'], hours=timeDelta['h'], minutes=timeDelta['m'])
 
     def __str__(self):
         tmp = []

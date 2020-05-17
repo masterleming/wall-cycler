@@ -25,6 +25,6 @@ if __name__ == '__main__':
             DataStore(config.cacheDir),
             config.interval,
             Updater(config.order),
-            InternalScheduler(), # TODO: use config for this!
+            InternalScheduler(),  # TODO: use config for this!
             None,  # TODO: provide implementation for different backends!
             config.wallpaperPaths).run())

@@ -9,7 +9,6 @@ from .RuntimeConfig import RuntimeConfig
 from wall_cycler.Interval.Intervals import Interval
 from wall_cycler.Wallpapers.Updaters import UpdaterTypes
 from wall_cycler.exceptions import MissingConfigFileException
-
 """
 [wall_cycler]
 order = shuffle | sorted
@@ -30,13 +29,14 @@ class DefaultConfig(enum.Enum):
 
     @classmethod
     def getRuntime(cls):
-        return RuntimeConfig(order=cls.defaultOrder.value,
-                             wallpaperPaths=[cls.defaultWallpaperPaths.value],
-                             interval=Interval(cls.defaultInterval.value),
-                             cacheDir=cls.defaultCacheDir.value,
-                             backend=cls.defaultBackend.value
-        #TODO: add missing default values! (left to periodically check and update if needed)
-                             )
+        return RuntimeConfig(
+            order=cls.defaultOrder.value,
+            wallpaperPaths=[cls.defaultWallpaperPaths.value],
+            interval=Interval(cls.defaultInterval.value),
+            cacheDir=cls.defaultCacheDir.value,
+            backend=cls.defaultBackend.value
+            #TODO: add missing default values! (left to periodically check and update if needed)
+        )
 
     @classmethod
     def getIni(cls):
@@ -64,19 +64,14 @@ class FileLoader:
         success = self.configParser.read(self.configPaths)
 
         if len(success) != len(self.configPaths):
-            failed = [
-                confPath for confPath in self.configPaths
-                if confPath not in success
-            ]
-            if (len(failed) == 1
-                    and failed[0] == DefaultConfig.userConfigPath.value):
+            failed = [confPath for confPath in self.configPaths if confPath not in success]
+            if (len(failed) == 1 and failed[0] == DefaultConfig.userConfigPath.value):
                 #TODO: log
                 pass
             else:
                 strList = ', '.join(["'{}'".format(f) for f in failed])
                 raise MissingConfigFileException(
-                    "These configuration file paths are invalid: {}!".format(
-                        strList.strip()))
+                    "These configuration file paths are invalid: {}!".format(strList.strip()))
 
         self.config = RuntimeConfig.fromCfgFile(self.configParser)
         return self.config
@@ -91,8 +86,8 @@ class FileLoader:
             os.makedirs(confDir, exist_ok=True)
         elif os.path.exists(path):
             backup = path + ".bak"
-            print("Configuration file '{file}' exists! Moving it to {backup}".
-                  format(file=path, backup=backup))
+            print("Configuration file '{file}' exists! Moving it to {backup}".format(file=path,
+                                                                                     backup=backup))
             os.rename(path, backup)
 
         defaultConf = configparser.ConfigParser()

@@ -19,12 +19,7 @@ class Test_TestTimestampStore(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.minutes = 10 * 24 * 60
-        cls.now = datetime(year=2019,
-                           month=12,
-                           day=29,
-                           hour=15,
-                           minute=40,
-                           second=20)
+        cls.now = datetime(year=2019, month=12, day=29, hour=15, minute=40, second=20)
 
     def test_timestampStore(self):
         with mock.patch("wall_cycler.Interval.TimestampStore.datetime", mock.Mock()) as fakeDateTime, \

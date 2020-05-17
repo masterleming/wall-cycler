@@ -30,8 +30,7 @@ _TestConfig1 = RuntimeConfig(order="sorted",
                              cacheDir=".cache/test",
                              backend="test backend")
 
-_TestConfig2 = RuntimeConfig(wallpaperPaths=["otherPath1", "otherPath2"],
-                             interval="2h")
+_TestConfig2 = RuntimeConfig(wallpaperPaths=["otherPath1", "otherPath2"], interval="2h")
 
 _CombinedConfig = RuntimeConfig(order="sorted",
                                 wallpaperPaths=["otherPath1", "otherPath2"],
@@ -42,8 +41,7 @@ _CombinedConfig = RuntimeConfig(order="sorted",
 
 class Test_TestFileLoader(unittest.TestCase):
     def test_createDefaultConfig(self):
-        with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX,
-                                dir=TEST_CONFIG_ROOT) as testDir:
+        with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX, dir=TEST_CONFIG_ROOT) as testDir:
             defaultConfPath = os.path.join(testDir, TEST_CONFIG_DEFAULT_NAME)
             self._ensureConfigDoesNotExist(defaultConfPath)
 
@@ -77,8 +75,7 @@ class Test_TestFileLoader(unittest.TestCase):
             self.assertTrue(os.path.exists(backedConfFile))
 
     def test_loadFromDefaultConfigFile(self):
-        with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX,
-                                dir=TEST_CONFIG_ROOT) as testDir:
+        with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX, dir=TEST_CONFIG_ROOT) as testDir:
             testConfigFile = self._prepareConfig(testDir)
 
             uut = FileLoader()
@@ -89,8 +86,7 @@ class Test_TestFileLoader(unittest.TestCase):
             self.assertEqual(conf, _TestConfig1)
 
     def test_loadSingleFile(self):
-        with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX,
-                                dir=TEST_CONFIG_ROOT) as testDir:
+        with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX, dir=TEST_CONFIG_ROOT) as testDir:
             testConfigFile = self._prepareConfig(testDir)
 
             uut = FileLoader(configPath=testConfigFile)
@@ -101,13 +97,10 @@ class Test_TestFileLoader(unittest.TestCase):
             self.assertEqual(conf, _TestConfig1)
 
     def test_loadMultipleFiles(self):
-        with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX,
-                                dir=TEST_CONFIG_ROOT) as testDir:
-            defaultConfig = self._prepareConfig(testDir,
-                                                TEST_CONFIG_DEFAULT_NAME,
+        with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX, dir=TEST_CONFIG_ROOT) as testDir:
+            defaultConfig = self._prepareConfig(testDir, TEST_CONFIG_DEFAULT_NAME,
                                                 str(_TestConfig1))
-            testConfigFile = self._prepareConfig(testDir, TEST_CONFIG_FILE,
-                                                 str(_TestConfig2))
+            testConfigFile = self._prepareConfig(testDir, TEST_CONFIG_FILE, str(_TestConfig2))
 
             uut = FileLoader(configPath=testConfigFile)
             self._overrideDefaultConfigPath(uut, defaultConfig)
@@ -127,9 +120,7 @@ class Test_TestFileLoader(unittest.TestCase):
         return DefaultConfig.getRuntime()
 
     @staticmethod
-    def _prepareConfig(testDir,
-                       configName=TEST_CONFIG_FILE,
-                       configString=str(_TestConfig1)):
+    def _prepareConfig(testDir, configName=TEST_CONFIG_FILE, configString=str(_TestConfig1)):
         testConfName = os.path.join(testDir, configName)
         with open(testConfName, 'w') as testFile:
             testFile.write(configString)
