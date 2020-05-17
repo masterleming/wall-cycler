@@ -7,7 +7,6 @@ import magic
 
 class FileScanner:
     # TODO: handle subdirectories config!
-    # TODO: handle multiple paths! or not... may be performed at the APP level
     def __init__(self, path, subdirs=True):
         self.path = os.path.abspath(
             os.path.expandvars(os.path.expanduser(path)))

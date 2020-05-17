@@ -5,7 +5,10 @@
     - [x] DataStore
     - [x] TimestampStore
     - [x] ExpirationCheck
-- [ ] prepare 'main' function
+- [x] prepare 'main' function
 - [ ] add program logger
     - [ ] start logging stuff
+- [ ] fix Updaters to detect file removal.
+- [ ] prepare scheduling backends
+- [ ] prepare wallpaper switching backends
 - [ ] prepare package

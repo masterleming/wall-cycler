@@ -35,7 +35,7 @@ class DefaultConfig(enum.Enum):
                              interval=Interval(cls.defaultInterval.value),
                              cacheDir=cls.defaultCacheDir.value,
                              backend=cls.defaultBackend.value
-                             #TODO: add missing default values!
+        #TODO: add missing default values! (left to periodically check and update if needed)
                              )
 
     @classmethod

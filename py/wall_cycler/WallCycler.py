@@ -59,6 +59,7 @@ class WallCycler:
     def _changeWallpaper(self):
         wallpaper = next(self._wallpapers)
         # TODO: change the wallpaper
+        # TODO: implement changing wallpaper backends!
         print("XXX changing wallpaper placeholder! New wallpaper is: '{}'".format(wallpaper), flush=True)
 
         self.__updateWallpaperCache()
