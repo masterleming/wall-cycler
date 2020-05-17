@@ -3,10 +3,13 @@
 import configparser
 import os.path
 import enum
+from collections.abc import Sequence
 
 from .RuntimeConfig import RuntimeConfig
 from wall_cycler.Interval.Intervals import Interval
+from wall_cycler.Wallpapers.Updaters import UpdaterTypes
 from wall_cycler.exceptions import MissingConfigFileException
+
 """
 [wall_cycler]
 order = shuffle | sorted
@@ -18,14 +21,7 @@ wallpaper backend = sway | $(expression)
 
 
 class DefaultConfig(enum.Enum):
-    defaultConfig = """[wall_cycler]
-order = shuffle
-wallpaper paths = $HOME/Pictures
-change time = daily
-cache dir = $HOME/.cache/wall_cycler
-wallpaper backend = sway
-"""
-    defaultOrder = "shuffle"
+    defaultOrder = UpdaterTypes.shuffle.name
     defaultWallpaperPaths = "$HOME/Pictures"
     defaultInterval = "daily"
     defaultCacheDir = "$HOME/.cache/wall_cycler"
@@ -38,7 +34,9 @@ wallpaper backend = sway
                              wallpaperPaths=[cls.defaultWallpaperPaths.value],
                              interval=Interval(cls.defaultInterval.value),
                              cacheDir=cls.defaultCacheDir.value,
-                             backend=cls.defaultBackend.value)
+                             backend=cls.defaultBackend.value
+        #TODO: add missing default values! (left to periodically check and update if needed)
+                             )
 
     @classmethod
     def getIni(cls):
@@ -49,7 +47,13 @@ class FileLoader:
     def __init__(self, configPath=None):
         self.configPaths = [DefaultConfig.userConfigPath.value]
         if configPath is not None:
-            self.configPaths.append(configPath)
+            if isinstance(configPath, str):
+                self.configPaths.append(configPath)
+            elif isinstance(configPath, Sequence):
+                self.configPaths += configPath
+            else:
+                self.configPaths.append(configPath)
+
         self.configParser = None
         self.config = RuntimeConfig()
 
@@ -72,7 +76,7 @@ class FileLoader:
                 strList = ', '.join(["'{}'".format(f) for f in failed])
                 raise MissingConfigFileException(
                     "These configuration file paths are invalid: {}!".format(
-                        strList.strip))
+                        strList.strip()))
 
         self.config = RuntimeConfig.fromCfgFile(self.configParser)
         return self.config
@@ -83,7 +87,7 @@ class FileLoader:
 
         path = self.__expandPath(path)
         confDir = os.path.dirname(path)
-        if not os.path.exists(confDir):
+        if confDir != "" and not os.path.exists(confDir):
             os.makedirs(confDir, exist_ok=True)
         elif os.path.exists(path):
             backup = path + ".bak"
@@ -92,7 +96,7 @@ class FileLoader:
             os.rename(path, backup)
 
         defaultConf = configparser.ConfigParser()
-        defaultConf.read_string(DefaultConfig.defaultConfig.value)
+        defaultConf.read_string(DefaultConfig.getIni())
         with open(path, 'w') as confFile:
             defaultConf.write(confFile)
 

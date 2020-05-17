@@ -13,6 +13,9 @@ class ExpirationCheck:
     def isExpired(self):
         timestamp, msg = self.timestampStore.readTimestamp()
         # TODO: log msg
+
+        if timestamp is None:
+            return True
         return self.interval.isExpired(timestamp)
 
     def mark(self):

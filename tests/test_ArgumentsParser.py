@@ -5,12 +5,13 @@ import sys
 import unittest.mock as mock
 
 from wall_cycler.Config.ArgumentsParser import ArgumentsParser
+from wall_cycler.Wallpapers.Updaters import UpdaterTypes
 
 
 class Test_TestArgumentsParser(unittest.TestCase):
     def test_parsingOrder(self):
         basicArgv = ["test_parsingOrder", "--order"]
-        validOrders = ["shuffle", "sorted"]
+        validOrders = UpdaterTypes.choices()
         invalidOrders = ['truffle', 'reverse']
 
         for order in validOrders:

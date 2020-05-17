@@ -1,6 +1,5 @@
 # exceptions
 
-
 class MissingConfigFileException(Exception):
     pass
 
@@ -10,7 +9,9 @@ class MissingDirectoryException(Exception):
 
 
 class InvalidSortOrderException(Exception):
-    pass
+    def __init__(self, order, valid):
+        super().__init__("Received invalid sort order type: '{}'! Allowed types are: {}.".
+        format(order, valid))
 
 
 class InvalidTimeIntervalSpecificationException(Exception):
