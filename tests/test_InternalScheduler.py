@@ -29,3 +29,7 @@ class Test_TestInternalScheduler(unittest.TestCase):
     @staticmethod
     def _nowPlusSeconds(seconds):
         return datetime.now() + timedelta(seconds=seconds)
+
+
+if __name__ == '__main__':
+    unittest.main()
