@@ -27,7 +27,7 @@ class DefaultConfig(enum.Enum):
     defaultCacheDir = "$HOME/.cache/wall_cycler"
     defaultBackend = "sway"
     userConfigPath = "$HOME/.config/wall_cycler/wall_cycler.conf"
-    defaultLogDir = "$HOME/.cache/wall_cycler/log"
+    defaultLogDir = ""
     defaultLogLevel = "WARNING"
 
     @classmethod
