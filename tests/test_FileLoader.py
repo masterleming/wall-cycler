@@ -4,6 +4,7 @@ import unittest
 
 import os.path
 from tempfile import TemporaryDirectory
+import logging
 
 from wall_cycler.Config.FileLoader import FileLoader, DefaultConfig
 from wall_cycler.Config.RuntimeConfig import RuntimeConfig
@@ -28,15 +29,22 @@ _TestConfig1 = RuntimeConfig(order="sorted",
                              wallpaperPaths=["testPath1", "testPath2"],
                              interval="boot",
                              cacheDir=".cache/test",
-                             backend="test backend")
+                             backend="test backend",
+                             logDir=".cache/log/wall_cycler_test",
+                             logLevel=logging.DEBUG)
 
-_TestConfig2 = RuntimeConfig(wallpaperPaths=["otherPath1", "otherPath2"], interval="2h")
+_TestConfig2 = RuntimeConfig(wallpaperPaths=["otherPath1", "otherPath2"],
+                             interval="2h",
+                             logDir=".log/test",
+                             logLevel=logging.CRITICAL)
 
 _CombinedConfig = RuntimeConfig(order="sorted",
                                 wallpaperPaths=["otherPath1", "otherPath2"],
                                 interval="2h",
                                 cacheDir=".cache/test",
-                                backend="test backend")
+                                backend="test backend",
+                                logDir=".log/test",
+                                logLevel=logging.CRITICAL)
 
 
 class Test_TestFileLoader(unittest.TestCase):

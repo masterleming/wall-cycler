@@ -73,3 +73,7 @@ def logLevels():
 
 def levelFromName(name):
     return logging._nameToLevel[name.upper()]
+
+
+def nameFromLevel(level):
+    return logging._levelToName[level]
