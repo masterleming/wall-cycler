@@ -7,7 +7,7 @@ import os.path
 import random
 import time
 
-from wall_cycler.Init.Log import Log, logLevels, levelFromName
+from wall_cycler.Init.Log import Log, logLevels, levelFromName, LOG_FILE_NAME
 import logging
 
 EPOCH = 1591448293
@@ -26,10 +26,10 @@ class Test_TestInit_Log(unittest.TestCase):
 
     def test_settingLogFilePath(self):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
-            logFileName = os.path.join(tmpDir, "test.log")
+            logFileName = os.path.join(tmpDir, LOG_FILE_NAME)
 
             uut = Log()
-            uut.init(level=logging.DEBUG, logFilePath=logFileName)
+            uut.init(level=logging.DEBUG, logDir=tmpDir)
 
             self._logDeterministicMessages()
 
@@ -37,10 +37,10 @@ class Test_TestInit_Log(unittest.TestCase):
 
     def test_logFileContents(self):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
-            logFileName = os.path.join(tmpDir, "test.log")
+            logFileName = os.path.join(tmpDir, LOG_FILE_NAME)
 
             uut = Log()
-            uut.init(level=logging.DEBUG, logFilePath=logFileName)
+            uut.init(level=logging.DEBUG, logDir=tmpDir)
 
             expectedLogs = self._logDeterministicMessages()
 
@@ -49,10 +49,10 @@ class Test_TestInit_Log(unittest.TestCase):
 
     def test_levelFiltering(self):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
-            logFileName = os.path.join(tmpDir, "test.log")
+            logFileName = os.path.join(tmpDir, LOG_FILE_NAME)
 
             uut = Log()
-            uut.init(level=logging.ERROR, logFilePath=logFileName)
+            uut.init(level=logging.ERROR, logDir=tmpDir)
 
             expectedLogs = self._logDeterministicMessages(timeAdjustment=-30)
 
@@ -62,11 +62,11 @@ class Test_TestInit_Log(unittest.TestCase):
 
     def test_formatOverriding(self):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
-            logFileName = os.path.join(tmpDir, "test.log")
+            logFileName = os.path.join(tmpDir, LOG_FILE_NAME)
 
             uut = Log()
             uut.init(level=logging.DEBUG,
-                     logFilePath=logFileName,
+                     logDir=tmpDir,
                      formatDetails={
                          "string": "%(asctime)s%(levelname)s%(name)s%(message)s",
                          "style": "%"
@@ -79,10 +79,10 @@ class Test_TestInit_Log(unittest.TestCase):
 
     def test_differentLogger(self):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
-            logFileName = os.path.join(tmpDir, "test.log")
+            logFileName = os.path.join(tmpDir, LOG_FILE_NAME)
 
             uut = Log()
-            uut.init(level=logging.ERROR, logFilePath=logFileName)
+            uut.init(level=logging.ERROR, logDir=tmpDir)
 
             expectedLogs = self._logDeterministicMessages(name="ABCDE", timeAdjustment=-30)
 
@@ -93,7 +93,7 @@ class Test_TestInit_Log(unittest.TestCase):
     def test_bootLogging(self):
         expectedFormat = "{}-{}-{}-{}\n"
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
-            logFileName = os.path.join(tmpDir, "test.log")
+            logFileName = os.path.join(tmpDir, LOG_FILE_NAME)
 
             uut = Log()
             bootLogs = self._logDeterministicMessages(formatStr=expectedFormat)
@@ -101,7 +101,7 @@ class Test_TestInit_Log(unittest.TestCase):
             self.assertFalse(os.path.exists(logFileName))
 
             uut.init(level=logging.ERROR,
-                     logFilePath=logFileName,
+                     logDir=tmpDir,
                      formatDetails={
                          "string": "%(asctime)s-%(levelname)s-%(name)s-%(message)s",
                          "style": "%"

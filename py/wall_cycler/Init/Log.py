@@ -3,8 +3,10 @@
 import enum
 import logging
 import logging.handlers
+import os.path
 import sys
 
+LOG_FILE_NAME = "wcycler.log"
 
 class Log:
 
@@ -26,8 +28,8 @@ class Log:
         self._memHandler.setFormatter(logging.Formatter(self._defaultFormatStr, style='{'))
         rootLogger.addHandler(self._memHandler)
 
-    def init(self, level, logFilePath=None, formatDetails={"string": None, "style": None}):
-        self._reinit(level, logFilePath, formatDetails)
+    def init(self, level, logDir=None, formatDetails={"string": None, "style": None}):
+        self._reinit(level, logDir, formatDetails)
 
         logger = logging.getLogger()
         logger.setLevel(self._level)
@@ -55,14 +57,18 @@ class Log:
             formatDetails = {"string": self._defaultFormatStr, "style": '{'}
         self._format = formatDetails
 
-    def _reinit(self, level=None, logFilePath=None, formatDetails=None):
+    def _reinit(self, level=None, logDir=None, formatDetails=None):
         if level is not None:
             self._level = level
 
-        if logFilePath is not None and logFilePath != "":
-            self._logFilePath = logFilePath
-
+        self._setLogFilePath(logDir)
         self._setLogFormat(formatDetails)
+
+    def _setLogFilePath(self, logDir):
+        if logDir is not None and logDir != "":
+            absDir = os.path.abspath(os.path.expandvars(os.path.expanduser(logDir)))
+            os.makedirs(absDir, exist_ok=True)
+            self._logFilePath = os.path.join(absDir, LOG_FILE_NAME)
 
 
 def logLevels():
