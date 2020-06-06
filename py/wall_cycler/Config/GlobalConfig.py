@@ -1,5 +1,7 @@
 # GlobalConfig
 
+# TODO remove the file as it is unused!
+
 
 class GlobalConfig:
 
