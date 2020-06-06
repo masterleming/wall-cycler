@@ -47,7 +47,7 @@ class Test_TestWallCollection(unittest.TestCase):
 
     @staticmethod
     def _prepareSomeFileNames(count):
-        return ["file-%02d.jpg" % n for n in range(1, count + 1)]
+        return ["file-{:02d}.jpg".format(n) for n in range(1, count + 1)]
 
 
 if __name__ == '__main__':
