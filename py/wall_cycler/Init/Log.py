@@ -63,3 +63,13 @@ class Log:
             self._logFilePath = logFilePath
 
         self._setLogFormat(formatDetails)
+
+
+def logLevels():
+    levels = logging._levelToName.copy()
+    del levels[logging.NOTSET]
+    return [levels[key] for key in sorted(levels)]
+
+
+def levelFromName(name):
+    return logging._nameToLevel[name.upper()]

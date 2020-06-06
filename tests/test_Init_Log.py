@@ -7,7 +7,7 @@ import os.path
 import random
 import time
 
-from wall_cycler.Init.Log import Log
+from wall_cycler.Init.Log import Log, logLevels, levelFromName
 import logging
 
 EPOCH = 1591448293
@@ -124,7 +124,7 @@ class Test_TestInit_Log(unittest.TestCase):
         if formatStr is None:
             formatStr = "{:s} | {:8s} | {:s} | {:s}\n"
 
-        levelsList = [logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL]
+        levelsList = [levelFromName(level) for level in logLevels()]
 
         messages = []
         with mock.patch("time.time", timeMock().__next__):
