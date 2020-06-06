@@ -28,8 +28,8 @@ class Test_TestInit_Log(unittest.TestCase):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
             logFileName = os.path.join(tmpDir, "test.log")
 
-            uut = Log(level=logging.DEBUG, logFilePath=logFileName)
-            uut.init()
+            uut = Log()
+            uut.init(level=logging.DEBUG, logFilePath=logFileName)
 
             self._logDeterministicMessages()
 
@@ -39,8 +39,8 @@ class Test_TestInit_Log(unittest.TestCase):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
             logFileName = os.path.join(tmpDir, "test.log")
 
-            uut = Log(level=logging.DEBUG, logFilePath=logFileName)
-            uut.init()
+            uut = Log()
+            uut.init(level=logging.DEBUG, logFilePath=logFileName)
 
             expectedLogs = self._logDeterministicMessages()
 
@@ -51,26 +51,26 @@ class Test_TestInit_Log(unittest.TestCase):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
             logFileName = os.path.join(tmpDir, "test.log")
 
-            uut = Log(level=logging.ERROR, logFilePath=logFileName)
-            uut.init()
+            uut = Log()
+            uut.init(level=logging.ERROR, logFilePath=logFileName)
 
             expectedLogs = self._logDeterministicMessages(timeAdjustment=-30)
 
             self.assertTrue(os.path.exists(logFileName))
-            self._assertLogFileContents(
-                logFileName, [el for el in expectedLogs if "ERROR" in el or "CRITICAL" in el])
+            filteredExpected = [l for l in expectedLogs if "ERROR" in l or "CRITICAL" in l]
+            self._assertLogFileContents(logFileName, filteredExpected)
 
     def test_formatOverriding(self):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
             logFileName = os.path.join(tmpDir, "test.log")
 
-            uut = Log(level=logging.DEBUG,
-                      logFilePath=logFileName,
-                      formatDetails={
-                          "string": "%(asctime)s%(levelname)s%(name)s%(message)s",
-                          "style": "%"
-                      })
-            uut.init()
+            uut = Log()
+            uut.init(level=logging.DEBUG,
+                     logFilePath=logFileName,
+                     formatDetails={
+                         "string": "%(asctime)s%(levelname)s%(name)s%(message)s",
+                         "style": "%"
+                     })
 
             expectedLogs = self._logDeterministicMessages(formatStr="{}{}{}{}\n")
 
@@ -81,14 +81,38 @@ class Test_TestInit_Log(unittest.TestCase):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
             logFileName = os.path.join(tmpDir, "test.log")
 
-            uut = Log(level=logging.ERROR, logFilePath=logFileName)
-            uut.init()
+            uut = Log()
+            uut.init(level=logging.ERROR, logFilePath=logFileName)
 
             expectedLogs = self._logDeterministicMessages(name="ABCDE", timeAdjustment=-30)
 
             self.assertTrue(os.path.exists(logFileName))
-            self._assertLogFileContents(
-                logFileName, [el for el in expectedLogs if "ERROR" in el or "CRITICAL" in el])
+            filteredExpected = [l for l in expectedLogs if "ERROR" in l or "CRITICAL" in l]
+            self._assertLogFileContents(logFileName, filteredExpected)
+
+    def test_bootLogging(self):
+        expectedFormat = "{}-{}-{}-{}\n"
+        with TemporaryDirectory(prefix="log-test-") as tmpDir:
+            logFileName = os.path.join(tmpDir, "test.log")
+
+            uut = Log()
+            bootLogs = self._logDeterministicMessages(formatStr=expectedFormat)
+
+            self.assertFalse(os.path.exists(logFileName))
+
+            uut.init(level=logging.ERROR,
+                     logFilePath=logFileName,
+                     formatDetails={
+                         "string": "%(asctime)s-%(levelname)s-%(name)s-%(message)s",
+                         "style": "%"
+                     })
+            expectedLogs = self._logDeterministicMessages(name="ABCDE",
+                                                          timeAdjustment=-30,
+                                                          formatStr=expectedFormat)
+            expectedLogs = bootLogs + [l for l in expectedLogs if "ERROR" in l or "CRITICAL" in l]
+
+            self.assertTrue(os.path.exists(logFileName))
+            self._assertLogFileContents(logFileName, expectedLogs)
 
     def _assertLogFileContents(self, logFileName, expectedLogs):
         with open(logFileName) as logFile:
