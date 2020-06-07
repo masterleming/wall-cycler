@@ -8,6 +8,9 @@ import sys
 
 LOG_FILE_NAME = "wcycler.log"
 
+_logger = logging.getLogger(__name__)
+
+
 class Log:
 
     _defaultFormatStr = "{asctime:s} | {levelname:8s} | {name:s} | {message:s}"
@@ -21,6 +24,7 @@ class Log:
         self.__preInit()
 
     def __preInit(self):
+        _logger.info("Running Logger pre-init to start BOOT Logger.")
         rootLogger = logging.getLogger()
         rootLogger.setLevel(logging.DEBUG)
 
@@ -29,15 +33,19 @@ class Log:
         rootLogger.addHandler(self._memHandler)
 
     def init(self, level, logDir=None, formatDetails={"string": None, "style": None}):
+        _logger.info("Configuration provided, running proper initialisation of Logger.")
         self._reinit(level, logDir, formatDetails)
+        _logger.debug("Logging level: %s", nameFromLevel(self._level))
 
         logger = logging.getLogger()
         logger.setLevel(self._level)
 
         if self._logFilePath is not None:
+            _logger.debug("Creating file logger; file '%s'.", self._logFilePath)
             handler = logging.FileHandler(self._logFilePath)
         else:
-            handler = logging.StreamHandler(sys.stderr)
+            _logger.debug("Creating STDERR logger.")
+            handler = logging._StderrHandler()
         handler.setLevel(self._level)
 
         formatter = logging.Formatter(self._format["string"], style=self._format["style"])
@@ -45,6 +53,7 @@ class Log:
 
         logger.addHandler(handler)
 
+        _logger.info("Switching BOOT logger to the target Logger.")
         if self._memHandler is not None:
             self._memHandler.setLevel(self._level)
             self._memHandler.setTarget(handler)

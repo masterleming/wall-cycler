@@ -7,6 +7,9 @@ from wall_cycler.Init.Log import levelFromName, nameFromLevel
 
 import enum
 from copy import deepcopy
+from logging import getLogger
+
+_logger = getLogger(__name__)
 
 
 class Modes(enum.Enum):
@@ -82,6 +85,7 @@ class RuntimeConfig:
 
     @classmethod
     def fromCfgFile(cls, parsed):
+        _logger.info("Producing RuntimeConfig from configuration file.")
         ret = RuntimeConfig()
         appConf = parsed[cls._ConfigFileKeys.rootSection.value]
 
@@ -119,6 +123,7 @@ class RuntimeConfig:
 
     @staticmethod
     def fromProgramArgs(argsConf):
+        _logger.info("Producing RuntimeConfig from runtime arguments.")
         ret = RuntimeConfig()
 
         if argsConf.order is not None and argsConf.order != "":

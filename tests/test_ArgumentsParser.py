@@ -1,14 +1,16 @@
 # test_ArgumentsParser
 
-import unittest
 import sys
+import unittest
 import unittest.mock as mock
+
+from TestSuite import TestSuite
 
 from wall_cycler.Config.ArgumentsParser import ArgumentsParser
 from wall_cycler.Wallpapers.Updaters import UpdaterTypes
 
 
-class Test_TestArgumentsParser(unittest.TestCase):
+class Test_TestArgumentsParser(TestSuite):
     def test_parsingOrder(self):
         basicArgv = ["test_parsingOrder", "--order"]
         validOrders = UpdaterTypes.choices()

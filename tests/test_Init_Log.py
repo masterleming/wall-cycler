@@ -7,13 +7,19 @@ import os.path
 import random
 import time
 
+from TestSuite import TestSuite
+
 from wall_cycler.Init.Log import Log, logLevels, levelFromName, LOG_FILE_NAME
 import logging
 
 EPOCH = 1591448293
 
 
-class Test_TestInit_Log(unittest.TestCase):
+@mock.patch("wall_cycler.Init.Log._logger", mock.Mock())
+class Test_TestInit_Log(TestSuite):
+    @classmethod
+    def setUpClass(cls):
+        pass
 
     __loremIpsum = [
         "Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit",

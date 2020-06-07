@@ -6,6 +6,8 @@ import os.path
 from tempfile import TemporaryDirectory
 import logging
 
+from TestSuite import TestSuite
+
 from wall_cycler.Config.FileLoader import FileLoader, DefaultConfig
 from wall_cycler.Config.RuntimeConfig import RuntimeConfig
 
@@ -47,7 +49,7 @@ _CombinedConfig = RuntimeConfig(order="sorted",
                                 logLevel=logging.CRITICAL)
 
 
-class Test_TestFileLoader(unittest.TestCase):
+class Test_TestFileLoader(TestSuite):
     def test_createDefaultConfig(self):
         with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX, dir=TEST_CONFIG_ROOT) as testDir:
             defaultConfPath = os.path.join(testDir, TEST_CONFIG_DEFAULT_NAME)

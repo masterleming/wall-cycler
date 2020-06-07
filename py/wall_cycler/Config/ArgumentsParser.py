@@ -1,6 +1,7 @@
 # ArgumentsParser
 
 import argparse
+from logging import getLogger
 
 from .RuntimeConfig import RuntimeConfig
 from wall_cycler.Interval import Intervals
@@ -16,6 +17,8 @@ wallpaper backend = sway | $(expression)
 
 config = path to the (additional) config file
 """
+
+_logger = getLogger(__name__)
 
 
 class ArgumentsParser:
@@ -35,6 +38,7 @@ class ArgumentsParser:
         self.parser = parser
 
     def parse(self):
+        _logger.debug("Parsing command line arguments.")
         return RuntimeConfig.fromProgramArgs(self.parser.parse_args())
 
     @staticmethod

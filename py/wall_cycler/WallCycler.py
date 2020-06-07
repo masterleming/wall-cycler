@@ -9,6 +9,9 @@ from wall_cycler.Wallpapers.WallCollection import WallCollection
 import wall_cycler.exceptions as exceptions
 
 import enum
+from logging import getLogger
+
+_logger = getLogger(__name__)
 
 
 class _CacheKeys(enum.Enum):
@@ -62,8 +65,7 @@ class WallCycler:
         wallpaper = next(self._wallpapers)
         # TODO: change the wallpaper
         # TODO: implement changing wallpaper backends!
-        print("XXX changing wallpaper placeholder! New wallpaper is: '{}'".format(wallpaper),
-              flush=True)
+        _logger.warning("Changing wallpaper placeholder! New wallpaper is: '{}'".format(wallpaper))
 
         self.__updateWallpaperCache()
         self._expiryChecker.mark()
