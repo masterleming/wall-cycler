@@ -5,13 +5,15 @@ import unittest.mock as mock
 from datetime import datetime, timedelta
 import time
 
+from TestSuite import TestSuite
+
 from wall_cycler.Schedulers.InternalScheduler import InternalScheduler
 
 TEST_START = 30
 TEST_THRESHOLD = 31
 
 
-class InternalSchedulerTests(unittest.TestCase):
+class InternalSchedulerTests(TestSuite):
     def test_blocksUntilScheduled(self):
 
         uut = InternalScheduler()

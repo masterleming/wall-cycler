@@ -2,6 +2,9 @@
 
 import time
 from datetime import datetime, timedelta
+from logging import getLogger
+
+_logger = getLogger(__name__)
 
 
 class InternalScheduler:
@@ -9,7 +12,9 @@ class InternalScheduler:
         pass
 
     def wait(self, nextChange):
-        time.sleep(self.__translateChangeTimeToAbsSeconds(nextChange))
+        t = self.__translateChangeTimeToAbsSeconds(nextChange)
+        _logger.info("Sleeping for %d s.", t)
+        time.sleep(t)
 
     @staticmethod
     def __translateChangeTimeToAbsSeconds(nextChange):
