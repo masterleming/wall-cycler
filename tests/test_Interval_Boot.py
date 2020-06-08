@@ -4,12 +4,16 @@ import unittest
 import unittest.mock as mock
 from datetime import datetime, timedelta
 
+from TestSuite import TestSuite
+
 from wall_cycler.Interval.Intervals import BootInterval
 
 
-class Test_TestBootInterval(unittest.TestCase):
+class BootIntervalTests(TestSuite):
     @classmethod
     def setUpClass(cls):
+        super().setUpClass()
+
         cls.boottime = datetime(year=2019,
                                 month=12,
                                 day=29,

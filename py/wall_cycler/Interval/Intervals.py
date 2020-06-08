@@ -3,22 +3,28 @@
 import datetime
 import uptime
 import re
+from logging import getLogger
 
 from wall_cycler.exceptions import InvalidTimeIntervalSpecificationException
 
+_logger = getLogger(__name__)
 __intervalPattern = re.compile(r"(?:\d+[dhm]\s*)+|boot|daily")
 
 
 def Interval(prototype):
     if not __intervalPattern.search(prototype):
+        _logger.error("Invalid interval prototype '%s'", prototype)
         raise InvalidTimeIntervalSpecificationException(prototype)
 
     if prototype == "boot":
+        _logger.debug("Creating 'boot' interval...")
         return BootInterval()
 
     if prototype == "daily":
+        _logger.debug("Creating 'daily' interval...")
         return DailyInterval()
 
+    _logger.debug("Creating 'custom' interval...")
     return CustomInterval(prototype)
 
 
@@ -42,9 +48,11 @@ class BaseInterval:
 class BootInterval(BaseInterval):
     def __init__(self):
         self.lastBoot = uptime.boottime()
+        _logger.info("Last boot time: %s", self.lastBoot)
 
     def isExpired(self, lastChange):
-        return lastChange < self.lastBoot
+        expired = lastChange < self.lastBoot
+        return expired
 
     def mark(self):
         return "boot"
@@ -58,6 +66,7 @@ class DailyInterval(BaseInterval):
         today = datetime.date.today()
         dayDelta = datetime.timedelta(days=1)
         self.nextChange = datetime.datetime.combine(today + dayDelta, datetime.time(0))
+        _logger.info("Today is %s.", today)
 
     def isExpired(self, lastChange):
         return lastChange.date() < datetime.date.today()

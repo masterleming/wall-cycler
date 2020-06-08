@@ -4,6 +4,8 @@ import unittest
 import unittest.mock as mock
 from datetime import datetime, timedelta, time
 
+from TestSuite import TestSuite
+
 from wall_cycler.Interval.ExpirationCheck import ExpirationCheck
 from wall_cycler.Interval.Intervals import BaseInterval
 
@@ -11,7 +13,7 @@ TEST_NOW = datetime(year=2019, month=12, day=29, hour=15, minute=40, second=20)
 TEST_MSG = "test message"
 
 
-class test_ExpirationCheck(unittest.TestCase):
+class ExpirationCheckTests(TestSuite):
     def test_expirationCheck(self):
         mockIntervals = self._prepareTestIntervals()
 
