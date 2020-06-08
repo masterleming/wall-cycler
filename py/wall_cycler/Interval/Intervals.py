@@ -17,14 +17,14 @@ def Interval(prototype):
         raise InvalidTimeIntervalSpecificationException(prototype)
 
     if prototype == "boot":
-        _logger.debug("Creating 'boot' interval...")
+        _logger.debug("Creating 'boot' interval.")
         return BootInterval()
 
     if prototype == "daily":
-        _logger.debug("Creating 'daily' interval...")
+        _logger.debug("Creating 'daily' interval.")
         return DailyInterval()
 
-    _logger.debug("Creating 'custom' interval...")
+    _logger.debug("Creating 'custom' interval.")
     return CustomInterval(prototype)
 
 

@@ -10,7 +10,7 @@ _logger = getLogger(__name__)
 
 class TimestampStore:
     def __init__(self, cache):
-        _logger.debug("Initialising...")
+        _logger.debug("Initialising.")
         if isinstance(cache, DataStore):
             _logger.debug("Using DataStore instance")
             self.dataStore = cache
@@ -24,7 +24,7 @@ class TimestampStore:
                     type(cache)), cache)
 
     def readTimestamp(self):
-        _logger.debug("Reading timestamp from cache...")
+        _logger.debug("Reading timestamp from cache.")
         timestamp = None
         msg = None
         with self.dataStore:

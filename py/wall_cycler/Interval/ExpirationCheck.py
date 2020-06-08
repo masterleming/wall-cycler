@@ -15,7 +15,7 @@ class ExpirationCheck:
         self.timestampStore = timestampStore
 
     def isExpired(self):
-        _logger.info("Checking expiration...")
+        _logger.info("Checking expiration.")
 
         timestamp, msg = self.timestampStore.readTimestamp()
         _logger.debug("Read timestamp: '{}' with message: '{}' from cache.".format(timestamp, msg))
@@ -29,12 +29,12 @@ class ExpirationCheck:
         return expired
 
     def mark(self):
-        _logger.info("Marking current time as time of the last change.")
+        _logger.debug("Marking current time as time of the last change.")
         msg = self.interval.mark()
         self.timestampStore.writeTimestamp(msg)
 
     def getNext(self):
-        _logger.info("Obtaining time of the next change (if possible).")
+        _logger.debug("Obtaining time of the next change (if possible).")
 
         timestamp, _ = self.timestampStore.readTimestamp()
         nextChange = self.interval.getNext(timestamp)
