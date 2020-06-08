@@ -13,7 +13,7 @@ TEST_CACHE_TEMP_PREFIX = 'test-cache-'
 TEST_DATA_PAIRS = [("number", 1234), ("text", "lorem ipsum"), ("object", {"A": 1, "B": 2})]
 
 
-class Test_TestDataStore(unittest.TestCase):
+class DataStoreTests(unittest.TestCase):
     def test_storeAndRetrieve_explicitOpen(self):
         with TemporaryDirectory(prefix=TEST_CACHE_TEMP_PREFIX, dir=TEST_CACHE_ROOT) as testDir:
             uut = DataStore(testDir)

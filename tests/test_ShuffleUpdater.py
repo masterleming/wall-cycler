@@ -13,7 +13,7 @@ FILE_LIST = PROTO_FILE_LIST.split(' ')
 TEST_ITERATIONS = 1000
 
 
-class Test_TestShuffleUpdater(unittest.TestCase):
+class ShuffleUpdaterTests(unittest.TestCase):
     def setUp(self):
         self.walls = WallCollection()
 

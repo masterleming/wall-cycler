@@ -5,7 +5,7 @@ from wall_cycler.Wallpapers.WallCollection import WallCollection
 import unittest
 
 
-class Test_TestWallCollection(unittest.TestCase):
+class WallCollectionTests(unittest.TestCase):
     def test_getNext(self):
         filesCnt = 50
         files = self._prepareSomeFileNames(filesCnt)

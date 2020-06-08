@@ -16,7 +16,7 @@ EPOCH = 1591448293
 
 
 @mock.patch("wall_cycler.Init.Log._logger", mock.Mock())
-class Test_TestInit_Log(TestSuite):
+class InitLogTests(TestSuite):
     @classmethod
     def setUpClass(cls):
         pass

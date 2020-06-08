@@ -11,7 +11,7 @@ PROTO_FILE_LIST = "Alfa Bravo Charlie Delta Echo Foxtrot Golf Hotel India Juliet
 FILE_LIST = PROTO_FILE_LIST.split(' ')
 
 
-class Test_TestSortedUpdater(unittest.TestCase):
+class SortedUpdaterTests(unittest.TestCase):
     def setUp(self):
         self.walls = WallCollection()
 

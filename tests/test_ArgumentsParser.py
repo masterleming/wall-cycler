@@ -10,7 +10,7 @@ from wall_cycler.Config.ArgumentsParser import ArgumentsParser
 from wall_cycler.Wallpapers.Updaters import UpdaterTypes
 
 
-class Test_TestArgumentsParser(TestSuite):
+class ArgumentsParserTests(TestSuite):
     def test_parsingOrder(self):
         basicArgv = ["test_parsingOrder", "--order"]
         validOrders = UpdaterTypes.choices()
@@ -26,9 +26,9 @@ class Test_TestArgumentsParser(TestSuite):
             sys.argv = basicArgv + [order]
 
             with mock.patch('argparse.ArgumentParser.exit',
-                            Test_TestArgumentsParser._MockExit.exit):
+                            ArgumentsParserTests._MockExit.exit):
                 uut = ArgumentsParser()
-                with self.assertRaises(Test_TestArgumentsParser._MockExit) as raised:
+                with self.assertRaises(ArgumentsParserTests._MockExit) as raised:
                     uut.parse()
                 self.assertNotEqual(raised.exception.status, 0)
                 self.assertIn(order, raised.exception.message)

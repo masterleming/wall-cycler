@@ -11,7 +11,7 @@ TEST_START = 30
 TEST_THRESHOLD = 31
 
 
-class Test_TestInternalScheduler(unittest.TestCase):
+class InternalSchedulerTests(unittest.TestCase):
     def test_blocksUntilScheduled(self):
 
         uut = InternalScheduler()

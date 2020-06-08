@@ -10,9 +10,11 @@ TEST_IMAGES_BASE_DIR = "assets/tests/img"
 TEST_IMAGES_IN_BASE_DIR = [TEST_IMAGES[0]]
 
 
-class Test_TestFileScanner(unittest.TestCase):
+class FileScannerTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        super().setUpClass()
+
         cls.testDir = os.path.abspath(TEST_IMAGES_BASE_DIR)
         cls.testImages = [
             os.path.abspath(os.path.join(TEST_IMAGES_BASE_DIR, f)) for f in TEST_IMAGES

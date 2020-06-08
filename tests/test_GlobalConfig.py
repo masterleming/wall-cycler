@@ -5,9 +5,10 @@ import unittest
 from wall_cycler.Config.GlobalConfig import GlobalConfig
 
 
-class Test_TestGlobalConfig(unittest.TestCase):
+class GlobalConfigTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        super().setUpClass()
         cls.testInstance = "Test config instance!"
 
     def setUp(self):

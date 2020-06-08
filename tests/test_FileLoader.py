@@ -49,7 +49,7 @@ _CombinedConfig = RuntimeConfig(order="sorted",
                                 logLevel=logging.CRITICAL)
 
 
-class Test_TestFileLoader(TestSuite):
+class FileLoaderTests(TestSuite):
     def test_createDefaultConfig(self):
         with TemporaryDirectory(prefix=TEST_CONFIG_TEMP_PREFIX, dir=TEST_CONFIG_ROOT) as testDir:
             defaultConfPath = os.path.join(testDir, TEST_CONFIG_DEFAULT_NAME)

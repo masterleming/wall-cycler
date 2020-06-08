@@ -9,7 +9,7 @@ from wall_cycler.Wallpapers.WallCollection import WallCollection
 from wall_cycler.Wallpapers.CollectionChecker import CollectionChecker
 
 
-class Test_TestCollectionChecker(unittest.TestCase):
+class CollectionCheckerTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
