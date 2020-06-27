@@ -9,6 +9,9 @@ from wall_cycler.Wallpapers.WallCollection import WallCollection
 import wall_cycler.exceptions as exceptions
 
 import enum
+from logging import getLogger
+
+_logger = getLogger(__name__)
 
 
 class _CacheKeys(enum.Enum):
@@ -27,6 +30,8 @@ class WallCycler:
         self._expiryChecker = self.__createExpirationChecker()
 
     def run(self):
+        _logger.info("Executing WallCycler.")
+
         self._loadCachedWallpapers()
 
         while True:
@@ -42,11 +47,14 @@ class WallCycler:
         return 0
 
     def _loadCachedWallpapers(self):
+        _logger.info("Loading cached wallpaper collection.")
         with self._dataStore:
             self._wallpapers = self._dataStore.db.get(_CacheKeys.wallpapers.value,
                                                       default=WallCollection())
 
     def _updateWallpapers(self):
+        _logger.info("Scanning configured paths for new wallpapers.")
+
         wallpapers = []
         for path in self._scanPaths:
             # TODO add subdirs (somehow) to configuration
@@ -56,23 +64,27 @@ class WallCycler:
         self.__updateWallpaperCache()
 
     def _checkExpiration(self):
+        _logger.info("Checking expiration.")
         return self._expiryChecker.isExpired()
 
     def _changeWallpaper(self):
         wallpaper = next(self._wallpapers)
+        _logger.info("Changing wallpaper to: '{}'".format(wallpaper))
         # TODO: change the wallpaper
         # TODO: implement changing wallpaper backends!
-        print("XXX changing wallpaper placeholder! New wallpaper is: '{}'".format(wallpaper),
-              flush=True)
 
         self.__updateWallpaperCache()
         self._expiryChecker.mark()
 
     def _sleepOrBreak(self):
+        _logger.info("Setting scheduler.")
+
         nextChange = self._expiryChecker.getNext()
         if nextChange is None:
+            _logger.info("Time of next change is unknown. Quitting.")
             return False
 
+        _logger.info("Scheduling next change.")
         self._scheduler.wait(nextChange)
         return True
 
@@ -80,5 +92,6 @@ class WallCycler:
         return ExpirationCheck(self._interval, TimestampStore(self._dataStore))
 
     def __updateWallpaperCache(self):
+        _logger.info("Updating cache of wallpapers collection.")
         with self._dataStore:
             self._dataStore[_CacheKeys.wallpapers.value] = self._wallpapers

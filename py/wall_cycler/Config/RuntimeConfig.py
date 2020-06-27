@@ -3,9 +3,13 @@
 from wall_cycler.Interval import Intervals
 from wall_cycler.Wallpapers.Updaters import UpdaterTypes
 from wall_cycler.exceptions import InvalidSortOrderException
+from wall_cycler.Init.Log import levelFromName, nameFromLevel
 
 import enum
 from copy import deepcopy
+from logging import getLogger
+
+_logger = getLogger(__name__)
 
 
 class Modes(enum.Enum):
@@ -20,6 +24,8 @@ class RuntimeConfig:
         interval = 'change time'
         cacheDir = 'cache dir'
         backend = 'wallpaper backend'
+        logDir = 'log dir'
+        logLevel = 'log level'
 
     def __init__(self,
                  order="",
@@ -28,7 +34,9 @@ class RuntimeConfig:
                  cacheDir="",
                  backend="",
                  configFiles=[],
-                 mode=None):
+                 mode=None,
+                 logDir="",
+                 logLevel=None):
         self.order = order
         self.wallpaperPaths = wallpaperPaths
         self.interval = interval
@@ -36,6 +44,8 @@ class RuntimeConfig:
         self.backend = backend
         self.configFiles = configFiles
         self.mode = mode
+        self.logDir = logDir
+        self.logLevel = logLevel
 
     def __add__(self, other):
         ret = deepcopy(self)
@@ -65,10 +75,17 @@ class RuntimeConfig:
         if other.mode != default.mode:
             self.mode = other.mode
 
+        if other.logDir != default.logDir:
+            self.logDir = other.logDir
+
+        if other.logLevel != default.logLevel:
+            self.logLevel = other.logLevel
+
         return self
 
     @classmethod
     def fromCfgFile(cls, parsed):
+        _logger.info("Producing RuntimeConfig from configuration file.")
         ret = RuntimeConfig()
         appConf = parsed[cls._ConfigFileKeys.rootSection.value]
 
@@ -94,10 +111,19 @@ class RuntimeConfig:
         if val is not None:
             ret.backend = val
 
+        val = appConf.get(cls._ConfigFileKeys.logDir.value)
+        if val is not None:
+            ret.logDir = val
+
+        val = appConf.get(cls._ConfigFileKeys.logLevel.value)
+        if val is not None:
+            ret.logLevel = levelFromName(val)
+
         return ret
 
     @staticmethod
     def fromProgramArgs(argsConf):
+        _logger.info("Producing RuntimeConfig from runtime arguments.")
         ret = RuntimeConfig()
 
         if argsConf.order is not None and argsConf.order != "":
@@ -121,13 +147,20 @@ class RuntimeConfig:
         if argsConf.generate_config is not None:
             ret.mode = Modes.GenerateConfig
 
+        if argsConf.log_dir is not None:
+            ret.logDir = argsConf.log_dir
+
+        if argsConf.log_level is not None:
+            ret.logLevel = levelFromName(argsConf.log_level)
+
         return ret
 
     def __eq__(self, other):
         return (self.order == other.order and self.wallpaperPaths == other.wallpaperPaths
                 and self.interval == other.interval and self.cacheDir == other.cacheDir
                 and self.backend == other.backend and self.configFiles == other.configFiles
-                and self.mode == other.mode)
+                and self.mode == other.mode and self.logDir == other.logDir
+                and self.logLevel == other.logLevel)
 
     def __str__(self):
         ret = "[{root}]\n".format(root=self._ConfigFileKeys.rootSection.value)
@@ -142,6 +175,10 @@ class RuntimeConfig:
             ret += self.__strPrep(self._ConfigFileKeys.cacheDir.value, self.cacheDir)
         if self.backend != "":
             ret += self.__strPrep(self._ConfigFileKeys.backend.value, self.backend)
+        if self.logDir != "":
+            ret += self.__strPrep(self._ConfigFileKeys.logDir.value, self.logDir)
+        if self.logLevel != None:
+            ret += self.__strPrep(self._ConfigFileKeys.logLevel.value, nameFromLevel(self.logLevel))
         return ret
 
     def _toDebugStr(self):

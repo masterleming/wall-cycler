@@ -1,8 +1,12 @@
 # ExpirationCheck
 
+from logging import getLogger
+
 from .TimestampStore import TimestampStore
 from wall_cycler.exceptions import TransactionCollisionException
 from wall_cycler.DataStore import DataStore
+
+_logger = getLogger(__name__)
 
 
 class ExpirationCheck:
@@ -11,17 +15,29 @@ class ExpirationCheck:
         self.timestampStore = timestampStore
 
     def isExpired(self):
+        _logger.info("Checking expiration.")
+
         timestamp, msg = self.timestampStore.readTimestamp()
-        # TODO: log msg
+        _logger.debug("Read timestamp: '{}' with message: '{}' from cache.".format(timestamp, msg))
 
         if timestamp is None:
+            _logger.debug("No timestamp defaults to 'expired'.")
             return True
-        return self.interval.isExpired(timestamp)
+
+        expired = self.interval.isExpired(timestamp)
+        _logger.info("Expired? %s.", "Yes" if expired else "No")
+        return expired
 
     def mark(self):
+        _logger.debug("Marking current time as time of the last change.")
         msg = self.interval.mark()
         self.timestampStore.writeTimestamp(msg)
 
     def getNext(self):
+        _logger.debug("Obtaining time of the next change (if possible).")
+
         timestamp, _ = self.timestampStore.readTimestamp()
-        return self.interval.getNext(timestamp)
+        nextChange = self.interval.getNext(timestamp)
+
+        _logger.debug("Next change at: %s.", nextChange)
+        return nextChange

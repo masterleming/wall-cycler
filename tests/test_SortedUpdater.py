@@ -6,12 +6,14 @@ from wall_cycler.Wallpapers.WallCollection import WallCollection
 import unittest
 import random
 
+from TestSuite import TestSuite
+
 PROTO_FILE_LIST = "Alfa Bravo Charlie Delta Echo Foxtrot Golf Hotel India Juliett Kilo Lima Mike " \
     "November Oscar Papa Quebec Romeo Sierra Tango Uniform Victor Whiskey X-ray Yankee Zulu"
 FILE_LIST = PROTO_FILE_LIST.split(' ')
 
 
-class Test_TestSortedUpdater(unittest.TestCase):
+class SortedUpdaterTests(TestSuite):
     def setUp(self):
         self.walls = WallCollection()
 

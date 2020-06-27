@@ -8,8 +8,10 @@ from copy import deepcopy
 from wall_cycler.Wallpapers.WallCollection import WallCollection
 from wall_cycler.Wallpapers.CollectionChecker import CollectionChecker
 
+from TestSuite import TestSuite
 
-class Test_TestCollectionChecker(unittest.TestCase):
+
+class CollectionCheckerTests(TestSuite):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

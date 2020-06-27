@@ -4,12 +4,16 @@ import unittest
 import unittest.mock as mock
 from datetime import timedelta, datetime
 
+from TestSuite import TestSuite
+
 from wall_cycler.Interval.Intervals import CustomInterval
 
 
-class Test_TestCustomInterval(unittest.TestCase):
+class CustomIntervalTests(TestSuite):
     @classmethod
     def setUpClass(cls):
+        super().setUpClass()
+
         cls.minutes = 10 * 24 * 60
         cls.now = datetime(year=2019, month=12, day=29, hour=15, minute=40, second=20)
 

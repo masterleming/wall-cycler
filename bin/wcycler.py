@@ -9,16 +9,29 @@ from wall_cycler.WallCycler import WallCycler
 from wall_cycler.DataStore import DataStore
 from wall_cycler.Wallpapers.Updaters import Updater
 
+from wall_cycler.Init.Log import Log as LogInitialiser
+
 # TODO: move it to config
 from wall_cycler.Schedulers.InternalScheduler import InternalScheduler
 
-if __name__ == '__main__':
+
+def configure():
+    logInit = LogInitialiser()
+
     argConfig = ArgumentsParser().parse()
     if argConfig.mode == Modes.GenerateConfig:
         FileLoader().createDefaultConfig(argConfig.configFiles[0])
         exit(0)
     fileConfig = FileLoader(argConfig.configFiles).loadConfig()
     config = fileConfig + argConfig
+
+    logInit.init(config.logLevel, config.logDir)
+
+    return config
+
+
+if __name__ == '__main__':
+    config = configure()
 
     exit(
         WallCycler(
