@@ -21,3 +21,6 @@ class InvalidTimeIntervalSpecificationException(Exception):
 
 class TransactionCollisionException(Exception):
     pass
+
+class SwitcherException(Exception):
+    pass
