@@ -70,8 +70,8 @@ class WallCycler:
     def _changeWallpaper(self):
         wallpaper = next(self._wallpapers)
         _logger.info("Changing wallpaper to: '{}'".format(wallpaper))
-        # TODO: change the wallpaper
-        # TODO: implement changing wallpaper backends!
+
+        self._backend(str(wallpaper))
 
         self.__updateWallpaperCache()
         self._expiryChecker.mark()
