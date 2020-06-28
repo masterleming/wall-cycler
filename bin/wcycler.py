@@ -13,6 +13,7 @@ from wall_cycler.Init.Log import Log as LogInitialiser
 
 # TODO: move it to config
 from wall_cycler.Schedulers.InternalScheduler import InternalScheduler
+from wall_cycler.Switchers import Switcher
 
 
 def configure():
@@ -39,5 +40,5 @@ if __name__ == '__main__':
             config.interval,
             Updater(config.order),
             InternalScheduler(),  # TODO: use config for this!
-            None,  # TODO: provide implementation for different backends!
+            Switcher(config.backend),
             config.wallpaperPaths).run())
