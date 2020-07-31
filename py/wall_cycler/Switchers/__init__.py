@@ -1,5 +1,5 @@
-
 from .SwayBackend import SwayBackend
+
 
 def Switcher(definition):
     if definition == "sway":

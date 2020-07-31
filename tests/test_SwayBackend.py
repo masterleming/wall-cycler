@@ -12,16 +12,10 @@ from TestSuite import TestSuite
 
 class SwayBackendTests(TestSuite):
 
-    __dummyWallpapers =[
-        "Interdum/et/malesuada.jpg",
-        "fames/ac/ante.jpg",
-        "ipsum/primis/in.jpg",
-        "faucibus/Proin/mattis.jpg",
-        "bibendum/leo/id.jpg",
-        "porttitor/Quisque/non.jpg",
-        "nisl/non/magna.jpg",
-        "fringilla/feugiat/Mauris.jpg",
-        "convallis/ac/ipsum.jpg",
+    __dummyWallpapers = [
+        "Interdum/et/malesuada.jpg", "fames/ac/ante.jpg", "ipsum/primis/in.jpg",
+        "faucibus/Proin/mattis.jpg", "bibendum/leo/id.jpg", "porttitor/Quisque/non.jpg",
+        "nisl/non/magna.jpg", "fringilla/feugiat/Mauris.jpg", "convallis/ac/ipsum.jpg",
         "non/ornare/Quisque.jpg"
     ]
 
@@ -55,4 +49,3 @@ class SwayBackendTests(TestSuite):
                 self.assertIn(errorMsg, str(exceptionContext.exception))
 
                 mockedRunner.reset_mock()
-
