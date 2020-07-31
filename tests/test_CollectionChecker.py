@@ -55,7 +55,7 @@ class CollectionCheckerTests(TestSuite):
 
             with CollectionChecker(wallCollection) as uut:
                 uut.check()
-            self.assertEquals(sorted(wallCollection.collection), sorted(halfTheFiles))
+            self.assertEqual(sorted(wallCollection.collection), sorted(halfTheFiles))
 
     def test_preservesOrderWhenFiltering(self):
         halfTheFiles = [file for i, file in enumerate(self.fileList) if i % 2 == 0]
@@ -189,7 +189,7 @@ class CollectionCheckerTests(TestSuite):
         firstNormalised = list(self.__collectionIterator(first))
         secondNormalised = list(self.__collectionIterator(second))
 
-        self.assertEquals(firstNormalised, secondNormalised)
+        self.assertEqual(firstNormalised, secondNormalised)
 
     @staticmethod
     def __collectionIterator(wallCollection):
