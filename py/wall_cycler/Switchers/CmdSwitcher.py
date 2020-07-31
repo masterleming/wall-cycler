@@ -25,3 +25,11 @@ class CmdSwitcher:
             raise SwitcherException(
                 "The wallpaper setting command returned non-zero exit code!\nError log:\n{}".format(
                     result.stderr))
+
+    def _getCmd(self, wallpaper):
+        cmd = self._cmd[:]
+        for i in range(len(cmd)):
+            if cmd[i] is SubstitutionKeywords.WALLPAPER:
+                cmd[i] = wallpaper
+                break
+        return cmd
