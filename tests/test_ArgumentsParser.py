@@ -25,8 +25,7 @@ class ArgumentsParserTests(TestSuite):
         for order in invalidOrders:
             sys.argv = basicArgv + [order]
 
-            with mock.patch('argparse.ArgumentParser.exit',
-                            ArgumentsParserTests._MockExit.exit):
+            with mock.patch('argparse.ArgumentParser.exit', ArgumentsParserTests._MockExit.exit):
                 uut = ArgumentsParser()
                 with self.assertRaises(ArgumentsParserTests._MockExit) as raised:
                     uut.parse()

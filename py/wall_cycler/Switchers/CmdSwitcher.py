@@ -23,5 +23,5 @@ class CmdSwitcher:
         result = subprocess.run([cmd], capture_output=True)
         if result.returncode != 0:
             raise SwitcherException(
-                "The wallpaper setting command returned non-zero exit code!\nError log:\n{}".
-                format(result.stderr))
+                "The wallpaper setting command returned non-zero exit code!\nError log:\n{}".format(
+                    result.stderr))
