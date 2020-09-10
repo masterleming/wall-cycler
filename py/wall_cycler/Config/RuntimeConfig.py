@@ -26,6 +26,7 @@ class RuntimeConfig:
         backend = 'wallpaper backend'
         logDir = 'log dir'
         logLevel = 'log level'
+        forceRefresh = 'force refresh'
 
     def __init__(self,
                  order="",
@@ -36,7 +37,8 @@ class RuntimeConfig:
                  configFiles=[],
                  mode=None,
                  logDir="",
-                 logLevel=None):
+                 logLevel=None,
+                 forceRefresh=None):
         self.order = order
         self.wallpaperPaths = wallpaperPaths
         self.interval = interval
@@ -46,6 +48,7 @@ class RuntimeConfig:
         self.mode = mode
         self.logDir = logDir
         self.logLevel = logLevel
+        self.forceRefresh = forceRefresh
 
     def __add__(self, other):
         ret = deepcopy(self)
@@ -80,6 +83,9 @@ class RuntimeConfig:
 
         if other.logLevel != default.logLevel:
             self.logLevel = other.logLevel
+
+        if other.forceRefresh != default.forceRefresh:
+            self.forceRefresh = other.forceRefresh
 
         return self
 
@@ -119,6 +125,10 @@ class RuntimeConfig:
         if val is not None:
             ret.logLevel = levelFromName(val)
 
+        val = appConf.get(cls._ConfigFileKeys.forceRefresh.value)
+        if val is not None:
+            ret.forceRefresh = val
+
         return ret
 
     @staticmethod
@@ -153,6 +163,9 @@ class RuntimeConfig:
         if argsConf.log_level is not None:
             ret.logLevel = levelFromName(argsConf.log_level)
 
+        if argsConf.force_refresh is not None:
+            ret.forceRefresh = bool(argsConf.force_refresh)
+
         return ret
 
     def __eq__(self, other):
@@ -160,7 +173,7 @@ class RuntimeConfig:
                 and self.interval == other.interval and self.cacheDir == other.cacheDir
                 and self.backend == other.backend and self.configFiles == other.configFiles
                 and self.mode == other.mode and self.logDir == other.logDir
-                and self.logLevel == other.logLevel)
+                and self.logLevel == other.logLevel and self.forceRefresh == other.forceRefresh)
 
     def __str__(self):
         ret = "[{root}]\n".format(root=self._ConfigFileKeys.rootSection.value)
@@ -177,8 +190,10 @@ class RuntimeConfig:
             ret += self.__strPrep(self._ConfigFileKeys.backend.value, self.backend)
         if self.logDir != "":
             ret += self.__strPrep(self._ConfigFileKeys.logDir.value, self.logDir)
-        if self.logLevel != None:
+        if self.logLevel is not None:
             ret += self.__strPrep(self._ConfigFileKeys.logLevel.value, nameFromLevel(self.logLevel))
+        if self.forceRefresh is not None:
+            ret += self.__strPrep(self._ConfigFileKeys.forceRefresh.value, self.forceRefresh)
         return ret
 
     def _toDebugStr(self):
