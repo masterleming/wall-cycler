@@ -34,7 +34,7 @@ class CmdSwitcher:
 
     def _getCmd(self, wallpaper):
         if type(self._cmd) is str:
-            return [self._cmd.replace(SubstitutionKeywords.WALLPAPER.value, wallpaper)]
+            return self._cmd.replace(SubstitutionKeywords.WALLPAPER.value, wallpaper).split(maxsplit=1)
 
         cmd = self._cmd[:]
         for i in range(len(cmd)):
