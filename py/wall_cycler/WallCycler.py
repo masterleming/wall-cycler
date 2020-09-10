@@ -1,12 +1,10 @@
 # WallCycler
 
-from wall_cycler.Interval.ExpirationCheck import ExpirationCheck
-from wall_cycler.Interval.TimestampStore import TimestampStore
+from .Interval.ExpirationCheck import ExpirationCheck
+from .Interval.TimestampStore import TimestampStore
 
-from wall_cycler.Wallpapers.FileScanner import FileScanner
-from wall_cycler.Wallpapers.WallCollection import WallCollection
-
-import wall_cycler.exceptions as exceptions
+from .Wallpapers.FileScanner import FileScanner
+from .Wallpapers.WallCollection import WallCollection
 
 import enum
 from logging import getLogger

@@ -3,7 +3,7 @@
 from datetime import datetime
 from logging import getLogger
 
-from wall_cycler.DataStore import DataStore
+from ..DataStore import DataStore
 
 _logger = getLogger(__name__)
 

@@ -7,10 +7,10 @@ from collections.abc import Sequence
 from logging import getLogger
 
 from .RuntimeConfig import RuntimeConfig
-from wall_cycler.Interval.Intervals import Interval
-from wall_cycler.Wallpapers.Updaters import UpdaterTypes
-from wall_cycler.exceptions import MissingConfigFileException
-from wall_cycler.Init.Log import levelFromName
+from ..Interval.Intervals import Interval
+from ..Wallpapers.Updaters import UpdaterTypes
+from ..exceptions import MissingConfigFileException
+from ..Init.Log import levelFromName
 """
 [wall_cycler]
 order = shuffle | sorted

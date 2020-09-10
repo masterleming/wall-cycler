@@ -33,6 +33,7 @@ class DataStore:
         self.__ensurePathExists()
 
         cachePath = os.path.join(self.cacheDir, DATASTORE_DB)
+        _logger.info("Using DB file: '{}'.".format(cachePath))
         self.db = shelve.open(cachePath)
 
     def close(self):

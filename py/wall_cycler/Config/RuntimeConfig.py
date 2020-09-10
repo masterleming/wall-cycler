@@ -1,9 +1,9 @@
 # RuntimeConfig
 
-from wall_cycler.Interval import Intervals
-from wall_cycler.Wallpapers.Updaters import UpdaterTypes
-from wall_cycler.exceptions import InvalidSortOrderException
-from wall_cycler.Init.Log import levelFromName, nameFromLevel
+from ..Interval import Intervals
+from ..Wallpapers.Updaters import UpdaterTypes
+from ..exceptions import InvalidSortOrderException
+from ..Init.Log import levelFromName, nameFromLevel
 
 import enum
 from copy import deepcopy

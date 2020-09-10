@@ -1,7 +1,7 @@
 # Updaters
 
 from .WallCollection import WallCollection
-from wall_cycler.exceptions import InvalidSortOrderException
+from ..exceptions import InvalidSortOrderException
 
 import bisect
 import enum

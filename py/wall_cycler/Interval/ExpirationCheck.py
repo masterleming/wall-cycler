@@ -3,8 +3,8 @@
 from logging import getLogger
 
 from .TimestampStore import TimestampStore
-from wall_cycler.exceptions import TransactionCollisionException
-from wall_cycler.DataStore import DataStore
+from ..exceptions import TransactionCollisionException
+from ..DataStore import DataStore
 
 _logger = getLogger(__name__)
 
