@@ -11,7 +11,7 @@ _logger = getLogger(__name__)
 
 
 class SubstitutionKeywords(Enum):
-    WALLPAPER = "$WALLPAPER"
+    WALLPAPER = "#WALLPAPER"
 
 
 class CmdSwitcher:
