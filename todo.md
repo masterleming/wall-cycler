@@ -13,7 +13,7 @@
 - [ ] prepare scheduling backends
 - [x] prepare wallpaper switching backends
     - [ ] extend configuration of sway backend
-    - [ ] possibly allow force-refresh of the same wallpaper (e.g. with 'daily' wallpaper after a reboot it might be necessary to refresh the wallpaper, because it is not 'remembered' between logins)
+    - [x] possibly allow force-refresh of the same wallpaper (e.g. with 'daily' wallpaper after a reboot it might be necessary to refresh the wallpaper, because it is not 'remembered' between logins)
 - [ ] prepare package
 - [ ] fix Updaters to detect file removal
     - [ ] add new mode that would check if files are missing (and optionally remove them from collection)

@@ -11,14 +11,6 @@ from ..Interval.Intervals import Interval
 from ..Wallpapers.Updaters import UpdaterTypes
 from ..exceptions import MissingConfigFileException
 from ..Init.Log import levelFromName
-"""
-[wall_cycler]
-order = shuffle | sorted
-wallpaper paths = multiple paths allowed in either unix format (path1:path2) or multiline in separate lines
-change time = 1d 4h 30m | boot | daily
-cache dir = path to the cache folder
-wallpaper backend = sway | $(expression)
-"""
 
 _logger = getLogger(__name__)
 
@@ -32,6 +24,7 @@ class DefaultConfig(enum.Enum):
     userConfigPath = "$HOME/.config/wall_cycler/wall_cycler.conf"
     defaultLogDir = ""
     defaultLogLevel = "WARNING"
+    defaultWallpaperRefresh = False
 
     @classmethod
     def getRuntime(cls):
@@ -43,7 +36,8 @@ class DefaultConfig(enum.Enum):
             cacheDir=cls.defaultCacheDir.value,
             backend=cls.defaultBackend.value,
             logDir=cls.defaultLogDir.value,
-            logLevel=levelFromName(cls.defaultLogLevel.value)
+            logLevel=levelFromName(cls.defaultLogLevel.value),
+            forceRefresh=cls.defaultWallpaperRefresh.value,
             #TODO: add missing default values! (left to periodically check and update if needed)
         )
 

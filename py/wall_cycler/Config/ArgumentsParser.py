@@ -2,6 +2,7 @@
 
 import argparse
 from logging import getLogger
+from distutils.util import strtobool
 
 from .RuntimeConfig import RuntimeConfig
 from ..Interval import Intervals
@@ -34,6 +35,7 @@ class ArgumentsParser:
         parser.add_argument("--generate-config", type=str, nargs='?', help="causes generation of default configuration file; if no argument is given, the file is created in default location.", const=True)
         parser.add_argument("--log-dir", type=str, help="specifies a directory to log to.")
         parser.add_argument("--log-level", type=str, choices=logLevels(), help="limits logs to specified and higher level.")
+        parser.add_argument("--force-refresh", type=strtobool, help="forces reloading of the wallpaper whenever the expiration check is made and it is not yet time for changing the wallpaper.")
         # yapf: enable
         self.parser = parser
 

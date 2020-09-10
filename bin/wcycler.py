@@ -41,4 +41,5 @@ if __name__ == '__main__':
             Updater(config.order),
             InternalScheduler(),  # TODO: use config for schedulers!
             Switcher(config.backend),
-            config.wallpaperPaths).run())
+            config.wallpaperPaths,
+            config.forceRefresh).run())

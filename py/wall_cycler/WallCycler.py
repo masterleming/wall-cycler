@@ -14,16 +14,18 @@ _logger = getLogger(__name__)
 
 class _CacheKeys(enum.Enum):
     wallpapers = "wallpapers"
+    lastWallpaper = "last wallpaper"
 
 
 class WallCycler:
-    def __init__(self, dataStore, interval, updater, scheduler, backend, scanPaths):
+    def __init__(self, dataStore, interval, updater, scheduler, backend, scanPaths, forceReload):
         self._dataStore = dataStore
         self._interval = interval
         self._updater = updater
         self._scheduler = scheduler
         self._backend = backend
         self._scanPaths = scanPaths
+        self._forceReload = forceReload
         self._wallpapers = None
         self._expiryChecker = self.__createExpirationChecker()
 
@@ -37,6 +39,8 @@ class WallCycler:
 
             if self._checkExpiration():
                 self._changeWallpaper()
+            else:
+                self._reloadWallpaper()
 
             if not self._sleepOrBreak():
                 break
@@ -65,14 +69,29 @@ class WallCycler:
         _logger.info("Checking expiration.")
         return self._expiryChecker.isExpired()
 
-    def _changeWallpaper(self):
+    def _changeWallpaper(self, mark=True):
         wallpaper = next(self._wallpapers)
         _logger.info("Changing wallpaper to: '{}'".format(wallpaper))
 
         self._backend(str(wallpaper))
 
-        self.__updateWallpaperCache()
-        self._expiryChecker.mark()
+        self.__updateWallpaperCache(str(wallpaper))
+        if mark:
+            self._expiryChecker.mark()
+
+    def _reloadWallpaper(self):
+        if self._forceReload:
+            _logger.debug("Reloading last wallpaper.")
+            with self._dataStore:
+                lastWallpaper = self._dataStore.db.get(_CacheKeys.lastWallpaper.value, default=None)
+
+            if lastWallpaper is None:
+                _logger.warning("Cannot reload wallpaper, no previous wallpaper is know.")
+                self._changeWallpaper(False)
+                return
+
+            _logger.info("Reloading wallpaper '{}'.".format(lastWallpaper))
+            self._backend(str(lastWallpaper))
 
     def _sleepOrBreak(self):
         _logger.info("Setting scheduler.")
@@ -89,7 +108,9 @@ class WallCycler:
     def __createExpirationChecker(self):
         return ExpirationCheck(self._interval, TimestampStore(self._dataStore))
 
-    def __updateWallpaperCache(self):
+    def __updateWallpaperCache(self, wallpaper=None):
         _logger.info("Updating cache of wallpapers collection.")
         with self._dataStore:
             self._dataStore[_CacheKeys.wallpapers.value] = self._wallpapers
+            if wallpaper is not None:
+                self._dataStore[_CacheKeys.lastWallpaper.value] = wallpaper
