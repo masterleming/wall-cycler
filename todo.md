@@ -12,7 +12,7 @@
     - [ ] rotate the log!
 - [ ] prepare scheduling backends
 - [x] prepare wallpaper switching backends
-    - [ ] extend configuration of sway backend
+    - [x] extend configuration of sway backend
     - [x] possibly allow force-refresh of the same wallpaper (e.g. with 'daily' wallpaper after a reboot it might be necessary to refresh the wallpaper, because it is not 'remembered' between logins)
 - [ ] prepare package
 - [ ] fix Updaters to detect file removal
