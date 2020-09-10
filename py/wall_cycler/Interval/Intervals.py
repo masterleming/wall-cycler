@@ -5,7 +5,7 @@ import uptime
 import re
 from logging import getLogger
 
-from wall_cycler.exceptions import InvalidTimeIntervalSpecificationException
+from ..exceptions import InvalidTimeIntervalSpecificationException
 
 _logger = getLogger(__name__)
 __intervalPattern = re.compile(r"(?:\d+[dhm]\s*)+|boot|daily")

@@ -4,9 +4,9 @@ import argparse
 from logging import getLogger
 
 from .RuntimeConfig import RuntimeConfig
-from wall_cycler.Interval import Intervals
-from wall_cycler.Wallpapers.Updaters import UpdaterTypes
-from wall_cycler.Init.Log import logLevels
+from ..Interval import Intervals
+from ..Wallpapers.Updaters import UpdaterTypes
+from ..Init.Log import logLevels
 """
 [wall_cycler]
 order = shuffle | sorted

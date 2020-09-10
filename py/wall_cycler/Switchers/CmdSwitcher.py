@@ -3,7 +3,7 @@
 import subprocess
 
 from logging import getLogger
-from wall_cycler.exceptions import SwitcherException
+from ..exceptions import SwitcherException
 
 _logger = getLogger(__name__)
 
