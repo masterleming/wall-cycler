@@ -14,7 +14,7 @@
 - [x] prepare wallpaper switching backends
     - [x] extend configuration of sway backend
     - [x] possibly allow force-refresh of the same wallpaper (e.g. with 'daily' wallpaper after a reboot it might be necessary to refresh the wallpaper, because it is not 'remembered' between logins)
-- [ ] prepare package
+- [x] prepare package
 - [ ] fix Updaters to detect file removal
     - [ ] add new mode that would check if files are missing (and optionally remove them from collection)
 - [ ] static typing
