@@ -6,9 +6,9 @@ setuptools.setup(
   name="wall_cycler",
   version="0.8",
   author="MasterLeming",
-  author_email="",
+  author_email="masterleming@interia.pl",
   description="Utility for rotating desktop wallpapers.",
-  url="",
+  url="https://github.com/masterleming/wall-cycler",
   packages=setuptools.find_packages(exclude=["tests"], where="py"),
   package_dir={
         '': 'py',
