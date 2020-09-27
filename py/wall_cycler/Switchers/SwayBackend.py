@@ -34,7 +34,7 @@ class SwayBackend(CmdSwitcher):
 
     __pattern = re.compile(r"^#[a-f0-9]{6}$")
 
-    def __init__(self, options):
+    def __init__(self, options=""):
         self._scaling = _Scaling.fit
         self._color = "#000000"
 

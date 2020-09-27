@@ -30,7 +30,7 @@ class SwayBackendTests(TestSuite):
 
                 mockedRunner.assert_called_once()
                 commandCall = mockedRunner.call_args[0][0]
-                self.assertEqual(commandCall[-2], image)
+                self.assertEqual(commandCall[-3], image)
 
                 mockedRunner.reset_mock()
 
