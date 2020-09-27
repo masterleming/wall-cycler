@@ -127,7 +127,7 @@ class RuntimeConfig:
 
         val = appConf.get(cls._ConfigFileKeys.forceRefresh.value)
         if val is not None:
-            ret.forceRefresh = val
+            ret.forceRefresh = _properBoolFromString(val)
 
         return ret
 
@@ -207,3 +207,7 @@ class RuntimeConfig:
     @staticmethod
     def __strPrep(key, value):
         return "{key} = {value}\n".format(key=key, value=value)
+
+def _properBoolFromString(val):
+    return val.lower() in ['true', '1', 't', 'y', 'yes']
+
