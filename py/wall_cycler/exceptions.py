@@ -25,3 +25,7 @@ class TransactionCollisionException(Exception):
 
 class SwitcherException(Exception):
     pass
+
+
+class PathSpecificationException(Exception):
+    pass
