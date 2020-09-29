@@ -41,3 +41,29 @@ class ExpirationCheck:
 
         _logger.debug("Next change at: %s.", nextChange)
         return nextChange
+
+
+class AlwaysExpired(ExpirationCheck):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def isExpired(self):
+        _logger.info("AlwaysExpired is expired.")
+        return True
+
+    def getNext(self):
+        _logger.debug("AlwaysExpired cannot know the time of the next change.")
+        return None
+
+
+class NeverExpires(ExpirationCheck):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def isExpired(self):
+        _logger.info("NeverExpires is not expired.")
+        return False
+
+    def getNext(self):
+        _logger.debug("NeverExpires cannot know the time of the next change.")
+        return None

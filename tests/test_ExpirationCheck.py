@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, time
 
 from TestSuite import TestSuite
 
-from wall_cycler.Interval.ExpirationCheck import ExpirationCheck
+from wall_cycler.Interval.ExpirationCheck import ExpirationCheck, AlwaysExpired, NeverExpires
 from wall_cycler.Interval.Intervals import BaseInterval
 
 TEST_NOW = datetime(year=2019, month=12, day=29, hour=15, minute=40, second=20)
@@ -14,22 +14,33 @@ TEST_MSG = "test message"
 
 
 class ExpirationCheckTests(TestSuite):
-    def test_expirationCheck(self):
-        mockIntervals = self._prepareTestIntervals()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._uutFactory = ExpirationCheck
+        cls._mockIntervals = cls._prepareTestIntervals()
 
-        for interval in mockIntervals:
+    @staticmethod
+    def _prepareTestIntervals():
+        return [
+            _MockInterval(False, TEST_NOW + timedelta(days=1)),
+            _MockInterval(True, TEST_NOW + timedelta(days=1))
+        ]
+
+    def test_expirationCheck(self):
+
+        for interval in self._mockIntervals:
             timestampStore = _MockTimestampStore(TEST_NOW)
-            uut = ExpirationCheck(interval, timestampStore)
+            uut = self._uutFactory(interval, timestampStore)
 
             self.assertEqual(uut.isExpired(), interval._isExpired)
             self.assertEqual(interval._testedAgainstTimestamp, TEST_NOW)
 
     def test_mark(self):
-        mockIntervals = self._prepareTestIntervals()
 
-        for interval in mockIntervals:
+        for interval in self._mockIntervals:
             timestampStore = _MockTimestampStore(TEST_NOW)
-            uut = ExpirationCheck(interval, timestampStore)
+            uut = self._uutFactory(interval, timestampStore)
 
             uut.mark()
 
@@ -38,11 +49,10 @@ class ExpirationCheckTests(TestSuite):
             self.assertEqual(timestampStore.msg, TEST_MSG)
 
     def test_getNext(self):
-        mockIntervals = self._prepareTestIntervals()
 
-        for interval in mockIntervals:
+        for interval in self._mockIntervals:
             timestampStore = _MockTimestampStore(TEST_NOW)
-            uut = ExpirationCheck(interval, timestampStore)
+            uut = self._uutFactory(interval, timestampStore)
 
             nextChange = uut.getNext()
 
@@ -50,21 +60,60 @@ class ExpirationCheckTests(TestSuite):
             self.assertTrue(timestampStore._calledRead)
 
     def test_alwaysTrueWhenNoTimestampInCache(self):
-        mockIntervals = self._prepareTestIntervals()
 
-        for interval in mockIntervals:
+        for interval in self._mockIntervals:
             timestampStore = _MockTimestampStore(None)
-            uut = ExpirationCheck(interval, timestampStore)
+            uut = self._uutFactory(interval, timestampStore)
 
             self.assertEqual(uut.isExpired(), True)
             self.assertEqual(interval._testedAgainstTimestamp, None)
 
-    @staticmethod
-    def _prepareTestIntervals():
-        return [
-            _MockInterval(False, TEST_NOW + timedelta(days=1)),
-            _MockInterval(True, TEST_NOW + timedelta(days=1))
-        ]
+
+class AlwaysExpiredTests(ExpirationCheckTests):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._uutFactory = AlwaysExpired
+
+    def test_expirationCheck(self):
+
+        for interval in self._mockIntervals:
+            timestampStore = _MockTimestampStore(TEST_NOW)
+            uut = self._uutFactory(interval, timestampStore)
+
+            self.assertTrue(uut.isExpired())
+
+    def test_getNext(self):
+
+        for interval in self._mockIntervals:
+            timestampStore = _MockTimestampStore(TEST_NOW)
+            uut = self._uutFactory(interval, timestampStore)
+
+            self.assertIsNone(uut.getNext())
+
+
+class NeverExpiresTests(AlwaysExpiredTests):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._uutFactory = NeverExpires
+
+    test_alwaysTrueWhenNoTimestampInCache = None
+
+    def test_expirationCheck(self):
+        for interval in self._mockIntervals:
+            timestampStore = _MockTimestampStore(TEST_NOW)
+            uut = self._uutFactory(interval, timestampStore)
+
+            self.assertFalse(uut.isExpired())
+
+    def test_alwaysFalseWhenNoTimestampInCache(self):
+        for interval in self._mockIntervals:
+            timestampStore = _MockTimestampStore(None)
+            uut = self._uutFactory(interval, timestampStore)
+
+            self.assertFalse(uut.isExpired())
+            self.assertEqual(interval._testedAgainstTimestamp, None)
 
 
 class _MockTimestampStore:
