@@ -34,13 +34,15 @@ _TestConfig1 = RuntimeConfig(order="sorted",
                              backend="test backend",
                              logDir=".cache/log/wall_cycler_test",
                              logLevel=logging.DEBUG,
-                             forceRefresh=False)
+                             forceRefresh=False,
+                             externalScheduling=True)
 
 _TestConfig2 = RuntimeConfig(wallpaperPaths=["otherPath1", "otherPath2"],
                              interval="2h",
                              logDir=".log/test",
                              logLevel=logging.CRITICAL,
-                             forceRefresh=True)
+                             forceRefresh=True,
+                             externalScheduling=False)
 
 _CombinedConfig = RuntimeConfig(order="sorted",
                                 wallpaperPaths=["otherPath1", "otherPath2"],
@@ -49,7 +51,8 @@ _CombinedConfig = RuntimeConfig(order="sorted",
                                 backend="test backend",
                                 logDir=".log/test",
                                 logLevel=logging.CRITICAL,
-                                forceRefresh=True)
+                                forceRefresh=True,
+                                externalScheduling=False)
 
 
 class FileLoaderTests(TestSuite):

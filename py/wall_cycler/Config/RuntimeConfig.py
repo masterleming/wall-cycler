@@ -8,6 +8,7 @@ from ..Init.Log import levelFromName, nameFromLevel
 import enum
 from copy import deepcopy
 from logging import getLogger
+from distutils.util import strtobool
 
 _logger = getLogger(__name__)
 
@@ -27,6 +28,7 @@ class RuntimeConfig:
         logDir = 'log dir'
         logLevel = 'log level'
         forceRefresh = 'force refresh'
+        externalScheduling = 'external scheduling'
 
     def __init__(self,
                  order="",
@@ -38,7 +40,8 @@ class RuntimeConfig:
                  mode=None,
                  logDir="",
                  logLevel=None,
-                 forceRefresh=None):
+                 forceRefresh=None,
+                 externalScheduling=None):
         self.order = order
         self.wallpaperPaths = wallpaperPaths
         self.interval = interval
@@ -49,6 +52,7 @@ class RuntimeConfig:
         self.logDir = logDir
         self.logLevel = logLevel
         self.forceRefresh = forceRefresh
+        self.externalScheduling = externalScheduling
 
     def __add__(self, other):
         ret = deepcopy(self)
@@ -86,6 +90,9 @@ class RuntimeConfig:
 
         if other.forceRefresh != default.forceRefresh:
             self.forceRefresh = other.forceRefresh
+
+        if other.externalScheduling != default.externalScheduling:
+            self.externalScheduling = other.externalScheduling
 
         return self
 
@@ -127,7 +134,11 @@ class RuntimeConfig:
 
         val = appConf.get(cls._ConfigFileKeys.forceRefresh.value)
         if val is not None:
-            ret.forceRefresh = _properBoolFromString(val)
+            ret.forceRefresh = bool(strtobool(val))
+
+        val = appConf.get(cls._ConfigFileKeys.externalScheduling.value)
+        if val is not None:
+            ret.externalScheduling = bool(strtobool(val))
 
         return ret
 
@@ -166,6 +177,9 @@ class RuntimeConfig:
         if argsConf.force_refresh is not None:
             ret.forceRefresh = bool(argsConf.force_refresh)
 
+        if argsConf.use_external_scheduling is not None:
+            ret.externalScheduling = bool(argsConf.use_external_scheduling)
+
         return ret
 
     def __eq__(self, other):
@@ -173,7 +187,8 @@ class RuntimeConfig:
                 and self.interval == other.interval and self.cacheDir == other.cacheDir
                 and self.backend == other.backend and self.configFiles == other.configFiles
                 and self.mode == other.mode and self.logDir == other.logDir
-                and self.logLevel == other.logLevel and self.forceRefresh == other.forceRefresh)
+                and self.logLevel == other.logLevel and self.forceRefresh == other.forceRefresh
+                and self.externalScheduling == other.externalScheduling)
 
     def __str__(self):
         ret = "[{root}]\n".format(root=self._ConfigFileKeys.rootSection.value)
@@ -194,6 +209,8 @@ class RuntimeConfig:
             ret += self.__strPrep(self._ConfigFileKeys.logLevel.value, nameFromLevel(self.logLevel))
         if self.forceRefresh is not None:
             ret += self.__strPrep(self._ConfigFileKeys.forceRefresh.value, self.forceRefresh)
+        if self.externalScheduling is not None:
+            ret += self.__strPrep(self._ConfigFileKeys.externalScheduling.value, self.externalScheduling)
         return ret
 
     def _toDebugStr(self):
@@ -207,7 +224,3 @@ class RuntimeConfig:
     @staticmethod
     def __strPrep(key, value):
         return "{key} = {value}\n".format(key=key, value=value)
-
-def _properBoolFromString(val):
-    return val.lower() in ['true', '1', 't', 'y', 'yes']
-

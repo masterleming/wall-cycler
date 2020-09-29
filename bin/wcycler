@@ -11,7 +11,6 @@ from wall_cycler.Wallpapers.Updaters import Updater
 
 from wall_cycler.Init.Log import Log as LogInitialiser
 
-# TODO: move selecting schedulers to config
 from wall_cycler.Schedulers.InternalScheduler import InternalScheduler
 from wall_cycler.Switchers import Switcher
 
@@ -39,7 +38,7 @@ if __name__ == '__main__':
             DataStore(config.cacheDir),
             config.interval,
             Updater(config.order),
-            InternalScheduler(),  # TODO: use config for schedulers!
+            None if config.externalScheduling else InternalScheduler(),
             Switcher(config.backend),
             config.wallpaperPaths,
             config.forceRefresh).run())
