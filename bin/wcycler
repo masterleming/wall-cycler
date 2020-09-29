@@ -11,7 +11,6 @@ from wall_cycler.Wallpapers.Updaters import Updater
 
 from wall_cycler.Init.Log import Log as LogInitialiser
 
-# TODO: move selecting schedulers to config
 from wall_cycler.Schedulers.InternalScheduler import InternalScheduler
 from wall_cycler.Switchers import Switcher
 

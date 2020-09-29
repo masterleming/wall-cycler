@@ -10,7 +10,7 @@
     - [x] add logger to main
     - [x] start logging stuff
     - [ ] rotate the log!
-- [ ] prepare scheduling backends
+- [x] prepare scheduling backends
 - [x] prepare wallpaper switching backends
     - [x] extend configuration of sway backend
     - [x] possibly allow force-refresh of the same wallpaper (e.g. with 'daily' wallpaper after a reboot it might be necessary to refresh the wallpaper, because it is not 'remembered' between logins)
