@@ -39,7 +39,7 @@ if __name__ == '__main__':
             DataStore(config.cacheDir),
             config.interval,
             Updater(config.order),
-            InternalScheduler(),  # TODO: use config for schedulers!
+            None if config.externalScheduling else InternalScheduler(),
             Switcher(config.backend),
             config.wallpaperPaths,
             config.forceRefresh).run())

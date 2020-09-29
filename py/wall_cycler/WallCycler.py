@@ -1,6 +1,6 @@
 # WallCycler
 
-from .Interval.ExpirationCheck import ExpirationCheck
+from .Interval.ExpirationCheck import ExpirationCheck, AlwaysExpired, NeverExpires
 from .Interval.TimestampStore import TimestampStore
 
 from .Wallpapers.FileScanner import FileScanner
@@ -96,6 +96,10 @@ class WallCycler:
     def _sleepOrBreak(self):
         _logger.info("Setting scheduler.")
 
+        if self._scheduler is None:
+            _logger.info("No scheduler present. Quitting.")
+            return False
+
         nextChange = self._expiryChecker.getNext()
         if nextChange is None:
             _logger.info("Time of next change is unknown. Quitting.")
@@ -106,7 +110,13 @@ class WallCycler:
         return True
 
     def __createExpirationChecker(self):
-        return ExpirationCheck(self._interval, TimestampStore(self._dataStore))
+        if self._scheduler is not None:
+            return ExpirationCheck(self._interval, TimestampStore(self._dataStore))
+
+        if self._forceReload:
+            return NeverExpires(self._interval, TimestampStore(self._dataStore))
+
+        return AlwaysExpired(self._interval, TimestampStore(self._dataStore))
 
     def __updateWallpaperCache(self, wallpaper=None):
         _logger.info("Updating cache of wallpapers collection.")
