@@ -25,6 +25,7 @@ class DefaultConfig(enum.Enum):
     defaultLogDir = ""
     defaultLogLevel = "WARNING"
     defaultWallpaperRefresh = False
+    defaultExternalScheduling = False
 
     @classmethod
     def getRuntime(cls):
@@ -38,6 +39,7 @@ class DefaultConfig(enum.Enum):
             logDir=cls.defaultLogDir.value,
             logLevel=levelFromName(cls.defaultLogLevel.value),
             forceRefresh=cls.defaultWallpaperRefresh.value,
+            externalScheduling=cls.defaultExternalScheduling.value,
             #TODO: add missing default values! (left to periodically check and update if needed)
         )
 

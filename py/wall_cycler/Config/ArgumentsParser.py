@@ -71,6 +71,7 @@ class ArgumentsParser:
         parser.add_argument("--log-dir", type=str, help="specifies a directory to log to.")
         parser.add_argument("--log-level", type=str, choices=logLevels(), help="limits logs to specified and higher level.")
         parser.add_argument("--force-refresh", type=strtobool, help="forces reloading of the wallpaper whenever the expiration check is made and it is not yet time for changing the wallpaper.")
+        parser.add_argument("--use-external-scheduling", type=strtobool, help="suppresses internal scheduling and expiration check in case external scheduling is used (e.g. `cron`).")
         # yapf: enable
         self.parser = parser
 
