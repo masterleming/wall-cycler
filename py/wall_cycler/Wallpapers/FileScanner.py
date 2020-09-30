@@ -9,7 +9,6 @@ _logger = getLogger(__name__)
 
 
 class FileScanner:
-    # TODO: handle subdirectories config!
     def __init__(self, path, subdirs=True):
         self.path = os.path.abspath(os.path.expandvars(os.path.expanduser(path)))
         self._origPath = path
