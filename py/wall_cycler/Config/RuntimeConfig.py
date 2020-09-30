@@ -10,6 +10,7 @@ import enum
 from copy import deepcopy
 from logging import getLogger
 from distutils.util import strtobool
+import os.path
 
 _logger = getLogger(__name__)
 
@@ -45,11 +46,11 @@ class RuntimeConfig:
                  externalScheduling=None):
         self.order = order
         self.interval = interval
-        self.cacheDir = cacheDir
+        self.cacheDir = expandPath(cacheDir)
         self.backend = backend
         self.configFiles = configFiles
         self.mode = mode
-        self.logDir = logDir
+        self.logDir = expandPath(logDir)
         self.logLevel = logLevel
         self.forceRefresh = forceRefresh
         self.externalScheduling = externalScheduling
@@ -74,8 +75,9 @@ class RuntimeConfig:
         if other.interval != default.interval:
             self.interval = other.interval
 
-        if other.cacheDir != default.cacheDir:
-            self.cacheDir = other.cacheDir
+        cacheDir = expandPath(other.cacheDir)
+        if cacheDir != default.cacheDir:
+            self.cacheDir = cacheDir
 
         if other.backend != default.backend:
             self.backend = other.backend
@@ -86,8 +88,9 @@ class RuntimeConfig:
         if other.mode != default.mode:
             self.mode = other.mode
 
-        if other.logDir != default.logDir:
-            self.logDir = other.logDir
+        logDir = expandPath(other.logDir)
+        if logDir != default.logDir:
+            self.logDir = logDir
 
         if other.logLevel != default.logLevel:
             self.logLevel = other.logLevel
@@ -123,7 +126,7 @@ class RuntimeConfig:
 
         val = appConf.get(cls._ConfigFileKeys.cacheDir.value)
         if val is not None:
-            ret.cacheDir = val
+            ret.cacheDir = expandPath(val)
 
         val = appConf.get(cls._ConfigFileKeys.backend.value)
         if val is not None:
@@ -163,7 +166,7 @@ class RuntimeConfig:
             ret.interval = argsConf.interval
 
         if argsConf.cache_dir is not None and argsConf.cache_dir != "":
-            ret.cacheDir = argsConf.cache_dir
+            ret.cacheDir = expandPath(argsConf.cache_dir)
 
         if argsConf.backend is not None and argsConf.backend != "":
             ret.backend = argsConf.backend
@@ -175,7 +178,7 @@ class RuntimeConfig:
             ret.mode = Modes.GenerateConfig
 
         if argsConf.log_dir is not None:
-            ret.logDir = argsConf.log_dir
+            ret.logDir = expandPath(argsConf.log_dir)
 
         if argsConf.log_level is not None:
             ret.logLevel = levelFromName(argsConf.log_level)
@@ -230,3 +233,7 @@ class RuntimeConfig:
     @staticmethod
     def __strPrep(key, value):
         return "{key} = {value}\n".format(key=key, value=value)
+
+
+def expandPath(path):
+    return os.path.expanduser(os.path.expandvars(path))

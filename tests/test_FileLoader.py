@@ -9,7 +9,7 @@ import logging
 from TestSuite import TestSuite
 
 from wall_cycler.Config.FileLoader import FileLoader, DefaultConfig
-from wall_cycler.Config.RuntimeConfig import RuntimeConfig
+from wall_cycler.Config.RuntimeConfig import RuntimeConfig, expandPath
 
 TEST_CONFIG_ROOT = '/tmp'
 TEST_CONFIG_TEMP_PREFIX = 'test-'
@@ -72,6 +72,9 @@ class FileLoaderTests(TestSuite):
             writtenConf = FileLoader(defaultConfPath).loadConfig()
 
             defC = self._getDefaultConfig()
+            # default configuration file does not include configuration of its own location, so it
+            # needs to be removed from the default config before comparison
+            defC.configFiles = []
             self.assertEqual(writtenConf, defC)
 
     def test_backingUpConfigBeforeGeneratingNewOne(self):
@@ -151,7 +154,7 @@ class FileLoaderTests(TestSuite):
 
     @staticmethod
     def _removeDefaultConfig(uut):
-        uut.configPaths.remove(DefaultConfig.userConfigPath.value)
+        uut.configPaths.remove(expandPath(DefaultConfig.userConfigPath.value))
 
 
 if __name__ == '__main__':

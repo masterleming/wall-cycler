@@ -6,7 +6,7 @@ import enum
 from collections.abc import Sequence
 from logging import getLogger
 
-from .RuntimeConfig import RuntimeConfig
+from .RuntimeConfig import RuntimeConfig, expandPath
 from ..Interval.Intervals import Interval
 from ..Wallpapers.Updaters import UpdaterTypes
 from ..exceptions import MissingConfigFileException
@@ -36,6 +36,7 @@ class DefaultConfig(enum.Enum):
             interval=Interval(cls.defaultInterval.value),
             cacheDir=cls.defaultCacheDir.value,
             backend=cls.defaultBackend.value,
+            configFiles=[cls.userConfigPath.value],
             logDir=cls.defaultLogDir.value,
             logLevel=levelFromName(cls.defaultLogLevel.value),
             forceRefresh=cls.defaultWallpaperRefresh.value,
@@ -53,7 +54,7 @@ class FileLoader:
     def __init__(self, configPath=None):
         _logger.debug("Creating FileLoader instance.")
 
-        self.configPaths = [DefaultConfig.userConfigPath.value]
+        self.configPaths = [expandPath(DefaultConfig.userConfigPath.value)]
         if configPath is not None:
             if isinstance(configPath, str):
                 _logger.debug("Config path is string, adding configuration paths.")
@@ -82,7 +83,7 @@ class FileLoader:
 
         if len(success) != len(self.configPaths):
             failed = [confPath for confPath in self.configPaths if confPath not in success]
-            if (len(failed) == 1 and failed[0] == DefaultConfig.userConfigPath.value):
+            if (len(failed) == 1 and failed[0] == expandPath(DefaultConfig.userConfigPath.value)):
                 _logger.warning(
                     "Default user config path does not contain configuration file! Path is '%s'.",
                     DefaultConfig.userConfigPath.value)
@@ -100,8 +101,10 @@ class FileLoader:
         if path is None:
             path = DefaultConfig.userConfigPath.value
 
-        path = self.__expandPath(path)
-        _logger.info("Creating default configuration file at '%s'.", path)
+        path = expandPath(path)
+        msg = "Creating default configuration file at '{}'.".format(path)
+        _logger.info(msg)
+        print(msg)
 
         confDir = os.path.dirname(path)
         if confDir != "" and not os.path.exists(confDir):
@@ -109,8 +112,10 @@ class FileLoader:
             os.makedirs(confDir, exist_ok=True)
         elif os.path.exists(path):
             backup = path + ".bak"
-            _logger.warning("Configuration file '{file}' exists! Moving it to {backup}".format(
-                file=path, backup=backup))
+            msg = "Configuration file '{file}' exists! Moving it to {backup}".format(file=path,
+                                                                                     backup=backup)
+            _logger.warning(msg)
+            print(msg)
             os.rename(path, backup)
 
         defaultConf = configparser.ConfigParser()
@@ -118,7 +123,3 @@ class FileLoader:
         with open(path, 'w') as confFile:
             defaultConf.write(confFile)
         _logger.debug("Created configuration file.")
-
-    @staticmethod
-    def __expandPath(path):
-        return os.path.expanduser(os.path.expandvars(path))

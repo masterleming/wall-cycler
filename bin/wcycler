@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from wall_cycler.Config.ArgumentsParser import ArgumentsParser
-from wall_cycler.Config.FileLoader import FileLoader
+from wall_cycler.Config.FileLoader import FileLoader, DefaultConfig
 from wall_cycler.Config.RuntimeConfig import RuntimeConfig, Modes
 
 from wall_cycler.WallCycler import WallCycler
@@ -20,7 +20,11 @@ def configure():
 
     argConfig = ArgumentsParser().parse()
     if argConfig.mode == Modes.GenerateConfig:
-        FileLoader().createDefaultConfig(argConfig.configFiles[0])
+        if len(argConfig.configFiles) > 0:
+            confFile = argConfig.configFiles[0]
+        else:
+            confFile = DefaultConfig.getRuntime().configFiles[0]
+        FileLoader().createDefaultConfig(confFile)
         exit(0)
     fileConfig = FileLoader(argConfig.configFiles).loadConfig()
     config = fileConfig + argConfig
