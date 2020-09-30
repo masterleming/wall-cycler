@@ -102,7 +102,9 @@ class FileLoader:
             path = DefaultConfig.userConfigPath.value
 
         path = self.__expandPath(path)
-        _logger.info("Creating default configuration file at '%s'.", path)
+        msg = "Creating default configuration file at '{}'.".format(path)
+        _logger.info(msg)
+        print(msg)
 
         confDir = os.path.dirname(path)
         if confDir != "" and not os.path.exists(confDir):
@@ -110,8 +112,10 @@ class FileLoader:
             os.makedirs(confDir, exist_ok=True)
         elif os.path.exists(path):
             backup = path + ".bak"
-            _logger.warning("Configuration file '{file}' exists! Moving it to {backup}".format(
-                file=path, backup=backup))
+            msg = "Configuration file '{file}' exists! Moving it to {backup}".format(file=path,
+                                                                                     backup=backup)
+            _logger.warning(msg)
+            print(msg)
             os.rename(path, backup)
 
         defaultConf = configparser.ConfigParser()
