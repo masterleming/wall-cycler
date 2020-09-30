@@ -6,7 +6,7 @@ import enum
 from collections.abc import Sequence
 from logging import getLogger
 
-from .RuntimeConfig import RuntimeConfig
+from .RuntimeConfig import RuntimeConfig, expandPath
 from ..Interval.Intervals import Interval
 from ..Wallpapers.Updaters import UpdaterTypes
 from ..exceptions import MissingConfigFileException
@@ -54,7 +54,7 @@ class FileLoader:
     def __init__(self, configPath=None):
         _logger.debug("Creating FileLoader instance.")
 
-        self.configPaths = [DefaultConfig.userConfigPath.value]
+        self.configPaths = [expandPath(DefaultConfig.userConfigPath.value)]
         if configPath is not None:
             if isinstance(configPath, str):
                 _logger.debug("Config path is string, adding configuration paths.")
@@ -101,7 +101,7 @@ class FileLoader:
         if path is None:
             path = DefaultConfig.userConfigPath.value
 
-        path = self.__expandPath(path)
+        path = expandPath(path)
         msg = "Creating default configuration file at '{}'.".format(path)
         _logger.info(msg)
         print(msg)
@@ -123,7 +123,3 @@ class FileLoader:
         with open(path, 'w') as confFile:
             defaultConf.write(confFile)
         _logger.debug("Created configuration file.")
-
-    @staticmethod
-    def __expandPath(path):
-        return os.path.expanduser(os.path.expandvars(path))
