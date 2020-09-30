@@ -36,6 +36,7 @@ class DefaultConfig(enum.Enum):
             interval=Interval(cls.defaultInterval.value),
             cacheDir=cls.defaultCacheDir.value,
             backend=cls.defaultBackend.value,
+            configFiles=[cls.userConfigPath.value],
             logDir=cls.defaultLogDir.value,
             logLevel=levelFromName(cls.defaultLogLevel.value),
             forceRefresh=cls.defaultWallpaperRefresh.value,
