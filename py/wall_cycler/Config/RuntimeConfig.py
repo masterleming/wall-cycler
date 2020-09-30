@@ -4,6 +4,7 @@ from ..Interval import Intervals
 from ..Wallpapers.Updaters import UpdaterTypes
 from ..exceptions import InvalidSortOrderException
 from ..Init.Log import levelFromName, nameFromLevel
+from .PathList import PathList
 
 import enum
 from copy import deepcopy
@@ -43,7 +44,6 @@ class RuntimeConfig:
                  forceRefresh=None,
                  externalScheduling=None):
         self.order = order
-        self.wallpaperPaths = wallpaperPaths
         self.interval = interval
         self.cacheDir = cacheDir
         self.backend = backend
@@ -53,6 +53,10 @@ class RuntimeConfig:
         self.logLevel = logLevel
         self.forceRefresh = forceRefresh
         self.externalScheduling = externalScheduling
+        self.wallpaperPaths = PathList()
+        for path in wallpaperPaths:
+            self.wallpaperPaths.addFromString(path)
+
 
     def __add__(self, other):
         ret = deepcopy(self)
@@ -65,7 +69,7 @@ class RuntimeConfig:
             self.order = other.order
 
         if other.wallpaperPaths != default.wallpaperPaths:
-            self.wallpaperPaths = other.wallpaperPaths
+            self.wallpaperPaths += other.wallpaperPaths
 
         if other.interval != default.interval:
             self.interval = other.interval
@@ -110,7 +114,8 @@ class RuntimeConfig:
 
         val = appConf.get(cls._ConfigFileKeys.wallpaperPaths.value)
         if val is not None:
-            ret.wallpaperPaths = [p.strip() for path in val.split('\n') for p in path.split(':')]
+            for s in [path.strip() for path in val.split('\n')]:
+                ret.wallpaperPaths.addFromString(s)
 
         val = appConf.get(cls._ConfigFileKeys.interval.value)
         if val is not None:
@@ -151,7 +156,8 @@ class RuntimeConfig:
             ret.order = argsConf.order
 
         if argsConf.img_path is not None and argsConf.img_path != []:
-            ret.wallpaperPaths = argsConf.img_path
+            for s in argsConf.img_path:
+                ret.wallpaperPaths.addFromString(s)
 
         if argsConf.interval is not None:
             ret.interval = argsConf.interval
@@ -194,9 +200,9 @@ class RuntimeConfig:
         ret = "[{root}]\n".format(root=self._ConfigFileKeys.rootSection.value)
         if self.order != "":
             ret += self.__strPrep(self._ConfigFileKeys.order.value, self.order)
-        if self.wallpaperPaths != []:
+        if len(self.wallpaperPaths._paths):
             ret += self.__strPrep(self._ConfigFileKeys.wallpaperPaths.value,
-                                  ":".join(self.wallpaperPaths))
+                                  ":".join(self.wallpaperPaths._paths.keys()))
         if self.interval is not None:
             ret += self.__strPrep(self._ConfigFileKeys.interval.value, str(self.interval))
         if self.cacheDir != "":

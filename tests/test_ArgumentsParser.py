@@ -7,6 +7,7 @@ import unittest.mock as mock
 from TestSuite import TestSuite
 
 from wall_cycler.Config.ArgumentsParser import ArgumentsParser
+from wall_cycler.Config.PathList import PathList
 from wall_cycler.Wallpapers.Updaters import UpdaterTypes
 
 
@@ -36,11 +37,12 @@ class ArgumentsParserTests(TestSuite):
         basicArgv = ["test_parsingImagePath", "--img-path"]
         paths = ['imgs/', '~/wallpapers', '$HOME/Pictures']
 
-        for path in paths:
-            sys.argv = basicArgv + [path]
-            uut = ArgumentsParser()
-            conf = uut.parse()
-            self._checkConfig(conf, imgDirs=[path])
+        with mock.patch("os.path.exists", lambda _: True):
+            for path in paths:
+                sys.argv = basicArgv + [path]
+                uut = ArgumentsParser()
+                conf = uut.parse()
+                self._checkConfig(conf, imgDirs=[path])
 
     def test_parsingMultipleImagePaths(self):
         basicArgv = ["test_parsingMultipleImagePaths"]
@@ -69,6 +71,10 @@ class ArgumentsParserTests(TestSuite):
             self.assertEqual(config.order, order)
 
         if imgDirs is not None:
+            if type(imgDirs) is not PathList:
+                tmp = PathList()
+                tmp.addFromString(":".join(imgDirs))
+                imgDirs = tmp
             self.assertEqual(config.wallpaperPaths, imgDirs)
 
         if interval is not None:

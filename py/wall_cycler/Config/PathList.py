@@ -28,6 +28,13 @@ class PathList:
         for path, spec in self._paths.items():
             yield path, spec
 
+    def __iadd__(self, other):
+        self._paths.update(other._paths)
+        return self
+
+    def __eq__(self, other):
+        return self._paths == other._paths
+
     @classmethod
     def _parseConfigString(cls, s):
         def validateSpec(spec):
