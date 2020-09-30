@@ -58,9 +58,8 @@ class WallCycler:
         _logger.info("Scanning configured paths for new wallpapers.")
 
         wallpapers = []
-        for path in self._scanPaths:
-            # TODO add subdirs (somehow) to configuration
-            wallpapers += FileScanner(path, subdirs=True).scan()
+        for path, scanSubdirs in self._scanPaths:
+            wallpapers += FileScanner(path, subdirs=scanSubdirs).scan()
 
         self._updater.update(self._wallpapers, wallpapers)
         self.__updateWallpaperCache()

@@ -27,32 +27,35 @@ wallpaper backend = 'bash -c test'
 
 import os
 
-_TestConfig1 = RuntimeConfig(order="sorted",
-                             wallpaperPaths=["testPath1", "testPath2"],
-                             interval="boot",
-                             cacheDir=".cache/test",
-                             backend="test backend",
-                             logDir=".cache/log/wall_cycler_test",
-                             logLevel=logging.DEBUG,
-                             forceRefresh=False,
-                             externalScheduling=True)
+_TestConfig1 = RuntimeConfig(
+    order="sorted",
+    wallpaperPaths=["py/wall_cycler/Wallpapers", "py/wall_cycler/Switchers"],
+    interval="boot",
+    cacheDir=".cache/test",
+    backend="test backend",
+    logDir=".cache/log/wall_cycler_test",
+    logLevel=logging.DEBUG,
+    forceRefresh=False,
+    externalScheduling=True)
 
-_TestConfig2 = RuntimeConfig(wallpaperPaths=["otherPath1", "otherPath2"],
-                             interval="2h",
-                             logDir=".log/test",
-                             logLevel=logging.CRITICAL,
-                             forceRefresh=True,
-                             externalScheduling=False)
+_TestConfig2 = RuntimeConfig(
+    wallpaperPaths=["py/wall_cycler/Schedulers", "py/wall_cycler/Interval"],
+    interval="2h",
+    logDir=".log/test",
+    logLevel=logging.CRITICAL,
+    forceRefresh=True,
+    externalScheduling=False)
 
-_CombinedConfig = RuntimeConfig(order="sorted",
-                                wallpaperPaths=["otherPath1", "otherPath2"],
-                                interval="2h",
-                                cacheDir=".cache/test",
-                                backend="test backend",
-                                logDir=".log/test",
-                                logLevel=logging.CRITICAL,
-                                forceRefresh=True,
-                                externalScheduling=False)
+_CombinedConfig = RuntimeConfig(
+    order="sorted",
+    wallpaperPaths=["py/wall_cycler/Schedulers", "py/wall_cycler/Interval"],
+    interval="2h",
+    cacheDir=".cache/test",
+    backend="test backend",
+    logDir=".log/test",
+    logLevel=logging.CRITICAL,
+    forceRefresh=True,
+    externalScheduling=False)
 
 
 class FileLoaderTests(TestSuite):
