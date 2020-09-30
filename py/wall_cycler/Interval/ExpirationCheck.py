@@ -48,7 +48,7 @@ class _ConsistentExpiration(ExpirationCheck):
         self.expired = expired
 
     def isExpired(self):
-        _logger.info(self.__class__.__name__ + " is expired.")
+        _logger.info(self.__class__.__name__ + " is %s.", "expired" if self.expired else "not expired")
         return self.expired
 
     def getNext(self):
