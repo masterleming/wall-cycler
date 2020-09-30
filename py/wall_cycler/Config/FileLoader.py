@@ -83,7 +83,7 @@ class FileLoader:
 
         if len(success) != len(self.configPaths):
             failed = [confPath for confPath in self.configPaths if confPath not in success]
-            if (len(failed) == 1 and failed[0] == DefaultConfig.userConfigPath.value):
+            if (len(failed) == 1 and failed[0] == expandPath(DefaultConfig.userConfigPath.value)):
                 _logger.warning(
                     "Default user config path does not contain configuration file! Path is '%s'.",
                     DefaultConfig.userConfigPath.value)
