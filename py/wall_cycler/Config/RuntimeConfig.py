@@ -174,7 +174,7 @@ class RuntimeConfig:
         if argsConf.config is not None and argsConf.config != []:
             ret.configFiles = [argsConf.config]
 
-        if argsConf.generate_config is not None:
+        if argsConf.generate_config:
             ret.mode = Modes.GenerateConfig
 
         if argsConf.log_dir is not None:

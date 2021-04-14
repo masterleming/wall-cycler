@@ -67,7 +67,7 @@ class ArgumentsParser:
         parser.add_argument("--cache-dir", type=str, help="path used for storing cached data; note that clearing the cache _will reset the wallpaper cycle_.")
         parser.add_argument("--backend", type=str, help="defines what backend shall be used for changing the wallpaper; currently only 'sway' and 'cmd' are supported. See BACKENDS for more info.")
         parser.add_argument("--config", type=str, help="points to the configuration file to be used; note however that whatever options are set in this file will override options from a default file; to suppress all default options the default file needs to be removed or all options overridden.")
-        parser.add_argument("--generate-config", type=str, nargs='?', help="causes generation of default configuration file; if no argument is given, the file is created in default location.", const=True)
+        parser.add_argument("--generate-config", action="store_true", default=False, help="causes generation of default configuration file; if no argument is given, the file is created in default location.")
         parser.add_argument("--log-dir", type=str, help="specifies a directory to log to.")
         parser.add_argument("--log-level", type=str, choices=logLevels(), help="limits logs to specified and higher level.")
         parser.add_argument("--force-refresh", type=strtobool, help="forces reloading of the wallpaper whenever the expiration check is made and it is not yet time for changing the wallpaper.")
