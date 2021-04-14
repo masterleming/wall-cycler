@@ -31,21 +31,21 @@ class CollectionCheckerTests(TestSuite):
             wallCollection = deepcopy(referenceCollection)
 
             with CollectionChecker(wallCollection) as uut:
-                uut.check()
+                uut.check(True)
             self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
 
             referenceCollection.nextWall = len(self.fileList) // 2
             wallCollection = deepcopy(referenceCollection)
 
             with CollectionChecker(wallCollection) as uut:
-                uut.check()
+                uut.check(True)
             self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
 
             referenceCollection.nextWall = len(self.fileList) - 1
             wallCollection = deepcopy(referenceCollection)
 
             with CollectionChecker(wallCollection) as uut:
-                uut.check()
+                uut.check(True)
             self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
 
     def test_filtersFiles(self):
@@ -54,7 +54,7 @@ class CollectionCheckerTests(TestSuite):
             wallCollection = WallCollection(self.fileList)
 
             with CollectionChecker(wallCollection) as uut:
-                uut.check()
+                uut.check(True)
             self.assertEqual(sorted(wallCollection.collection), sorted(halfTheFiles))
 
     def test_preservesOrderWhenFiltering(self):
@@ -64,7 +64,7 @@ class CollectionCheckerTests(TestSuite):
             wallCollection = WallCollection(self.fileList)
 
             with CollectionChecker(wallCollection) as uut:
-                uut.check()
+                uut.check(True)
             self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
 
             referenceCollection.nextWall = len(referenceCollection.collection) // 2
@@ -73,7 +73,7 @@ class CollectionCheckerTests(TestSuite):
                 referenceCollection.collection[referenceCollection.nextWall])
 
             with CollectionChecker(wallCollection) as uut:
-                uut.check()
+                uut.check(True)
             self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
 
             referenceCollection.nextWall = len(referenceCollection.collection) - 1
@@ -82,7 +82,7 @@ class CollectionCheckerTests(TestSuite):
                 referenceCollection.collection[referenceCollection.nextWall])
 
             with CollectionChecker(wallCollection) as uut:
-                uut.check()
+                uut.check(True)
             self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
 
     def test_whatHappensWhenNextWallIsFilteredOut_wasFirst(self):
@@ -94,7 +94,7 @@ class CollectionCheckerTests(TestSuite):
             wallCollection.nextWall = 0
 
             with CollectionChecker(wallCollection) as uut:
-                uut.check()
+                uut.check(True)
             self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
 
     def test_whatHappensWhenNextWallIsFilteredOut_wasInTheMiddle(self):
@@ -107,7 +107,7 @@ class CollectionCheckerTests(TestSuite):
             wallCollection.nextWall = pos
 
             with CollectionChecker(wallCollection) as uut:
-                uut.check()
+                uut.check(True)
             self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
 
     def test_whatHappensWhenNextWallIsFilteredOut_wasLast(self):
@@ -120,7 +120,7 @@ class CollectionCheckerTests(TestSuite):
             wallCollection.nextWall = pos
 
             with CollectionChecker(wallCollection) as uut:
-                uut.check()
+                uut.check(True)
             self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
 
     def test_chunkWasDeleted_inFront(self):
@@ -135,7 +135,7 @@ class CollectionCheckerTests(TestSuite):
                 wallCollection.nextWall = i
 
                 with CollectionChecker(wallCollection) as uut:
-                    uut.check()
+                    uut.check(True)
                 self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
 
     def test_chunkWasDeleted_inTheMiddle(self):
@@ -150,7 +150,7 @@ class CollectionCheckerTests(TestSuite):
                 wallCollection.nextWall = i
 
                 with CollectionChecker(wallCollection) as uut:
-                    uut.check()
+                    uut.check(True)
                 self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
 
     def test_chunkWasDeleted_inTheBack(self):
@@ -165,7 +165,7 @@ class CollectionCheckerTests(TestSuite):
                 wallCollection.nextWall = i
 
                 with CollectionChecker(wallCollection) as uut:
-                    uut.check()
+                    uut.check(True)
                 self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
 
     def test_chunkWasDeleted_spansFromBackToFront(self):
@@ -182,8 +182,18 @@ class CollectionCheckerTests(TestSuite):
                 wallCollection.nextWall = i
 
                 with CollectionChecker(wallCollection) as uut:
-                    uut.check()
+                    uut.check(True)
                 self._assertWallCollectionsAreEqual(wallCollection, referenceCollection)
+
+    def test_doesNotAlterCollectionIfNotAsked(self):
+        halfTheFiles = [file for i, file in enumerate(self.fileList) if i % 2 == 0]
+        with mock.patch("os.path.exists", _OsPathExistMock(halfTheFiles).exists):
+            wallCollection = WallCollection(self.fileList[:])
+
+            with CollectionChecker(wallCollection) as uut:
+                uut.check(False)
+            self.assertFalse(self.fileList is wallCollection.collection)
+            self.assertEqual(sorted(wallCollection.collection), sorted(self.fileList))
 
     def _assertWallCollectionsAreEqual(self, first, second):
         firstNormalised = list(self.__collectionIterator(first))
