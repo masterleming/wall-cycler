@@ -5,6 +5,7 @@ from .Interval.TimestampStore import TimestampStore
 
 from .Wallpapers.FileScanner import FileScanner
 from .Wallpapers.WallCollection import WallCollection
+from .Wallpapers.CollectionChecker import CollectionChecker
 
 import enum
 from logging import getLogger
@@ -46,6 +47,19 @@ class WallCycler:
                 break
 
         self.__updateWallpaperCache()
+        return 0
+
+    def check(self, remove=False):
+        _logger.info("Checking collection for missing files.")
+
+        self._loadCachedWallpapers()
+        self._updateWallpapers()
+
+        CollectionChecker(self._wallpapers).check(remove)
+
+        if(remove):
+            self.__updateWallpaperCache()
+
         return 0
 
     def _loadCachedWallpapers(self):

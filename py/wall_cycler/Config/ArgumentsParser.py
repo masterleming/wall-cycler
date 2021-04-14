@@ -5,6 +5,7 @@ from logging import getLogger
 from distutils.util import strtobool
 import shutil
 import textwrap
+from sys import stderr
 
 from .RuntimeConfig import RuntimeConfig
 from ..Interval import Intervals
@@ -72,6 +73,15 @@ class ArgumentsParser:
         parser.add_argument("--log-level", type=str, choices=logLevels(), help="limits logs to specified and higher level.")
         parser.add_argument("--force-refresh", type=strtobool, help="forces reloading of the wallpaper whenever the expiration check is made and it is not yet time for changing the wallpaper.")
         parser.add_argument("--use-external-scheduling", type=strtobool, help="suppresses internal scheduling and expiration check in case external scheduling is used (e.g. `cron`).")
+
+        def REMOVE(s):
+            if type(s) is str and s != "REMOVE":
+                print("To remove missing files pass 'REMOVE' (in capital letters) to '--check' option.", file=stderr)
+            return True if s=="REMOVE" else False
+
+        grp = parser.add_argument_group(title="Collection tools", description="Options for checking collection cache.")
+        grp.add_argument("--check", type=REMOVE, nargs='?', const=False, default=None, help="Checks whether files form collection cache are present in storage, optionally removing missing files. Pass a 'REMOVE' value to remove missing files.", metavar="'REMOVE'")
+
         # yapf: enable
         self.parser = parser
 

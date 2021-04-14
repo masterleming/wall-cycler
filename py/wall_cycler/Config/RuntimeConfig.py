@@ -43,7 +43,8 @@ class RuntimeConfig:
                  logDir="",
                  logLevel=None,
                  forceRefresh=None,
-                 externalScheduling=None):
+                 externalScheduling=None,
+                 collectionCheck=None):
         self.order = order
         self.interval = interval
         self.cacheDir = expandPath(cacheDir)
@@ -57,6 +58,7 @@ class RuntimeConfig:
         self.wallpaperPaths = PathList()
         for path in wallpaperPaths:
             self.wallpaperPaths.addFromString(path)
+        self.collectionCheck = collectionCheck
 
 
     def __add__(self, other):
@@ -100,6 +102,9 @@ class RuntimeConfig:
 
         if other.externalScheduling != default.externalScheduling:
             self.externalScheduling = other.externalScheduling
+
+        if other.collectionCheck != default.collectionCheck:
+            self.collectionCheck = other.collectionCheck
 
         return self
 
@@ -188,6 +193,9 @@ class RuntimeConfig:
 
         if argsConf.use_external_scheduling is not None:
             ret.externalScheduling = bool(argsConf.use_external_scheduling)
+
+        if argsConf.check is not None:
+            ret.collectionCheck = argsConf.check
 
         return ret
 
