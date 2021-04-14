@@ -5,6 +5,7 @@ from logging import getLogger
 from distutils.util import strtobool
 import shutil
 import textwrap
+from sys import stderr
 
 from .RuntimeConfig import RuntimeConfig
 from ..Interval import Intervals
@@ -67,11 +68,20 @@ class ArgumentsParser:
         parser.add_argument("--cache-dir", type=str, help="path used for storing cached data; note that clearing the cache _will reset the wallpaper cycle_.")
         parser.add_argument("--backend", type=str, help="defines what backend shall be used for changing the wallpaper; currently only 'sway' and 'cmd' are supported. See BACKENDS for more info.")
         parser.add_argument("--config", type=str, help="points to the configuration file to be used; note however that whatever options are set in this file will override options from a default file; to suppress all default options the default file needs to be removed or all options overridden.")
-        parser.add_argument("--generate-config", type=str, nargs='?', help="causes generation of default configuration file; if no argument is given, the file is created in default location.", const=True)
+        parser.add_argument("--generate-config", action="store_true", default=False, help="causes generation of default configuration file; if no argument is given, the file is created in default location.")
         parser.add_argument("--log-dir", type=str, help="specifies a directory to log to.")
         parser.add_argument("--log-level", type=str, choices=logLevels(), help="limits logs to specified and higher level.")
         parser.add_argument("--force-refresh", type=strtobool, help="forces reloading of the wallpaper whenever the expiration check is made and it is not yet time for changing the wallpaper.")
         parser.add_argument("--use-external-scheduling", type=strtobool, help="suppresses internal scheduling and expiration check in case external scheduling is used (e.g. `cron`).")
+
+        def REMOVE(s):
+            if type(s) is str and s != "REMOVE":
+                print("To remove missing files pass 'REMOVE' (in capital letters) to '--check' option.", file=stderr)
+            return True if s=="REMOVE" else False
+
+        grp = parser.add_argument_group(title="Collection tools", description="Options for checking collection cache.")
+        grp.add_argument("--check", type=REMOVE, nargs='?', const=False, default=None, help="Checks whether files form collection cache are present in storage, optionally removing missing files. Pass a 'REMOVE' value to remove missing files.", metavar="'REMOVE'")
+
         # yapf: enable
         self.parser = parser
 

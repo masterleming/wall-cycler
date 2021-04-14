@@ -37,12 +37,15 @@ def configure():
 if __name__ == '__main__':
     config = configure()
 
-    exit(
-        WallCycler(
-            DataStore(config.cacheDir),
-            config.interval,
-            Updater(config.order),
-            None if config.externalScheduling else InternalScheduler(),
-            Switcher(config.backend),
-            config.wallpaperPaths,
-            config.forceRefresh).run())
+    app = WallCycler(DataStore(config.cacheDir),
+        config.interval,
+        Updater(config.order),
+        None if config.externalScheduling else InternalScheduler(),
+        Switcher(config.backend),
+        config.wallpaperPaths,
+        config.forceRefresh)
+
+    if config.collectionCheck is not None:
+        exit(app.check(config.collectionCheck))
+    else:
+        exit(app.run())
