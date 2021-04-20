@@ -80,7 +80,7 @@ class ArgumentsParser:
             return True if s=="REMOVE" else False
 
         grp = parser.add_argument_group(title="Collection tools", description="Options for checking collection cache.")
-        grp.add_argument("--check", type=REMOVE, nargs='?', const=False, default=None, help="Checks whether files form collection cache are present in storage, optionally removing missing files. Pass a 'REMOVE' value to remove missing files.", metavar="'REMOVE'")
+        grp.add_argument("--check", type=REMOVE, nargs='?', const=False, default=None, help="Checks whether files from collection cache are present on drive, optionally removing missing files -- pass a string 'REMOVE' (in all capital letters) as argument to remove them.", metavar="'REMOVE'")
 
         # yapf: enable
         self.parser = parser
