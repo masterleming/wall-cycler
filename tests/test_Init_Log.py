@@ -15,7 +15,6 @@ import logging
 EPOCH = 1591448293
 
 
-@mock.patch("wall_cycler.Init.Log._logger", mock.Mock())
 class InitLogTests(TestSuite):
     @classmethod
     def setUpClass(cls):
@@ -51,7 +50,7 @@ class InitLogTests(TestSuite):
             expectedLogs = self._logDeterministicMessages()
 
             self.assertTrue(os.path.exists(logFileName))
-            self._assertLogFileContents(logFileName, expectedLogs)
+            self._assertLogFileContents(logFileName, expectedLogs, True)
 
     def test_levelFiltering(self):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
@@ -81,7 +80,7 @@ class InitLogTests(TestSuite):
             expectedLogs = self._logDeterministicMessages(formatStr="{}{}{}{}\n")
 
             self.assertTrue(os.path.exists(logFileName))
-            self._assertLogFileContents(logFileName, expectedLogs)
+            self._assertLogFileContents(logFileName, expectedLogs, True)
 
     def test_differentLogger(self):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
@@ -120,10 +119,30 @@ class InitLogTests(TestSuite):
             self.assertTrue(os.path.exists(logFileName))
             self._assertLogFileContents(logFileName, expectedLogs)
 
-    def _assertLogFileContents(self, logFileName, expectedLogs):
+    def _assertLogFileContents(self, logFileName, expectedLogs, extended=False):
         with open(logFileName) as logFile:
             logLines = logFile.readlines()
+            self._assertAndRemoveLogInitMessages(logLines, extended)
             self.assertEqual(logLines, expectedLogs)
+
+    def _assertAndRemoveLogInitMessages(self, readLogs, extended):
+        logInitMessages = [
+            "Run Logger pre-init to start BOOT Logger.",
+            "Configuration provided, running proper initialisation of Logger."
+        ]
+        if extended:
+            logInitMessages += [
+                "Logging level:", "Creating file logger; file",
+                "Switched BOOT logger to the target Logger."
+            ]
+        for im in logInitMessages:
+            found = False
+            for i, rl in enumerate(readLogs):
+                if im in rl:
+                    readLogs[i:i+1] = []
+                    found = True
+                    break
+            self.assertTrue(found, "Log init message not found! Missing message '{}'.".format(im))
 
     @classmethod
     def _logDeterministicMessages(cls, formatStr=None, name="root", timeAdjustment=0):
