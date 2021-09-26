@@ -8,8 +8,6 @@ import sys
 
 LOG_FILE_NAME = "wcycler.log"
 
-_logger = logging.getLogger(__name__)
-
 
 class Log:
 
@@ -24,27 +22,27 @@ class Log:
         self.__preInit()
 
     def __preInit(self):
-        _logger.info("Running Logger pre-init to start BOOT Logger.")
         rootLogger = logging.getLogger()
         rootLogger.setLevel(logging.DEBUG)
 
         self._memHandler = logging.handlers.MemoryHandler(capacity=-1)
         self._memHandler.setFormatter(logging.Formatter(self._defaultFormatStr, style='{'))
         rootLogger.addHandler(self._memHandler)
+        rootLogger.info("Run Logger pre-init to start BOOT Logger.")
 
     def init(self, level, logDir=None, formatDetails={"string": None, "style": None}):
-        _logger.info("Configuration provided, running proper initialisation of Logger.")
-        self._reinit(level, logDir, formatDetails)
-        _logger.debug("Logging level: %s", nameFromLevel(self._level))
-
         logger = logging.getLogger()
+
+        logger.info("Configuration provided, running proper initialisation of Logger.")
+        self._reinit(level, logDir, formatDetails)
         logger.setLevel(self._level)
+        logger.debug("Logging level: %s", nameFromLevel(self._level))
 
         if self._logFilePath is not None:
-            _logger.debug("Creating file logger; file '%s'.", self._logFilePath)
+            logger.debug("Creating file logger; file '%s'.", self._logFilePath)
             handler = logging.FileHandler(self._logFilePath)
         else:
-            _logger.debug("Creating STDERR logger.")
+            logger.debug("Creating STDERR logger.")
             handler = logging._StderrHandler()
         handler.setLevel(self._level)
 
@@ -53,12 +51,12 @@ class Log:
 
         logger.addHandler(handler)
 
-        _logger.info("Switching BOOT logger to the target Logger.")
         if self._memHandler is not None:
             self._memHandler.setLevel(self._level)
             self._memHandler.setTarget(handler)
             self._memHandler.close()
             logger.removeHandler(self._memHandler)
+        logger.info("Switched BOOT logger to the target Logger.")
 
     def _setLogFormat(self, formatDetails):
         if (formatDetails is None or formatDetails["string"] is None
