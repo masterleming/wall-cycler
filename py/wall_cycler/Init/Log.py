@@ -30,11 +30,18 @@ class Log:
         rootLogger.addHandler(self._memHandler)
         rootLogger.info("Run Logger pre-init to start BOOT Logger.")
 
-    def init(self, level, logDir=None, formatDetails={"string": None, "style": None}):
+    def init(self,
+             level,
+             logDir=None,
+             formatDetails={
+                 "string": None,
+                 "style": None
+             },
+             fileName=None):
         logger = logging.getLogger()
 
         logger.info("Configuration provided, running proper initialisation of Logger.")
-        self._reinit(level, logDir, formatDetails)
+        self._reinit(level, logDir, formatDetails, fileName)
         logger.setLevel(self._level)
         logger.debug("Logging level: %s", nameFromLevel(self._level))
 
@@ -64,18 +71,19 @@ class Log:
             formatDetails = {"string": self._defaultFormatStr, "style": '{'}
         self._format = formatDetails
 
-    def _reinit(self, level=None, logDir=None, formatDetails=None):
+    def _reinit(self, level, logDir, formatDetails, fileName):
         if level is not None:
             self._level = level
 
-        self._setLogFilePath(logDir)
+        self._setLogFilePath(logDir, fileName)
         self._setLogFormat(formatDetails)
 
-    def _setLogFilePath(self, logDir):
+    def _setLogFilePath(self, logDir, fileName):
+        fn = fileName if fileName is not None else LOG_FILE_NAME
         if logDir is not None and logDir != "":
             absDir = os.path.abspath(os.path.expandvars(os.path.expanduser(logDir)))
             os.makedirs(absDir, exist_ok=True)
-            self._logFilePath = os.path.join(absDir, LOG_FILE_NAME)
+            self._logFilePath = os.path.join(absDir, fn)
 
 
 def logLevels():
