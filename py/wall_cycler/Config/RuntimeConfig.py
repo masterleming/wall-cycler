@@ -5,11 +5,11 @@ from ..Wallpapers.Updaters import UpdaterTypes
 from ..exceptions import InvalidSortOrderException
 from ..Init.Log import levelFromName, nameFromLevel
 from .PathList import PathList
+from .utils import strtobool
 
 import enum
 from copy import deepcopy
 from logging import getLogger
-from distutils.util import strtobool
 import os.path
 
 _logger = getLogger(__name__)

@@ -2,12 +2,12 @@
 
 import argparse
 from logging import getLogger
-from distutils.util import strtobool
 import shutil
 import textwrap
 from sys import stderr
 
 from .RuntimeConfig import RuntimeConfig
+from .utils import strtobool
 from ..Interval import Intervals
 from ..Wallpapers.Updaters import UpdaterTypes
 from ..Init.Log import logLevels
