@@ -2,6 +2,7 @@
 
 import re
 from logging import getLogger
+from copy import deepcopy
 
 from ..exceptions import PathSpecificationException
 import os.path
@@ -13,8 +14,10 @@ class PathList:
 
     specRegex = re.compile(r"^(?:(\w+)@)?(.*)$")
 
-    def __init__(self):
+    def __init__(self, paths = []):
         self._paths = {}
+        for p in paths:
+            self.addFromString(p)
 
     def addFromString(self, s):
         paths = self._parseConfigString(s)
@@ -31,6 +34,11 @@ class PathList:
     def __iadd__(self, other):
         self._paths.update(other._paths)
         return self
+
+    def __add__(self, other):
+        ret = deepcopy(self)
+        ret += other
+        return ret
 
     def __eq__(self, other):
         return self._paths == other._paths
