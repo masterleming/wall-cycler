@@ -11,7 +11,7 @@ LOG_FILE_NAME = "wcycler.log"
 
 class Log:
 
-    _defaultFormatStr = "{asctime:s} | {levelname:8s} | {name:s} | {message:s}"
+    _defaultFormatStr = "{asctime:s} | {process:d} | {levelname:8s} | {name:s} | {message:s}"
 
     def __init__(self):
         self._level = None
