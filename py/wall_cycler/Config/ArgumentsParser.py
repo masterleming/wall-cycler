@@ -34,7 +34,16 @@ _epilog = [
     ("", 0),
     ("cmd", 4),
     ("as the sole option it accepts the raw string with shell command to be executed; use '#WALLPAPER' as a placeholder for the actual wallpaper's file path in the command.", 6),
-    ("", 0)
+    ("", 0),
+    ("", 0),
+    ("INTERVALS:", 0),
+    ("The intervalse are:", 2),
+    ("boot", 4),
+    ("the wallpaper is changed at every system boot", 6),
+    ("daily", 4),
+    ("the wallpaper is changed once a day at midnight", 6),
+    ("custom", 4),
+    ("custom time interval specified as a combination of days, hours and minutes, e.g. '1d 4h 30m' for 1 day, 4 hours and 30 minutes; the order of the components does not matter and any of them can be omitted (e.g. '4h 30m' or '1d'); note that there must be a space between different components.", 6)
 ]
 
 
@@ -64,7 +73,7 @@ class ArgumentsParser:
         # yapf: disable
         parser.add_argument("--order", choices=UpdaterTypes.choices(), type=str, help="select the order of the wallpapers.")
         parser.add_argument("--img-path", type=str, action="extend", nargs='+', help="path(s) to look for the wallpaper images.")
-        parser.add_argument("--interval", type=self.__interval_choices, help="specifies the time at which the wallpaper is changed. See TIME for details.")
+        parser.add_argument("--interval", type=self.__interval_choices, help="specifies the time at which the wallpaper is changed. See INTERVALS for details.")
         parser.add_argument("--cache-dir", type=str, help="path used for storing cached data; note that clearing the cache _will reset the wallpaper cycle_.")
         parser.add_argument("--backend", type=str, help="defines what backend shall be used for changing the wallpaper; currently only 'sway' and 'cmd' are supported. See BACKENDS for more info.")
         parser.add_argument("--config", type=str, help="points to the configuration file to be used; note however that whatever options are set in this file will override options from a default file; to suppress all default options the default file needs to be removed or all options overridden.")
