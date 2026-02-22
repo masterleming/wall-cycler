@@ -33,11 +33,15 @@ class CmdSwitcher:
                     result.stderr))
 
     def _getCmd(self, wallpaper):
+        _logger.debug("Raw cmd='{}', type={}".format(self._cmd, type(self._cmd)))
         if type(self._cmd) is str:
-            return self._cmd.replace(SubstitutionKeywords.WALLPAPER.value, wallpaper).split(maxsplit=1)
+            self._cmd = self._cmd.strip().split()
+            return self._getCmd(wallpaper)
 
         cmd = self._cmd[:]
         for i in range(len(cmd)):
-            if cmd[i] is SubstitutionKeywords.WALLPAPER or cmd[i] == SubstitutionKeywords.WALLPAPER.value:
+            if cmd[i] is SubstitutionKeywords.WALLPAPER:
                 cmd[i] = wallpaper
+            else:
+                cmd[i] = cmd[i].replace(SubstitutionKeywords.WALLPAPER.value, wallpaper)
         return cmd
