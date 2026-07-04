@@ -13,20 +13,20 @@ class Log:
 
     _defaultFormatStr = "{asctime:s} | {process:d} | {levelname:8s} | {name:s} | {message:s}"
 
-    def __init__(self):
+    def __init__(self, formatStr=None):
         self._level = None
         self._logFilePath = None
         self._format = None
         self._memHandler = None
 
-        self.__preInit()
+        self.__preInit(formatStr if formatStr is not None else self._defaultFormatStr)
 
-    def __preInit(self):
+    def __preInit(self, formatStr):
         rootLogger = logging.getLogger()
         rootLogger.setLevel(logging.DEBUG)
 
         self._memHandler = logging.handlers.MemoryHandler(capacity=-1)
-        self._memHandler.setFormatter(logging.Formatter(self._defaultFormatStr, style='{'))
+        self._memHandler.setFormatter(logging.Formatter(formatStr, style='{'))
         rootLogger.addHandler(self._memHandler)
         rootLogger.info("Run Logger pre-init to start BOOT Logger.")
 

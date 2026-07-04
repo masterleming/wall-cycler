@@ -5,20 +5,19 @@ import unittest.mock as mock
 from tempfile import TemporaryDirectory
 import os.path
 import random
-import time
+import os
 
 from TestSuite import TestSuite
 
 from wall_cycler.Init.Log import Log, logLevels, levelFromName, LOG_FILE_NAME
 import logging
 
-EPOCH = 1591448293
-
 
 class InitLogTests(TestSuite):
+
     @classmethod
     def setUpClass(cls):
-        pass
+        cls._pid = os.getpid()
 
     __loremIpsum = [
         "Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit",
@@ -29,12 +28,19 @@ class InitLogTests(TestSuite):
         "laoreet", "posuere", "Etiam", "eget", "eleifend"
     ]
 
+    __noDateFormatStr = "{process:d} | {levelname:8s} | {name:s} | {message:s}"
+
     def test_settingLogFilePath(self):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
             logFileName = os.path.join(tmpDir, LOG_FILE_NAME)
 
-            uut = Log()
-            uut.init(level=logging.DEBUG, logDir=tmpDir)
+            uut = Log(self.__noDateFormatStr)
+            uut.init(level=logging.DEBUG,
+                     logDir=tmpDir,
+                     formatDetails={
+                         "string": self.__noDateFormatStr,
+                         "style": "{"
+                     })
 
             self._logDeterministicMessages()
 
@@ -44,8 +50,13 @@ class InitLogTests(TestSuite):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
             logFileName = os.path.join(tmpDir, LOG_FILE_NAME)
 
-            uut = Log()
-            uut.init(level=logging.DEBUG, logDir=tmpDir)
+            uut = Log(self.__noDateFormatStr)
+            uut.init(level=logging.DEBUG,
+                     logDir=tmpDir,
+                     formatDetails={
+                         "string": self.__noDateFormatStr,
+                         "style": "{"
+                     })
 
             expectedLogs = self._logDeterministicMessages()
 
@@ -56,8 +67,13 @@ class InitLogTests(TestSuite):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
             logFileName = os.path.join(tmpDir, LOG_FILE_NAME)
 
-            uut = Log()
-            uut.init(level=logging.ERROR, logDir=tmpDir)
+            uut = Log(self.__noDateFormatStr)
+            uut.init(level=logging.ERROR,
+                     logDir=tmpDir,
+                     formatDetails={
+                         "string": self.__noDateFormatStr,
+                         "style": "{"
+                     })
 
             expectedLogs = self._logDeterministicMessages(timeAdjustment=-30)
 
@@ -69,11 +85,11 @@ class InitLogTests(TestSuite):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
             logFileName = os.path.join(tmpDir, LOG_FILE_NAME)
 
-            uut = Log()
+            uut = Log(self.__noDateFormatStr)
             uut.init(level=logging.DEBUG,
                      logDir=tmpDir,
                      formatDetails={
-                         "string": "%(asctime)s%(levelname)s%(name)s%(message)s",
+                         "string": "%(process)s%(levelname)s%(name)s%(message)s",
                          "style": "%"
                      })
 
@@ -86,8 +102,13 @@ class InitLogTests(TestSuite):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
             logFileName = os.path.join(tmpDir, LOG_FILE_NAME)
 
-            uut = Log()
-            uut.init(level=logging.ERROR, logDir=tmpDir)
+            uut = Log(self.__noDateFormatStr)
+            uut.init(level=logging.ERROR,
+                     logDir=tmpDir,
+                     formatDetails={
+                         "string": self.__noDateFormatStr,
+                         "style": "{"
+                     })
 
             expectedLogs = self._logDeterministicMessages(name="ABCDE", timeAdjustment=-30)
 
@@ -100,7 +121,7 @@ class InitLogTests(TestSuite):
         with TemporaryDirectory(prefix="log-test-") as tmpDir:
             logFileName = os.path.join(tmpDir, LOG_FILE_NAME)
 
-            uut = Log()
+            uut = Log(self.__noDateFormatStr)
             bootLogs = self._logDeterministicMessages(formatStr=expectedFormat)
 
             self.assertFalse(os.path.exists(logFileName))
@@ -108,7 +129,7 @@ class InitLogTests(TestSuite):
             uut.init(level=logging.ERROR,
                      logDir=tmpDir,
                      formatDetails={
-                         "string": "%(asctime)s-%(levelname)s-%(name)s-%(message)s",
+                         "string": "%(process)s-%(levelname)s-%(name)s-%(message)s",
                          "style": "%"
                      })
             expectedLogs = self._logDeterministicMessages(name="ABCDE",
@@ -139,7 +160,7 @@ class InitLogTests(TestSuite):
             found = False
             for i, rl in enumerate(readLogs):
                 if im in rl:
-                    readLogs[i:i+1] = []
+                    readLogs[i:i + 1] = []
                     found = True
                     break
             self.assertTrue(found, "Log init message not found! Missing message '{}'.".format(im))
@@ -147,34 +168,23 @@ class InitLogTests(TestSuite):
     @classmethod
     def _logDeterministicMessages(cls, formatStr=None, name="root", timeAdjustment=0):
         if formatStr is None:
-            formatStr = "{:s} | {:8s} | {:s} | {:s}\n"
+            formatStr = "{:d} | {:8s} | {:s} | {:s}\n"
 
         levelsList = [levelFromName(level) for level in logLevels()]
 
         messages = []
-        with mock.patch("time.time", timeMock().__next__):
-            for i, level in zip(timeMock(EPOCH + timeAdjustment), levelsList):
-                msg = random.choice(cls.__loremIpsum)
-                expectedMsg = formatStr.format(
-                    time.strftime("%Y-%m-%d %H:%M:%S,000", time.localtime(i)),
-                    logging._levelToName[level], name, msg)
-                messages.append(expectedMsg)
+        for level in levelsList:
+            msg = random.choice(cls.__loremIpsum)
+            expectedMsg = formatStr.format(cls._pid, logging._levelToName[level], name, msg)
+            messages.append(expectedMsg)
 
-                if name != "root":
-                    logger = logging.getLogger(name)
-                    logger.log(level, msg)
-                else:
-                    logging.log(level, msg)
+            if name != "root":
+                logger = logging.getLogger(name)
+                logger.log(level, msg)
+            else:
+                logging.log(level, msg)
 
         return messages
-
-
-def timeMock(startTime=EPOCH):
-    time = startTime
-    while True:
-        tmp = time
-        time += 10
-        yield tmp
 
 
 if __name__ == '__main__':
